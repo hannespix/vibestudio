@@ -1,0 +1,19 @@
+/* Anordnen: Fanglinien und Raster liegen in Folienkoordinaten über den Folien; Bedienelemente in Toolbar, Griffen und Inspektor. */
+#editor-guides,#editor-grid{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none;overflow:visible}#editor-grid{z-index:39}#editor-guides{z-index:40}
+.editing #editor-guides{display:block}.editing.grid-on #editor-grid{display:block}.reveal.overview #editor-guides,.reveal.overview #editor-grid{display:none!important}
+#editor-guides line{stroke:#ff2f8e;stroke-width:1.5;stroke-dasharray:8 5;vector-effect:non-scaling-stroke}
+#editor-grid line{stroke:#5b6b8f;stroke-opacity:.32;stroke-width:1;vector-effect:non-scaling-stroke}#editor-grid line.major{stroke-opacity:.72}
+.editor-format .rotate-controls{gap:4px}.rotate-controls input[type=number]{width:58px}.rotate-controls span{color:#8b8476;font-size:12px}
+.arrange-group{display:inline-flex;gap:3px;padding-left:8px;border-left:1px solid #d5cbbd;flex-shrink:0}.editor-format .arrange-group button{padding:4px 6px;line-height:0}
+.arrange-group svg,#object-align svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;display:block}.arrange-group svg rect,#object-align svg rect{fill:currentColor;stroke:none;opacity:.85}
+.editor-main button[aria-pressed=true]{background:#354a3b;color:#fff;border-color:#354a3b}
+.object-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.studio-panel .object-grid label{margin:8px 0}
+#object-align{display:grid;grid-template-columns:1fr 1fr;gap:5px}#object-align button{display:flex;align-items:center;gap:7px;padding:6px 8px;font-size:11px;text-align:left}#object-align button svg{flex-shrink:0}
+#object-label{font-size:12px;color:#5d5648;margin:6px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#edit-rotate{width:28px;height:28px;padding:0;font-size:17px;line-height:24px;text-align:center;border-radius:50%;border:2px solid #f3eede;cursor:grab}#edit-rotate:active{cursor:grabbing}
+.reveal [data-edit-id][style*="justify"]{hyphens:auto;-webkit-hyphens:auto}
+@media(max-width:1100px){.rotate-controls input[type=number]{width:50px}.arrange-group{padding-left:5px}}
+@media print{#editor-guides,#editor-grid,#edit-rotate{display:none!important}}
+/* Schmale Fenster: Beschriftungen der Formatzeile ausblenden, damit alle Bedienelemente ohne Scrollen sichtbar bleiben (Tooltips und ARIA bleiben). */
+@media(max-width:1440px){.editor-format>label{font-size:0;gap:0}.editor-format>label>*{font-size:12px}.editor-format .font-quick select{width:150px;max-width:150px}.editor-format{gap:10px}.editor-format .arrange-group{padding-left:6px}}
+@media(max-width:1200px){.editor-format .font-quick select{width:120px;max-width:120px}.editor-format{gap:7px}}
