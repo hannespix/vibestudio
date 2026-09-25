@@ -1,0 +1,168 @@
+# Vibecoding
+
+Eine kurze Reveal.js-Präsentation von Hannes Pix. Zwölf Folien, ungefähr sieben Minuten.
+
+## Öffnen
+
+`Vibecoding.html` ist die komplette Präsentation in einer Datei. Herunterladen und mit Chrome, Edge oder Firefox öffnen. Sie benötigt weder Internet noch Installation.
+
+Im bearbeitbaren Projektordner lässt sich auch `index.html` direkt öffnen. Den Ordner dabei vollständig entpacken, damit Bilder, Schrift und Reveal.js zusammenbleiben.
+
+## Vorführen
+
+- Pfeiltasten oder Leertaste: nächste / vorherige Folie
+- F: Vollbild
+- Esc oder O: Folienübersicht
+- N: kurze Sprechernotizen zur aktuellen Folie
+- E: Bearbeiten / Präsentieren
+- M: Hintergrundbewegung pausieren / fortsetzen
+- P: automatischer Durchlauf
+- Home: zum Anfang
+
+Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die neue Grundeinstellung zeigt einen deutlicheren Ken-Burns-Zoom mit sanfter Drehung und einem 28-Sekunden-Zyklus. Wasserringe verformen sich leicht; Licht, Staub und Körnung bleiben sehr dezent. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
+
+## Direkt in der HTML bearbeiten
+
+1. `Vibecoding.html` herunterladen und im Browser öffnen.
+2. Unten rechts **Bearbeiten** anklicken oder **E** drücken.
+3. Einen Text anklicken und direkt schreiben. Größe, Farbe, Fett und Ausrichtung stehen oben.
+4. **＋ Text** legt ein neues Textfeld auf der aktuellen Folie an.
+5. Das ausgewählte Feld am Griff **Verschieben** ziehen. Mit dem Griff rechts unten lässt sich seine Breite ändern. Der Verschiebegriff unterstützt auch Pfeiltasten; mit Umschalt geht es in 10-Pixel-Schritten.
+6. Über **Logo** ein globales PNG, JPG, WebP oder SVG auswählen. Größe, Position, Originalfarben, einfarbig Hell/Dunkel und eine helle Unterlage sind einstellbar. Ohne Logo erscheint das Platzhalterfeld nur beim Bearbeiten. Pro Folie sind eigene Einstellungen möglich (siehe unten).
+7. **HTML speichern** lädt eine vollständige, erneut bearbeitbare Datei mit allen Änderungen, Bildern und Logo herunter. Alternativ: Strg/Cmd + S im Bearbeitungsmodus.
+8. **Präsentieren** blendet die Werkzeuge aus. Folienwechsel erfolgt mit den Pfeilen unten rechts; im Bearbeitungsmodus funktionieren auch Bild auf / Bild ab außerhalb eines Textfelds.
+
+Der Browser überschreibt die ursprüngliche Datei nicht automatisch. Ein lokaler Entwurf wird, soweit verfügbar, im Browser zwischengespeichert. Für ein dauerhaftes, übertragbares Ergebnis immer **HTML speichern** verwenden. Die neue Datei öffnet im Präsentationsmodus. Rückgängig/Wiederholen steht für Text, Position, Format und Logo in der aktuellen Sitzung zur Verfügung. Bei aktivem Textcursor betrifft Strg/Cmd + Z die Texteingabe; die Pfeilknöpfe oben betreffen die Bearbeitungsschritte.
+
+Eingefügter Text wird ohne fremde Formatierung übernommen. Die Schrift in Screenshots ist Teil des Bilds und lässt sich nicht direkt ändern. Zusätzliche Texte können darübergelegt werden. Der Editor ist für Desktop-Browser gestaltet.
+
+## Vibe Studio: Folien, Medien und Hintergründe
+
+Im Bearbeitungsmodus stehen links die Folien und rechts die Eigenschaften. Die Präsentation selbst bleibt unverändert groß: Der Editor verkleinert nur die Arbeitsansicht.
+
+### Folien verwalten
+
+- Links das Layout wählen: **Titelfolie**, **Textfolie** oder **Leere Folie**. Mit **+** direkt nach der aktuellen Folie einfügen.
+- **Dupl.** dupliziert die aktuelle Folie inklusive ihrer Texte, Formatierungen, Bilder, Hintergrund-, Übergangs- und individuellen Logo-Einstellungen.
+- **Entf.** entfernt die aktuelle Folie. Mindestens eine Folie bleibt erhalten. Mit **Rückgängig** lässt sich die Entfernung zurücknehmen.
+- Folienvorschaubilder an eine andere Position ziehen. Alternativ die Pfeile **↑ / ↓** verwenden.
+- Über den Namen rechts lässt sich eine Folie für die Übersicht benennen; der Titel im eigentlichen Bild bleibt separat editierbar.
+
+### Hintergrund ändern
+
+1. Rechts **Hintergrund** öffnen.
+2. **Datei wählen** importiert ein Bild oder Video. **Medien wählen** öffnet den vorhandenen Bestand.
+3. Bildfüllung (**Fläche füllen**, **ganzes Motiv**, **Strecken**), horizontalen/vertikalen Ausschnitt und Abdunklung einstellen.
+4. Unter **Background Animation** Bewegung, Rotation, Tempo und Materialeffekte einstellen. **Bewegung hier abspielen** zeigt sie direkt im Editor.
+5. Eine Flächenfarbe kann unter dem Bild liegen oder über **Nur Flächenfarbe verwenden** zum alleinigen Hintergrund werden. Die allgemeine Textfarbe der Folie lässt sich ebenfalls ändern; einzelne speziell formatierte Texte behalten ihre eigene Farbe.
+6. **Original-Hintergrund wiederherstellen** setzt diese Änderungen zurück.
+
+Videos laufen stumm in Schleife. Nur das Video auf der aktuellen Folie spielt; beim Bearbeiten bleibt es stehen, bis **Bewegung hier abspielen** aktiviert wird. Bei aktivierter Bewegungspause bleibt es ebenfalls stehen. Das gilt auch für frei eingefügte Videos.
+
+### Bewegung und Material
+
+Alle Werte gelten für die aktuelle Folie und werden beim Duplizieren, Rückgängigmachen und HTML-Export mitgenommen.
+
+- **Hintergrundeffekte aktiv** schaltet die erzeugten Effekte ein oder aus. Ein Video behält seine eigene Bewegung.
+- **Effektstärke gesamt** dosiert Kamera, Rotation, Jiggle, Wellen, Licht, Staub, Körnung und Farbverstärkung gemeinsam. 0 ergibt einen unveränderten Hintergrund; native Videos laufen weiter.
+- **Bewegungsstärke / Ken Burns** steuert Zoom und Kamerafahrt. **Rotation** ergänzt langsame Drehungen um das Motiv.
+- **Geschwindigkeit** reicht von 0,25× bis 2×. Sie steuert erzeugte Bewegungen und die Wiedergabegeschwindigkeit von Hintergrundvideos.
+- **Handycam / Jiggle** ergänzt weiche, leicht unregelmäßige Kamerabewegungen. 0 = aus; geringe Werte wirken ruhig und handgeführt. Es gibt keine zufälligen Sprünge zwischen Bildern.
+- **Wellenbewegung** verformt den unteren Bildbereich fließend. Das passt besonders gut zu den Wasserringen; bei anderen Motiven nach Geschmack nutzen. Der Effekt benötigt WebGL; ohne WebGL bleibt das Bild mit den übrigen Effekten sichtbar.
+- **Weiches Licht / DOF** fügt sanft wandernde, unscharfe Lichtflecken hinzu. **Schwebender Staub** ergänzt wenige weiche Partikel. Das ist eine gestalterische Lichtsimulation, keine aus dem Motiv berechnete Tiefenkarte.
+- **Material / Körnung** ergänzt eine feine, ruhige Textur ohne flackerndes Rauschen. **Lebendigkeit / Farbe** erhöht die Farbsättigung behutsam.
+- Presets: **Ruhig · warm**, **Lebendig · organisch** und **Handycam · weich**. Die Einzelwerte bleiben anschließend frei einstellbar.
+- Unter **Zyklus & Zurücksetzen** lässt sich die Dauer eines ganzen Hin- und Rückwegs bei Tempo 1× verändern.
+
+Die Vorschau wird beim Folienwechsel und beim Verlassen des Editors beendet. In der Präsentation laufen nur die Medien der aktuellen Folie. **M** pausiert Bildbewegung, Effekte und Videos gemeinsam. Titel bleiben immer unbewegt.
+
+### Schriften: global, je Feldtyp und individuell
+
+Die aktuelle **DM Sans** bleibt unverändert der Standard und ist eingebettet. Zusätzlich stehen Sans Serif, Serif und Monospace als Systemschriften zur Auswahl. Ihre genaue Darstellung hängt vom Gerät ab.
+
+1. Oben **Schriften** öffnen. **Standardschrift** legt die globale Schrift fest.
+2. Unter **Je Feldtyp** kann man Kapitel-Titel, Überschriften, Untertitel, Fließtext/Prompts, Beschriftungen und freie Textfelder getrennt einstellen. **Global übernehmen** folgt wieder der Standardschrift. Diese Einstellungen gelten über alle Folien hinweg.
+3. Einen Text auf der Folie anklicken und oben im Feld **Schrift** individuell formatieren. **Vom Feldtyp übernehmen** entfernt diese Ausnahme. Im Schriftenfenster lässt sich auch der Feldtyp des ausgewählten Textes ändern, beispielsweise ein freies Textfeld zum Titel machen. Der Feldtyp bestimmt hier die Schriftfamilie; Größe, Farbe und Position bleiben separat.
+4. Es gilt immer: **individuelle Schrift → Schrift des Feldtyps → globale Schrift**. Die darunterliegende Einstellung bleibt erhalten und wird wieder wirksam, sobald eine Ausnahme zurückgesetzt wird.
+
+**Eigene Schriften:** Im Schriftenfenster auf **Eigene Schriften hochladen** klicken oder Dateien auf das gestrichelte Feld ziehen. WOFF, WOFF2, TTF und OTF sind möglich, mehrere Dateien zugleich, maximal 15 MB je Datei. Der Browser prüft die Schrift vor der Aufnahme. Nicht lesbare Dateien verändern die bisherigen Einstellungen nicht.
+
+Jede Datei erscheint als eigene Auswahl. Die Schriftübersicht rechts zeigt eine Vorschau; ein Klick dort ändert nur die Vorschau. Zum Verwenden die Schrift links global, für einen Feldtyp oder für den ausgewählten Text zuweisen. Identische Dateien werden wiederverwendet.
+
+Hochgeladene Schriften werden vollständig in **HTML speichern** eingebettet. Eine Installation auf dem Präsentationsrechner oder eine Internetverbindung ist nicht erforderlich. Schriften funktionieren auch auf gebogenen Texten und bleiben beim Duplizieren und erneuten Öffnen erhalten. Rückgängig/Wiederholen betrifft die Zuweisungen; importierte Schriftdateien bleiben in der Übersicht verfügbar. Die Studio-Bedienelemente behalten ihre bisherige Schrift.
+
+### Titel als Bogen
+
+Text anklicken, dann oben **Bogen** einstellen. 0 bedeutet gerade; positive Werte wölben nach oben, negative nach unten. **Gerade** setzt die Biegung direkt zurück. So lässt sich der Titel an die runden Motive anlegen, ohne dass er sich mit dem Hintergrund bewegt.
+
+Der Bogen gilt pro Textfeld und funktioniert auch für neu eingefügte Texte. Breite, Schriftgröße, Farbe und Position bleiben bearbeitbar. Während man direkt in den Text schreibt, erscheint er für die Eingabe gerade; nach dem Verlassen des Felds wird der Bogen wieder angezeigt. Mehrzeilige Texte werden im Bogen als eine Zeile dargestellt. Bei sehr langen Texten wird die Schrift auf die verfügbare Breite eingepasst. Biegung und Text werden mit der Folie dupliziert und in der HTML gespeichert.
+
+### Logos: global und pro Folie
+
+- **Logo** oben öffnet den globalen Standard. Alle Folien übernehmen ihn zunächst.
+- Rechts unter **Folie → Logo dieser Folie** oder durch Klicken auf das Logo lassen sich einzelne Folien anpassen. Unter **Gilt für** kann man jederzeit zwischen globalem Standard und aktueller Folie wechseln.
+- **Individuell anpassen** übernimmt den aktuellen Stand als eigene Kopie. Danach sind ein anderes Bild, die Darstellung **Originalfarben / Hell / Dunkel**, Größe, Position und helle Unterlage unabhängig einstellbar. Hell und Dunkel färben das ganze Bild einfarbig; für Logos mit Hintergrund am besten eine transparente PNG- oder SVG-Datei verwenden.
+- **Bild auswählen** lädt ein neues Logo; **Aus Medien wählen** verwendet ein bereits vorhandenes Bild. Für jede Folie ist ein anderes Logo möglich.
+- **X / Y** bestimmen die linke obere Ecke, **Breite / Höhe** den frei einstellbaren Rahmen in Folienpixeln (1600 × 900). Das Bild wird proportional in diesen Rahmen eingepasst und nicht verzerrt.
+- Direkt auf der Folie das Logo ziehen; mit dem Griff rechts unten die Größe ändern. **Ziehen betrifft immer nur die aktuelle Folie** und erzeugt bei Bedarf eine individuelle Einstellung. Die globalen Werte stellt man im Dialog ein.
+- **Globales Logo übernehmen** entfernt die individuelle Abweichung. **Logo ausblenden** versteckt es nur auf dieser Folie. Der globale Standard bleibt erhalten.
+- Individuelle Logos bleiben beim Duplizieren, Umsortieren, Rückgängigmachen und HTML-Export erhalten. In den Folienminiaturen sieht man die tatsächliche Variante.
+
+### Medienübersicht
+
+**Medien** oben zeigt vorhandene Hintergrundmotive, Screenshots, importierte Bilder/Videos und alle eigenen Logos. Suche und Filter helfen beim Wiederfinden.
+
+- **Dateien hinzufügen** oder Dateien in die Übersicht ziehen; Mehrfachauswahl ist möglich.
+- Ein Medium auswählen und als Hintergrund verwenden, frei auf die Folie einfügen oder als globales Logo einsetzen (Bilder).
+- Frei eingefügte Bilder und Videos lassen sich auswählen, am Griff verschieben und in der Breite skalieren. Das Seitenverhältnis bleibt erhalten.
+- **Datei speichern** lädt das ausgewählte Medium separat herunter.
+- Bereits identische Dateien werden wiederverwendet. Importierte Medien bleiben im Bestand, auch wenn ein Bearbeitungsschritt rückgängig gemacht wird.
+
+Die Dateiauswahl ist nicht nach Endungen eingeschränkt. Der Browser prüft, ob er die Datei dekodieren kann. Übliche Bildformate sind JPG, PNG, WebP, GIF, SVG, AVIF und BMP; übliche Videoformate MP4, WebM und OGV. Weitere Formate hängen vom Browser und vom enthaltenen Codec ab. Nicht darstellbare Dateien ersetzen den bisherigen Hintergrund nicht. PSD, AI, Office-Dateien und nicht unterstützte Foto-/Videoformate bitte vorher in ein kompatibles Bild oder Video exportieren. Maximal 100 MB je Datei. Transparenz und Animationen unterstützter Bilddateien bleiben erhalten; der direkte Logo-Upload erzeugt weiterhin ein kompaktes PNG.
+
+### Übergänge, Zeit und Notizen
+
+Rechts unter **Folie**: Überblenden, Schieben, Zoom, Konvex, Konkav oder kein Übergang. Die **Übergangsdauer** wird in Millisekunden angegeben. Die **Anzeigedauer** steuert den automatischen Durchlauf mit **P** und ist davon unabhängig. **Übergang & Timing auf alle** wendet diese drei Einstellungen auf alle Folien an.
+
+Die Sprechernotizen können direkt im rechten Feld geändert werden. Während der Präsentation zeigt **N** die Notizen der aktuellen Folie. Zur Prüfung von Übergängen oder Videos **Präsentieren** anklicken.
+
+### Speichern mit Medien
+
+**HTML speichern** sichert die komplette Präsentation einschließlich Folienstruktur, importierter Medien und Schriften, Logos, Texten und Einstellungen in einer wieder bearbeitbaren Datei. Das Herunterladen kann bei großen Videos entsprechend länger dauern. Große Medien werden nicht im begrenzten Browser-Zwischenspeicher gesichert: In diesem Fall zeigt die Statuszeile ausdrücklich den Hinweis auf **HTML speichern**. Der Export funktioniert weiterhin.
+
+Zum Bearbeiten und Exportieren die vollständige **Vibecoding.html** verwenden. Die `index.html` im Quellordner benötigt ihre benachbarten Assets und dient als Entwicklerfassung.
+
+## Inhalt
+
+Der Schwerpunkt ist **LLM + Git als Grundlage für eigene Verwaltungsprojekte**. Die Präsentation führt zu einer konkreten Entscheidung: internes GitLab und – mit höherer Dringlichkeit – eine betreute Container- und Datenbankumgebung im LVM. Sie beschreibt ein vorgeschlagenes Zielbild, keine bereits bestätigte Infrastruktur oder Datenfreigabe.
+
+Sechs Kapitelpaare, jeweils **Titelfolie → Inhaltsfolie**, mit knappen Aussagen und ausführlicheren Sprechernotizen:
+
+1. **Vibecoding:** LLM/Agent entwickelt, Git hält Fortschritt fest.
+2. **Festhalten:** Begrenzter Chatkontext versus versionierter Code und dokumentiertes Projektwissen.
+3. **Frei bleiben:** Agent, Harness und unterstütztes Modell wechseln; am selben Repository weiterarbeiten.
+4. **Bauen:** Auftrag, Branch, Ausprobieren, Review – an öffentlichen Claude-Code-/GitHub-Aufnahmen.
+5. **Betreiben:** vorgeschlagene interne Architektur mit GitLab, Anwendungscontainern und Datenbankdienst.
+6. **Ermöglichen:** Priorität für Container + Datenbank, internes GitLab als gemeinsame Grundlage, ein Pilot mit klarer Verantwortung.
+
+Git vergrößert kein Kontextfenster. Dauerhafte Ziele, Entscheidungen und nächste Schritte müssen als Dateien gesichert und in neuen Sitzungen gelesen werden. Die unterstützten Modelle und Anweisungsdateien unterscheiden sich nach Agent. Die Abbildung der Zielarchitektur ist bewusst vereinfacht; technische Auswahl, Zugriffe, Datenfreigaben und Betrieb müssen vereinbart werden.
+
+Die beiden sichtbaren UI-Aufnahmen stammen aus einer veröffentlichten Produktdemo von Oktober 2025. Sie zeigen `acme/tea-sales`, **kein LVM-Projekt und keine LVM-Daten**. Die heutige Oberfläche kann anders aussehen. Der separate Screenshot-Download enthält außerdem unveränderte Originalbilder aus GitHub Docs. Details stehen in `QUELLEN.md`.
+
+Die bisherige kleine Pflanzen-App bleibt als zusätzliches Übungsbeispiel unter `demo/pflanzenlernen.html` im Quellpaket enthalten. Sie ist kein Bestandteil des neuen roten Fadens.
+
+## Anpassen
+
+Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung und den HTML-Export. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
+
+Die Ein-Datei-Fassung ist ein fertiger Export. Zum Bearbeiten die Dateien im Projektordner verwenden.
+
+## Quellen und Bildnachweise
+
+Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUELLEN.md`.
+
+- Visuelle Inspiration: https://www.reddit.com/r/unixporn/comments/1wps5f4/hyprland_tacit_i_ported_linux_to_my_snapdragon/ . Keine Videoausschnitte übernommen.
+- Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante). Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
+- Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
+- DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
+- Technische Referenzen zu Editor-Funktionen: https://revealjs.com/transitions/ ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers ; https://developer.mozilla.org/en-US/docs/Web/API/FontFace ; https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API
