@@ -1,12 +1,40 @@
-# Vibecoding
+# Vibe Studio · Vibecoding
 
-Eine kurze Reveal.js-Präsentation von Hannes Pix. Zwölf Folien, ungefähr sieben Minuten.
+Eine kurze Reveal.js-Präsentation von Hannes Pix (zwölf Folien, ungefähr sieben Minuten) und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung. Alles läuft ohne Server, Build-Tool oder Internet direkt im Browser.
+
+**Live:** https://hannespix.github.io/vibestudio/ · **Zum Herunterladen:** https://hannespix.github.io/vibestudio/Vibecoding.html
+
+## Repo-Aufbau
+
+| Pfad | Inhalt |
+| --- | --- |
+| `index.html` | Folien, Sprechernotizen und Einbindung aller Skripte (Entwicklerfassung, benötigt die Nachbardateien) |
+| `style.css` | Layout der Folien |
+| `deck.js` | Navigation, Tastatur, automatischer Durchlauf |
+| `editor.js` / `editor.css` | Textbearbeitung, Griffe, Drehung, Rückgängig, HTML-Export |
+| `arrange.js` / `arrange.css` | Fanglinien, Raster, Ausrichten am Folienrand, Inspektor-Tab „Objekt“ |
+| `studio.js` / `studio.css` | Folienleiste, Eigenschaften, Hintergründe, Übergänge |
+| `fonts.js` / `fonts.css` | Schriftvererbung, Vorschau, eigene Schriftdateien |
+| `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
+| `assets/` | Reveal.js, DM Sans, BaWue Sans/Serif (`assets/fonts/`), Motive und Screenshots |
+| `build.mjs` | Baut die Ein-Datei-Fassung nach `dist/` |
+| `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
+| `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
+| `demo/pflanzenlernen.html` | Kleines zusätzliches Übungsbeispiel, nicht Teil des Decks |
+| `QUELLEN.md` | Quellen und Bildnachweise |
+
+## Entwickeln und veröffentlichen
+
+- **Lokal öffnen:** `index.html` direkt im Browser öffnen, oder im Projektordner einen kleinen Server starten (`python3 -m http.server 8000` oder `npx serve`), damit Schriften und Medien sicher geladen werden.
+- **Ein-Datei-Fassung bauen:** `node build.mjs` schreibt `dist/index.html` und `dist/Vibecoding.html`. Darin sind alle Stylesheets, Skripte, Schriften und Bilder als Data-URIs eingebettet. Nur diese Fassung erzeugt beim **HTML speichern** eine vollständig eigenständige Datei; die Entwicklerfassung verweist auf ihre Nachbardateien.
+- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright && npx playwright install chromium`). Der Test öffnet Quell- und Ein-Datei-Fassung, prüft Schriften, Drehung, Ausrichtung, Fanglinien, Raster, Export und Konsolenfehler und legt Screenshots unter `dist/smoke/` ab.
+- **Arbeitsweise:** Änderungen entstehen auf einem Arbeits-Branch, gehen als Pull Request nach `main` und werden nach bestandener Prüfung gemergt. Jeder Stand auf `main` baut die Ein-Datei-Fassung über GitHub Actions und veröffentlicht sie auf GitHub Pages (`pages.yml`). Der Workflow lässt sich unter „Actions“ auch von Hand starten.
 
 ## Öffnen
 
-`Vibecoding.html` ist die komplette Präsentation in einer Datei. Herunterladen und mit Chrome, Edge oder Firefox öffnen. Sie benötigt weder Internet noch Installation.
+`Vibecoding.html` (aus `dist/` oder von der Pages-Adresse oben) ist die komplette Präsentation in einer Datei. Herunterladen und mit Chrome, Edge oder Firefox öffnen. Sie benötigt weder Internet noch Installation.
 
-Im bearbeitbaren Projektordner lässt sich auch `index.html` direkt öffnen. Den Ordner dabei vollständig entpacken, damit Bilder, Schrift und Reveal.js zusammenbleiben.
+Im Repo lässt sich auch `index.html` direkt öffnen. Den Ordner dabei vollständig behalten, damit Bilder, Schriften und Reveal.js zusammenbleiben.
 
 ## Vorführen
 
@@ -27,7 +55,7 @@ Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisc
 2. Unten rechts **Bearbeiten** anklicken oder **E** drücken.
 3. Einen Text anklicken und direkt schreiben. Größe, Farbe, Fett und Ausrichtung stehen oben.
 4. **＋ Text** legt ein neues Textfeld auf der aktuellen Folie an.
-5. Das ausgewählte Feld am Griff **Verschieben** ziehen. Mit dem Griff rechts unten lässt sich seine Breite ändern. Der Verschiebegriff unterstützt auch Pfeiltasten; mit Umschalt geht es in 10-Pixel-Schritten.
+5. Das ausgewählte Feld am Griff **Verschieben** ziehen; dabei rastet es an Fanglinien ein (siehe unten). Mit dem Griff rechts unten lässt sich seine Breite ändern, mit dem runden Griff darüber wird es gedreht. Der Verschiebegriff unterstützt auch Pfeiltasten; mit Umschalt geht es in 10-Pixel-Schritten. **Ausrichtung** bietet Links, Mitte, Rechts und **Blocksatz**.
 6. Über **Logo** ein globales PNG, JPG, WebP oder SVG auswählen. Größe, Position, Originalfarben, einfarbig Hell/Dunkel und eine helle Unterlage sind einstellbar. Ohne Logo erscheint das Platzhalterfeld nur beim Bearbeiten. Pro Folie sind eigene Einstellungen möglich (siehe unten).
 7. **HTML speichern** lädt eine vollständige, erneut bearbeitbare Datei mit allen Änderungen, Bildern und Logo herunter. Alternativ: Strg/Cmd + S im Bearbeitungsmodus.
 8. **Präsentieren** blendet die Werkzeuge aus. Folienwechsel erfolgt mit den Pfeilen unten rechts; im Bearbeitungsmodus funktionieren auch Bild auf / Bild ab außerhalb eines Textfelds.
@@ -78,7 +106,9 @@ Die Vorschau wird beim Folienwechsel und beim Verlassen des Editors beendet. In 
 
 ### Schriften: global, je Feldtyp und individuell
 
-Die aktuelle **DM Sans** bleibt unverändert der Standard und ist eingebettet. Zusätzlich stehen Sans Serif, Serif und Monospace als Systemschriften zur Auswahl. Ihre genaue Darstellung hängt vom Gerät ab.
+Die aktuelle **DM Sans** bleibt unverändert der Standard und ist eingebettet. Ebenfalls eingebettet sind **BaWue Sans** (Regular, SemiBold, Bold, jeweils mit Kursiv) und **BaWue Serif** (Regular, Bold), die Landesschriften Baden-Württembergs; sie erscheinen in allen Schriftauswahlen direkt hinter DM Sans. Zusätzlich stehen Sans Serif, Serif und Monospace als Systemschriften zur Auswahl. Ihre genaue Darstellung hängt vom Gerät ab.
+
+Hinweis zur Lizenz: BaWue Sans und BaWue Serif stammen von Luzi Type und sind für das Land Baden-Württemberg lizenziert (EULA: https://luzi-type.ch/source/EULA-Web.pdf). Die Dateien unter `assets/fonts/` und die veröffentlichte Ein-Datei-Fassung sind öffentlich abrufbar; ob das für die eigene Nutzung von der Lizenz gedeckt ist, bitte selbst prüfen. Die Schriften sind keine freien Schriften.
 
 1. Oben **Schriften** öffnen. **Standardschrift** legt die globale Schrift fest.
 2. Unter **Je Feldtyp** kann man Kapitel-Titel, Überschriften, Untertitel, Fließtext/Prompts, Beschriftungen und freie Textfelder getrennt einstellen. **Global übernehmen** folgt wieder der Standardschrift. Diese Einstellungen gelten über alle Folien hinweg.
@@ -90,6 +120,17 @@ Die aktuelle **DM Sans** bleibt unverändert der Standard und ist eingebettet. Z
 Jede Datei erscheint als eigene Auswahl. Die Schriftübersicht rechts zeigt eine Vorschau; ein Klick dort ändert nur die Vorschau. Zum Verwenden die Schrift links global, für einen Feldtyp oder für den ausgewählten Text zuweisen. Identische Dateien werden wiederverwendet.
 
 Hochgeladene Schriften werden vollständig in **HTML speichern** eingebettet. Eine Installation auf dem Präsentationsrechner oder eine Internetverbindung ist nicht erforderlich. Schriften funktionieren auch auf gebogenen Texten und bleiben beim Duplizieren und erneuten Öffnen erhalten. Rückgängig/Wiederholen betrifft die Zuweisungen; importierte Schriftdateien bleiben in der Übersicht verfügbar. Die Studio-Bedienelemente behalten ihre bisherige Schrift.
+
+### Anordnen: Fanglinien, Raster, Ausrichten und Drehung
+
+Alle Werte gelten in Folienpixeln (1600 × 900) und werden mit Rückgängig, Duplizieren und HTML-Export mitgenommen. Sie funktionieren für vorhandene Texte, neue Textfelder und frei eingefügte Bilder oder Videos.
+
+- **Fanglinien:** Beim Ziehen am Griff **Verschieben** rasten Kanten und Mitte des Felds an der Folienmitte, an den Folienrändern (bei Inhaltsfolien am inneren Rand), an anderen Texten, Bildern und am Logo ein. Eine rosa Linie zeigt die getroffene Kante. **Alt** gedrückt halten schaltet das Einrasten beim Ziehen vorübergehend aus; der Knopf **Fanglinien** oben schaltet es ganz ab.
+- **Raster:** **Raster** oben zeigt ein Gitter über der Folie, an dessen Linien Kanten einrasten. Die Rastergröße (20 bis 100 px) steht im Inspektor unter **Objekt**. Fanglinien haben Vorrang vor dem Raster.
+- **Ausrichten:** Die sechs Symbole in der Formatzeile setzen das Feld linksbündig, zentriert oder rechtsbündig sowie oben, mittig oder unten auf die Folie. Inhaltsfolien nutzen dabei ihren inneren Rand, Kapitelfolien die Folienkante.
+- **Drehen:** Der runde Griff über dem Feld dreht es per Ziehen um seine Mitte. Umschalt rastet in 15°-Schritten; nahe 0°, 90° und 180° rastet die Drehung von selbst ein, mit Alt nicht. Doppelklick auf den Griff oder **0°** stellt gerade. Pfeiltasten auf dem fokussierten Griff drehen um 1° (Umschalt: 15°). Genaue Werte stehen im Feld **Drehung** oben und im Inspektor.
+- **Objekt-Tab:** Rechts unter **Objekt** lassen sich X, Y, Breite und Drehung als Zahl eingeben, die Ausrichtungsknöpfe erneut aufrufen sowie Fanglinien, Raster und Rastergröße einstellen. Diese Einstellungen merkt sich der Browser, sie gehören nicht zur Datei.
+- **Blocksatz:** Unter **Ausrichtung** steht neben Links, Mitte und Rechts auch Blocksatz. Blocksatz aktiviert automatische Silbentrennung (deutsch), damit die Zeilen ruhig bleiben.
 
 ### Titel als Bogen
 
@@ -130,7 +171,7 @@ Die Sprechernotizen können direkt im rechten Feld geändert werden. Während de
 
 **HTML speichern** sichert die komplette Präsentation einschließlich Folienstruktur, importierter Medien und Schriften, Logos, Texten und Einstellungen in einer wieder bearbeitbaren Datei. Das Herunterladen kann bei großen Videos entsprechend länger dauern. Große Medien werden nicht im begrenzten Browser-Zwischenspeicher gesichert: In diesem Fall zeigt die Statuszeile ausdrücklich den Hinweis auf **HTML speichern**. Der Export funktioniert weiterhin.
 
-Zum Bearbeiten und Exportieren die vollständige **Vibecoding.html** verwenden. Die `index.html` im Quellordner benötigt ihre benachbarten Assets und dient als Entwicklerfassung.
+Zum Bearbeiten und Exportieren die vollständige **Vibecoding.html** (Pages-Adresse oder `dist/`) verwenden. Die `index.html` im Repo benötigt ihre benachbarten Assets und dient als Entwicklerfassung.
 
 ## Inhalt
 
@@ -153,9 +194,9 @@ Die bisherige kleine Pflanzen-App bleibt als zusätzliches Übungsbeispiel unter
 
 ## Anpassen
 
-Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung und den HTML-Export. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
+Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
 
-Die Ein-Datei-Fassung ist ein fertiger Export. Zum Bearbeiten die Dateien im Projektordner verwenden.
+Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird nicht im Repo gepflegt, sondern bei jedem Stand auf `main` automatisch gebaut und veröffentlicht.
 
 ## Quellen und Bildnachweise
 
@@ -165,4 +206,5 @@ Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUEL
 - Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante). Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
 - Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
 - DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
+- BaWue Sans und BaWue Serif, Luzi Type, lizenziert für das Land Baden-Württemberg (nicht frei): `assets/fonts/`, EULA https://luzi-type.ch/source/EULA-Web.pdf
 - Technische Referenzen zu Editor-Funktionen: https://revealjs.com/transitions/ ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers ; https://developer.mozilla.org/en-US/docs/Web/API/FontFace ; https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API

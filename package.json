@@ -1,0 +1,10 @@
+{
+  "name": "vibestudio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Vibecoding-Präsentation mit Vibe-Studio-Editor auf Reveal.js-Basis",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tools/smoke-test.mjs"
+  }
+}

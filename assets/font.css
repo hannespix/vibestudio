@@ -26,3 +26,14 @@
   font-display: swap;
   src: url(dm-3.ttf) format('truetype');
 }
+
+/* BaWue Sans und BaWue Serif: Landesschriften Baden-Württemberg (Luzi Type, lizenziert; Hinweis in README.md).
+   Regular = 400, SemiBold = 500–600, Bold = 700, damit Überschriften (500) sichtbar kräftiger bleiben als Fließtext. */
+@font-face{font-family:'BaWue Sans';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/BaWueSansWeb-Regular.woff2) format('woff2')}
+@font-face{font-family:'BaWue Sans';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/BaWueSansWeb-RegularItalic.woff2) format('woff2')}
+@font-face{font-family:'BaWue Sans';font-style:normal;font-weight:500 600;font-display:swap;src:url(fonts/BaWueSansWeb-SemiBold.woff2) format('woff2')}
+@font-face{font-family:'BaWue Sans';font-style:italic;font-weight:500 600;font-display:swap;src:url(fonts/BaWueSansWeb-SemiBoldItalic.woff2) format('woff2')}
+@font-face{font-family:'BaWue Sans';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/BaWueSansWeb-Bold.woff2) format('woff2')}
+@font-face{font-family:'BaWue Sans';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/BaWueSansWeb-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'BaWue Serif';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/BaWueSerifWeb-Regular.woff2) format('woff2')}
+@font-face{font-family:'BaWue Serif';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/BaWueSerifWeb-Bold.woff2) format('woff2')}

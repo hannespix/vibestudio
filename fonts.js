@@ -1,7 +1,7 @@
 /* Font files are embedded resources; assignments follow text → field type → global. */
 window.addEventListener('DOMContentLoaded',()=>{
  const E=DeckEditor,$=s=>document.querySelector(s);
- const builtins=[{id:'dm-sans',name:'DM Sans',family:'"DM Sans", Arial, sans-serif',detail:'Aktuelle Schrift · eingebettet'},{id:'sans',name:'Arial / Sans Serif',family:'Arial, Helvetica, sans-serif',detail:'Systemschrift'},{id:'serif',name:'Georgia / Serif',family:'Georgia, "Times New Roman", serif',detail:'Systemschrift'},{id:'mono',name:'Courier / Monospace',family:'"Courier New", Courier, monospace',detail:'Systemschrift'}];
+ const builtins=[{id:'dm-sans',name:'DM Sans',family:'"DM Sans", Arial, sans-serif',detail:'Aktuelle Schrift · eingebettet'},{id:'bawue-sans',name:'BaWue Sans',family:'"BaWue Sans", "DM Sans", Arial, sans-serif',detail:'Landesschrift BW · eingebettet'},{id:'bawue-serif',name:'BaWue Serif',family:'"BaWue Serif", Georgia, serif',detail:'Landesschrift BW · eingebettet'},{id:'sans',name:'Arial / Sans Serif',family:'Arial, Helvetica, sans-serif',detail:'Systemschrift'},{id:'serif',name:'Georgia / Serif',family:'Georgia, "Times New Roman", serif',detail:'Systemschrift'},{id:'mono',name:'Courier / Monospace',family:'"Courier New", Courier, monospace',detail:'Systemschrift'}];
  const types=[['title','Kapitel-Titel'],['heading','Überschriften'],['subtitle','Untertitel'],['body','Fließtext & Prompts'],['label','Beschriftungen'],['free','Freie Textfelder']];
  const state=()=>E.state(),files=()=>state().fontFiles||=[],config=()=>state().typography||={global:'dm-sans',types:{}};
  const familyName=f=>'VibeFont_'+f.id.replace(/[^a-z0-9]/gi,'_');
