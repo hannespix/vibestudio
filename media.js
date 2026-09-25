@@ -2,7 +2,7 @@
 window.addEventListener('DOMContentLoaded',()=>{
  const E=DeckEditor,$=s=>document.querySelector(s),builtins=[];
  const state=()=>E.state();state().assets||=[];
- const readable={'scene-paper.jpg':'Keramik · Tellerrand','scene-wood.jpg':'Holz · Jahresringe','scene-blueprint.jpg':'Wasserringe','scene-landscape.jpg':'Pflanzenquerschnitt','scene-orbit.jpg':'Planetenkante'};
+ const readable={'scene-paper.jpg':'Keramik · Tellerrand','scene-wood.jpg':'Holz · Jahresringe','scene-blueprint.jpg':'Wasserringe','scene-landscape.jpg':'Pflanzenquerschnitt','scene-orbit.jpg':'Planetenkante','scene-network.jpg':'Netzknoten · Kreisbogen'};
  document.querySelectorAll('.slides>section img,.slides>section video').forEach((el,i)=>{const src=el.getAttribute('src');if(!src||builtins.some(a=>a.src===src))return;const filename=el.dataset.fileName||src.split('/').pop().split('?')[0];builtins.push({id:'builtin-'+builtins.length,name:filename.startsWith('data:')?'Motiv '+(i+1):filename,label:readable[filename]||filename,kind:el.tagName==='VIDEO'?'video':'image',src,width:el.naturalWidth||1600,height:el.naturalHeight||900,size:src.startsWith('data:')?Math.round(src.length*.75):0,builtin:true})});
  function logoSources(){return [state().logo,...Object.values(state().slideLogos||{})].filter(l=>l?.src)}
  function isLogo(a){return !!a.logo||logoSources().some(l=>l.src===a.src)}

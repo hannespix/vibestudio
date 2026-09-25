@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Motiv: Netzknoten auf einem Kreisbogen</title>
+<!-- Prozedural erzeugtes Kapitelmotiv für die Danke-Folie. Parameter: ?seed=7&scale=2&q=.82. Rendern: node tools/render-scene.mjs -->
+<style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;height:auto}</style>
+<canvas id="c"></canvas>
+<script>
+const params=new URLSearchParams(location.search),seed=+params.get('seed')||7,scale=+params.get('scale')||2,quality=+params.get('q')||.82;
+const W=1600*scale,H=900*scale,u=scale,canvas=document.getElementById('c');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry32(seed),range=(a,b)=>a+(b-a)*rnd(),gauss=()=>{let s=0;for(let i=0;i<6;i++)s+=rnd();return(s-3)/.7071},pick=list=>list[Math.floor(rnd()*list.length)];
+const rad=d=>d*Math.PI/180,X=x=>x*u,Y=y=>y*u;
+/* Geometrie in 1600 × 900: Kreis unterhalb des Bilds, Scheitel bei y = 600, Schnitt mit dem unteren Rand bei x ≈ 103 und 1497. */
+const C={x:800,y:1560},RADIUS=960,A0=rad(-143),A1=rad(-37);
+const teal=[118,224,255],ice=[228,248,255],amber=[255,196,120],rust=[230,136,96],deep=[70,152,206];
+const rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`,mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+function nodeColour(){const r=rnd();return r<.1?amber:r<.13?rust:r<.55?teal:r<.85?mix(teal,ice,rnd()):deep}
+function glowDot(x,y,r,colour,alpha,halo=3.2){const g=ctx.createRadialGradient(X(x),Y(y),0,X(x),Y(y),X(r*halo));g.addColorStop(0,rgba(colour,alpha));g.addColorStop(.28,rgba(colour,alpha*.45));g.addColorStop(1,rgba(colour,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(X(x),Y(y),X(r*halo),0,Math.PI*2);ctx.fill();ctx.fillStyle=rgba(mix(colour,ice,.5),Math.min(1,alpha*1.15));ctx.beginPath();ctx.arc(X(x),Y(y),X(r),0,Math.PI*2);ctx.fill()}
+function link(a,b,alpha,width){const g=ctx.createLinearGradient(X(a.x),Y(a.y),X(b.x),Y(b.y));g.addColorStop(0,rgba(a.c,alpha*a.b));g.addColorStop(.5,rgba(mix(a.c,b.c,.5),alpha*.55));g.addColorStop(1,rgba(b.c,alpha*b.b));ctx.strokeStyle=g;ctx.lineWidth=X(width);ctx.beginPath();ctx.moveTo(X(a.x),Y(a.y));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke()}
+function ringNodes(count,radius,spread,size,bright){const nodes=[],clusters=Array.from({length:16},()=>({a:range(A0,A1),s:range(.015,.06)}));for(let i=0;i<count;i++){const cl=rnd()<.55?pick(clusters):null,a=cl?cl.a+gauss()*cl.s:range(A0,A1),r=radius+gauss()*spread+(rnd()<.08?gauss()*spread*2.6:0);nodes.push({x:C.x+Math.cos(a)*r,y:C.y+Math.sin(a)*r,a,r:size*(rnd()<.06?range(2.6,4):rnd()<.3?range(1.4,2.2):range(.55,1.2)),c:nodeColour(),b:bright*range(.55,1)})}return nodes}
+function connect(nodes,k,maxDist,alpha,width){const done=new Set();for(let i=0;i<nodes.length;i++){const a=nodes[i],near=nodes.map((n,j)=>({j,d:Math.hypot(n.x-a.x,n.y-a.y)})).filter(o=>o.j!==i&&o.d<maxDist).sort((p,q)=>p.d-q.d).slice(0,k);for(const o of near){const key=i<o.j?i+':'+o.j:o.j+':'+i;if(done.has(key))continue;done.add(key);link(a,nodes[o.j],alpha*(1-o.d/maxDist*.7),width)}}return[...done].map(key=>key.split(':').map(Number))}
+/* 1 · Grund: tiefes Blau mit kühlem Schein unter dem Bogen und einem warmen Hauch rechts unten */
+let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#08111b');g.addColorStop(.55,'#0a1622');g.addColorStop(1,'#050b12');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+for(const[x,y,r,c,a]of[[800,760,720,deep,.16],[560,900,420,teal,.08],[1240,880,380,amber,.06],[800,330,520,[40,70,100],.14]]){g=ctx.createRadialGradient(X(x),Y(y),0,X(x),Y(y),X(r));g.addColorStop(0,rgba(c,a));g.addColorStop(1,rgba(c,0));ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+/* 2 · Fernes Feld aus Datenstaub */
+ctx.globalCompositeOperation='lighter';
+const dust=Array.from({length:720},()=>({x:range(-40,1640),y:range(-40,940),r:range(.5,1.5),c:rnd()<.9?mix(teal,ice,rnd()):amber,b:range(.08,.34)}));
+for(const d of dust){ctx.fillStyle=rgba(d.c,d.b);ctx.beginPath();ctx.arc(X(d.x),Y(d.y),X(d.r),0,Math.PI*2);ctx.fill()}
+for(let i=0;i<dust.length;i++)for(let j=i+1;j<dust.length;j++){const a=dust[i],b=dust[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<52&&rnd()<.16){ctx.strokeStyle=rgba(teal,.05*(1-d/52));ctx.lineWidth=X(.6);ctx.beginPath();ctx.moveTo(X(a.x),Y(a.y));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke()}}
+/* 3 · Konzentrische Spuren deuten die Kreisform an */
+for(const[dr,a,dash]of[[-220,.05,[3,14]],[-150,.06,[]],[95,.07,[2,9]],[150,.05,[]],[230,.04,[4,18]]]){ctx.strokeStyle=rgba(deep,a);ctx.lineWidth=X(1);ctx.setLineDash(dash.map(v=>X(v)));ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(RADIUS+dr),A0-.1,A1+.1);ctx.stroke()}ctx.setLineDash([]);
+/* 4 · Äußerer und innerer Ring: kleiner, blasser, weiter weg */
+const outer=ringNodes(110,RADIUS+92,14,2.1,.5),inner=ringNodes(70,RADIUS-118,16,2.3,.55);
+for(const ring of[outer,inner]){connect(ring,2,120,.22,.8);for(const n of ring)glowDot(n.x,n.y,n.r,n.c,n.b*.8,2.6)}
+/* 5 · Hauptbogen: Leuchtspur, Instrumentenringe mit Skalenstrichen, Datenspuren, dichte Knoten, Neuronen, Verbindungen, Impulse */
+function arc(radius,from,to,alpha,width,colour=teal,dash=[]){ctx.strokeStyle=rgba(colour,alpha);ctx.lineWidth=X(width);ctx.setLineDash(dash.map(v=>X(v)));ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(radius),from,to);ctx.stroke();ctx.setLineDash([])}
+arc(RADIUS,A0-.05,A1+.05,.2,1.4);arc(RADIUS+42,A0-.05,A1+.05,.13,1,deep,[14,10]);arc(RADIUS-46,A0-.05,A1+.05,.1,1,deep,[3,7]);arc(RADIUS+70,A0-.05,A1+.05,.07,.8,deep);
+for(let a=A0;a<A1;a+=rad(.75)){const major=Math.round((a-A0)/rad(.75))%8===0,len=major?16:7;ctx.strokeStyle=rgba(mix(teal,ice,.4),major?.34:.16);ctx.lineWidth=X(major?1.2:.8);ctx.beginPath();ctx.moveTo(X(C.x+Math.cos(a)*(RADIUS+30)),Y(C.y+Math.sin(a)*(RADIUS+30)));ctx.lineTo(X(C.x+Math.cos(a)*(RADIUS+30+len)),Y(C.y+Math.sin(a)*(RADIUS+30+len)));ctx.stroke()}
+for(let i=0;i<46;i++){const a=range(A0,A1),len=rad(range(.6,3.4)),r=RADIUS+(rnd()<.5?range(-58,-4):range(4,58)),warm=rnd()<.18;ctx.strokeStyle=rgba(warm?amber:ice,range(.25,.7));ctx.lineWidth=X(range(1,2));ctx.lineCap='round';ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(r),a,a+len);ctx.stroke();glowDot(C.x+Math.cos(a+len)*r,C.y+Math.sin(a+len)*r,1.3,warm?amber:ice,.9,4)}ctx.lineCap='butt';
+function neuron(n){const arms=4+Math.floor(rnd()*5);for(let k=0;k<arms;k++){const dir=rnd()*Math.PI*2,len=range(18,52),bend=range(-.9,.9),ex=n.x+Math.cos(dir)*len,ey=n.y+Math.sin(dir)*len,cx=n.x+Math.cos(dir+bend)*len*.55,cy=n.y+Math.sin(dir+bend)*len*.55,g=ctx.createLinearGradient(X(n.x),Y(n.y),X(ex),Y(ey));g.addColorStop(0,rgba(n.c,.55*n.b));g.addColorStop(1,rgba(n.c,0));ctx.strokeStyle=g;ctx.lineWidth=X(1.3);ctx.beginPath();ctx.moveTo(X(n.x),Y(n.y));ctx.quadraticCurveTo(X(cx),Y(cy),X(ex),Y(ey));ctx.stroke();if(rnd()<.5)glowDot(ex,ey,1,n.c,.5*n.b,3)}}
+g=ctx.createRadialGradient(X(C.x),Y(C.y),X(RADIUS-60),X(C.x),Y(C.y),X(RADIUS+60));g.addColorStop(0,rgba(teal,0));g.addColorStop(.5,rgba(teal,.11));g.addColorStop(1,rgba(teal,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(RADIUS+60),A0-.05,A1+.05);ctx.arc(X(C.x),Y(C.y),X(RADIUS-60),A1+.05,A0-.05,true);ctx.closePath();ctx.fill();
+const main=ringNodes(430,RADIUS,26,3,.95);
+connect(main,6,230,.09,.7);
+const edges=connect(main,4,150,.4,1.15);
+for(let i=0;i<22;i++){const a=pick(main),b=pick(main),d=Math.hypot(a.x-b.x,a.y-b.y);if(d>140&&d<460)link(a,b,.12,.9)}
+for(const n of main)if(n.r>6.5||(n.r>4&&rnd()<.3))neuron(n);
+for(const n of main)glowDot(n.x,n.y,n.r,n.c,n.b,n.r>6?3.8:3);
+for(let i=0;i<34;i++){const[ia,ib]=pick(edges),a=main[ia],b=main[ib],t=range(.2,.8);glowDot(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t,1.4,rnd()<.2?amber:ice,.95,4.5)}
+/* 6 · Vordergrund: unscharfe Lichtpunkte nah an der Kamera */
+for(let i=0;i<14;i++){const a=range(A0,A1),r=RADIUS+gauss()*70,x=C.x+Math.cos(a)*r,y=C.y+Math.sin(a)*r,size=range(22,70),c=rnd()<.25?amber:teal;g=ctx.createRadialGradient(X(x),Y(y),0,X(x),Y(y),X(size));g.addColorStop(0,rgba(c,.2));g.addColorStop(.55,rgba(c,.09));g.addColorStop(1,rgba(c,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(X(x),Y(y),X(size),0,Math.PI*2);ctx.fill()}
+ctx.globalCompositeOperation='source-over';
+/* 7 · Vignette und feine Körnung */
+g=ctx.createRadialGradient(X(800),Y(520),X(300),X(800),Y(520),X(1150));g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(2,6,10,.62)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+const img=ctx.getImageData(0,0,W,H),px=img.data;for(let i=0;i<px.length;i+=4){const n=(rnd()-.5)*9;px[i]+=n;px[i+1]+=n;px[i+2]+=n}ctx.putImageData(img,0,0);
+window.sceneDataURL=canvas.toDataURL('image/jpeg',quality);window.rendered=true;
+</script>
