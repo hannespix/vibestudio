@@ -48,4 +48,4 @@ Die Rechte an Produktoberflächen, Marken und veröffentlichten Medien verbleibe
 
 ## Eigene Illustrationen
 
-Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Dekorative Naturhintergründe wurden KI-generiert. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
+Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Dekorative Naturhintergründe wurden KI-generiert. Das Motiv der Danke-Folie (`assets/scene-network.jpg`, Netzknoten auf einem Kreisbogen) ist eine prozedural mit HTML-Canvas erzeugte Grafik aus `tools/scene-network.html`; es ist kein Foto, kein KI-Bild und keine Darstellung realer Systeme. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.

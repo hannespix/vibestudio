@@ -14,12 +14,21 @@ const server=createServer(async(req,res)=>{try{const path=decodeURIComponent(new
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
 const failures=[],notes=[];const check=(ok,label)=>{(ok?notes:failures).push((ok?'✓ ':'✗ ')+label);if(!ok)console.error('✗ '+label)};
 await mkdir(shots,{recursive:true});
+const expectedSlides=((await readFile(join(root,'index.html'),'utf8')).match(/<section\b/g)||[]).length;
 const browser=await chromium.launch();
 async function open(url){const page=await browser.newPage({viewport:{width:1600,height:1000}});const errors=[],requests=[];page.on('pageerror',e=>errors.push('pageerror: '+e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text())});page.on('request',r=>requests.push(r.url()));await page.goto(url);await page.waitForSelector('.reveal.ready',{timeout:20000});await page.evaluate(()=>document.fonts.ready);return{page,errors,requests}}
 try{
  /* Quellfassung */
  const {page,errors}=await open(base+'/index.html');
- check(await page.evaluate(()=>deck.getTotalSlides())===12,'Quellfassung: 12 Folien');
+ check(await page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Quellfassung: '+expectedSlides+' Folien');
+ check(await page.$('#fullscreen')!==null,'Vollbild-Knopf in der Steuerleiste');
+ await page.click('#fullscreen');await page.waitForTimeout(300);
+ const fullscreen=await page.evaluate(()=>({on:!!document.fullscreenElement,pressed:document.querySelector('#fullscreen').getAttribute('aria-pressed'),toast:document.querySelector('#toast').classList.contains('visible')}));
+ check(fullscreen.on?fullscreen.pressed==='true':fullscreen.toast,'Vollbild-Knopf reagiert ('+(fullscreen.on?'Vollbild aktiv':'Hinweis gezeigt')+')');
+ if(fullscreen.on){await page.click('#fullscreen');await page.waitForTimeout(300);check(!(await page.evaluate(()=>!!document.fullscreenElement)),'Vollbild wieder beendet')}
+ await page.evaluate(()=>deck.slide(deck.getTotalSlides()-1));await page.waitForTimeout(400);
+ check((await page.evaluate(()=>deck.getCurrentSlide().classList.contains('network')&&deck.getCurrentSlide().querySelector('h1')?.textContent.trim()))==='danke','Letzte Folie ist die Danke-Folie');
+ await page.screenshot({path:join(shots,'danke.png')});await page.evaluate(()=>deck.slide(0));await page.waitForTimeout(300);
  const fonts=await page.evaluate(async()=>Object.fromEntries(await Promise.all(['DM Sans','BaWue Sans','BaWue Serif'].map(async f=>[f,(await document.fonts.load('20px "'+f+'"')).length>0]))));
  for(const[f,ok]of Object.entries(fonts))check(ok,'Schrift verfügbar: '+f);
  await page.keyboard.press('e');await page.waitForSelector('body.editing');
@@ -76,7 +85,7 @@ try{
  await page.close();
  /* Ein-Datei-Fassung */
  if(existsSync(join(root,'dist','index.html'))){const one=await open(base+'/dist/index.html');
-  check(await one.page.evaluate(()=>deck.getTotalSlides())===12,'Ein-Datei-Fassung: 12 Folien');
+  check(await one.page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Ein-Datei-Fassung: '+expectedSlides+' Folien');
   const extra=one.requests.filter(u=>!u.endsWith('/dist/index.html')&&!u.startsWith('data:'));
   check(extra.length===0,'Ein-Datei-Fassung lädt keine externen Dateien'+(extra.length?': '+extra.slice(0,3).join(', '):''));
   const oneFonts=await one.page.evaluate(async()=>(await document.fonts.load('20px "BaWue Serif"')).length>0&&(await document.fonts.load('20px "DM Sans"')).length>0);

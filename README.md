@@ -1,6 +1,6 @@
 # Vibe Studio · Vibecoding
 
-Eine kurze Reveal.js-Präsentation von Hannes Pix (zwölf Folien, ungefähr sieben Minuten) und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung. Alles läuft ohne Server, Build-Tool oder Internet direkt im Browser.
+Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr sieben Minuten) und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung. Alles läuft ohne Server, Build-Tool oder Internet direkt im Browser.
 
 **Live:** https://hannespix.github.io/vibestudio/ · **Zum Herunterladen:** https://hannespix.github.io/vibestudio/Vibecoding.html
 
@@ -19,6 +19,7 @@ Eine kurze Reveal.js-Präsentation von Hannes Pix (zwölf Folien, ungefähr sieb
 | `assets/` | Reveal.js, DM Sans, BaWue Sans/Serif (`assets/fonts/`), Motive und Screenshots |
 | `build.mjs` | Baut die Ein-Datei-Fassung nach `dist/` |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
+| `tools/scene-network.html`, `tools/render-scene.mjs` | Generator und Renderer für das Netzknoten-Motiv der Danke-Folie |
 | `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
 | `demo/pflanzenlernen.html` | Kleines zusätzliches Übungsbeispiel, nicht Teil des Decks |
 | `QUELLEN.md` | Quellen und Bildnachweise |
@@ -39,7 +40,7 @@ Im Repo lässt sich auch `index.html` direkt öffnen. Den Ordner dabei vollstän
 ## Vorführen
 
 - Pfeiltasten oder Leertaste: nächste / vorherige Folie
-- F: Vollbild
+- F oder der Vollbild-Knopf unten rechts: Vollbild an und aus
 - Esc oder O: Folienübersicht
 - N: kurze Sprechernotizen zur aktuellen Folie
 - E: Bearbeiten / Präsentieren
@@ -177,7 +178,7 @@ Zum Bearbeiten und Exportieren die vollständige **Vibecoding.html** (Pages-Adre
 
 Der Schwerpunkt ist **LLM + Git als Grundlage für eigene Verwaltungsprojekte**. Die Präsentation führt zu einer konkreten Entscheidung: internes GitLab und – mit höherer Dringlichkeit – eine betreute Container- und Datenbankumgebung im LVM. Sie beschreibt ein vorgeschlagenes Zielbild, keine bereits bestätigte Infrastruktur oder Datenfreigabe.
 
-Sechs Kapitelpaare, jeweils **Titelfolie → Inhaltsfolie**, mit knappen Aussagen und ausführlicheren Sprechernotizen:
+Sechs Kapitelpaare, jeweils **Titelfolie → Inhaltsfolie**, mit knappen Aussagen und ausführlicheren Sprechernotizen, dazu eine **Danke-Folie** zum Abschluss:
 
 1. **Vibecoding:** LLM/Agent entwickelt, Git hält Fortschritt fest.
 2. **Festhalten:** Begrenzter Chatkontext versus versionierter Code und dokumentiertes Projektwissen.
@@ -185,6 +186,7 @@ Sechs Kapitelpaare, jeweils **Titelfolie → Inhaltsfolie**, mit knappen Aussage
 4. **Bauen:** Auftrag, Branch, Ausprobieren, Review – an öffentlichen Claude-Code-/GitHub-Aufnahmen.
 5. **Betreiben:** vorgeschlagene interne Architektur mit GitLab, Anwendungscontainern und Datenbankdienst.
 6. **Ermöglichen:** Priorität für Container + Datenbank, internes GitLab als gemeinsame Grundlage, ein Pilot mit klarer Verantwortung.
+7. **Danke:** Raum für Fragen, Ideen und nächste Schritte, vor einem Netz aus Knoten und Verbindungen auf einem Kreisbogen.
 
 Git vergrößert kein Kontextfenster. Dauerhafte Ziele, Entscheidungen und nächste Schritte müssen als Dateien gesichert und in neuen Sitzungen gelesen werden. Die unterstützten Modelle und Anweisungsdateien unterscheiden sich nach Agent. Die Abbildung der Zielarchitektur ist bewusst vereinfacht; technische Auswahl, Zugriffe, Datenfreigaben und Betrieb müssen vereinbart werden.
 
@@ -194,7 +196,7 @@ Die bisherige kleine Pflanzen-App bleibt als zusätzliches Übungsbeispiel unter
 
 ## Anpassen
 
-Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
+Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `scene-network.jpg` (Danke-Folie) entsteht prozedural aus `tools/scene-network.html`; `node tools/render-scene.mjs [seed] [scale] [quality]` rendert es neu, andere Seeds ergeben andere Netze. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
 
 Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird nicht im Repo gepflegt, sondern bei jedem Stand auf `main` automatisch gebaut und veröffentlicht.
 
@@ -203,7 +205,7 @@ Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird
 Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUELLEN.md`.
 
 - Visuelle Inspiration: https://www.reddit.com/r/unixporn/comments/1wps5f4/hyprland_tacit_i_ported_linux_to_my_snapdragon/ . Keine Videoausschnitte übernommen.
-- Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante). Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
+- Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante) sowie ein prozedural erzeugtes Netzknoten-Motiv für die Danke-Folie (`tools/scene-network.html`, kein KI-Bild). Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
 - Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
 - DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
 - BaWue Sans und BaWue Serif, Luzi Type, lizenziert für das Land Baden-Württemberg (nicht frei): `assets/fonts/`, EULA https://luzi-type.ch/source/EULA-Web.pdf

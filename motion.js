@@ -1,6 +1,6 @@
 /* Shared controls are available before the DOMContentLoaded editor hooks run. */
 window.VibeMotionSettings={
- defaults(node){const scene=node?.dataset.scene||node?.className||'';return{motion:!!node?.querySelector('.motion-layer img'),cycle:28,strength:85,movement:65,rotation:scene.includes('blueprint')?8:22,speed:1,waves:scene.includes('blueprint')?42:0,dof:6,dust:5,texture:8,vividness:10,jiggle:0}},
+ defaults(node){const scene=node?.dataset.scene||node?.className||'';const network=scene.includes('network');return{motion:!!node?.querySelector('.motion-layer img'),cycle:28,strength:85,movement:network?45:65,rotation:scene.includes('blueprint')?8:network?6:22,speed:1,waves:scene.includes('blueprint')?42:0,dof:network?14:6,dust:network?18:5,texture:8,vividness:10,jiggle:0}},
  normalize(value){const c={...this.defaults(null),...value};for(const k of ['strength','movement','rotation','waves','dof','dust','texture','vividness','jiggle'])c[k]=Math.max(0,Math.min(100,Number(c[k])||0));c.speed=Math.max(.25,Math.min(2,Number(c.speed)||1));c.cycle=Math.max(10,Math.min(180,Number(c.cycle)||28));return c},
  presets:{calm:{strength:65,movement:40,rotation:12,speed:.8,waves:12,dof:4,dust:3,texture:6,vividness:6,jiggle:0},vivid:{strength:85,movement:65,rotation:22,speed:1,waves:28,dof:6,dust:5,texture:8,vividness:10,jiggle:0},handheld:{strength:85,movement:45,rotation:12,speed:1,waves:0,dof:6,dust:5,texture:8,vividness:8,jiggle:22}}
 };
