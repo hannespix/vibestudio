@@ -29,6 +29,8 @@ try{
  await page.evaluate(()=>deck.slide(deck.getTotalSlides()-1));await page.waitForTimeout(400);
  check((await page.evaluate(()=>deck.getCurrentSlide().classList.contains('network')&&deck.getCurrentSlide().querySelector('h1')?.textContent.trim()))==='danke','Letzte Folie ist die Danke-Folie');
  await page.screenshot({path:join(shots,'danke.png')});
+ const motion=await page.evaluate(()=>VibeMotionSettings.defaults(document.querySelector('.slides>section.chapter.paper')));
+ check(motion.strength===95&&motion.movement===76&&motion.rotation===28&&motion.texture===12,'Kräftige Effekt-Grundeinstellung (Stärke '+motion.strength+', Bewegung '+motion.movement+')');
  const scenes=await page.evaluate(()=>[...document.querySelectorAll('.slides>section.chapter .motion-image')].map(i=>i.getAttribute('src')));
  check(new Set(scenes).size===scenes.length,'Jede Kapitelfolie hat ein eigenes Hintergrundmotiv ('+scenes.length+')');
  await page.evaluate(()=>deck.slide(10));await page.waitForTimeout(400);check(await page.evaluate(()=>deck.getCurrentSlide().classList.contains('dawn')),'Folie 11 nutzt das Morgenlicht-Motiv');await page.screenshot({path:join(shots,'ermoeglichen.png')});
