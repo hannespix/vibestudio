@@ -59,3 +59,6 @@
 /* Danke-Folie: Netzknoten auf einem Kreisbogen (prozedural erzeugt, tools/scene-network.html). */
 .network{background:#08111b;color:#e9f1f5}.network .chapter-title{text-shadow:0 2px 40px #04101acc}.network .signature{opacity:.72}
 .deck-ui button svg{display:block;margin:auto}.deck-ui button[aria-pressed=true]{background:#fff2}
+
+/* Ermöglichen: Morgenlicht über dem Horizont (prozedural erzeugt, tools/scene-dawn.html). */
+.dawn{background:#ebdcc7;color:#2c241c}.dawn .chapter-title{text-shadow:0 1px 26px #f7e9d5aa}

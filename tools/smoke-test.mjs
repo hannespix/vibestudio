@@ -28,7 +28,11 @@ try{
  if(fullscreen.on){await page.click('#fullscreen');await page.waitForTimeout(300);check(!(await page.evaluate(()=>!!document.fullscreenElement)),'Vollbild wieder beendet')}
  await page.evaluate(()=>deck.slide(deck.getTotalSlides()-1));await page.waitForTimeout(400);
  check((await page.evaluate(()=>deck.getCurrentSlide().classList.contains('network')&&deck.getCurrentSlide().querySelector('h1')?.textContent.trim()))==='danke','Letzte Folie ist die Danke-Folie');
- await page.screenshot({path:join(shots,'danke.png')});await page.evaluate(()=>deck.slide(0));await page.waitForTimeout(300);
+ await page.screenshot({path:join(shots,'danke.png')});
+ const scenes=await page.evaluate(()=>[...document.querySelectorAll('.slides>section.chapter .motion-image')].map(i=>i.getAttribute('src')));
+ check(new Set(scenes).size===scenes.length,'Jede Kapitelfolie hat ein eigenes Hintergrundmotiv ('+scenes.length+')');
+ await page.evaluate(()=>deck.slide(10));await page.waitForTimeout(400);check(await page.evaluate(()=>deck.getCurrentSlide().classList.contains('dawn')),'Folie 11 nutzt das Morgenlicht-Motiv');await page.screenshot({path:join(shots,'ermoeglichen.png')});
+ await page.evaluate(()=>deck.slide(0));await page.waitForTimeout(300);
  const fonts=await page.evaluate(async()=>Object.fromEntries(await Promise.all(['DM Sans','BaWue Sans','BaWue Serif'].map(async f=>[f,(await document.fonts.load('20px "'+f+'"')).length>0]))));
  for(const[f,ok]of Object.entries(fonts))check(ok,'Schrift verfügbar: '+f);
  await page.keyboard.press('e');await page.waitForSelector('body.editing');
