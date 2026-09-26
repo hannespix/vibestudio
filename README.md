@@ -183,6 +183,8 @@ Die Sprechernotizen können direkt im rechten Feld geändert werden. Während de
 
 Beim Überblenden bleibt die verlassene Folie bis zum Ende der Überblendung sichtbar und in Bewegung; erst danach wird sie unsichtbar geschaltet und ihre Animation pausiert. Verlassene Folien belegen so keinen Grafikspeicher mehr, was auf schwächeren Grafikkarten flackernde Kacheln beim Folienwechsel vermeidet. Die Hintergrundfotos der Nachbarfolien werden vorab dekodiert, damit der erste Wechsel auf eine neue Folie nicht stockt.
 
+Die Hintergrundeffekte sind so gebaut, dass sie die Grafikkarte wenig belasten: Bild, Farbkraft-Filter und Körnung liegen in einer gemeinsamen animierten Ebene (`.motion-camera`) und werden zusammen gerastert. Lichtflecken und Staub sind einfache Verläufe ohne Filter und ohne Mischmodus. Damit braucht eine bewegte Folie keine Render-Oberflächen pro Bild, nur eine Bildebene und kleine Partikelebenen, die der Compositor allein über ihre Animationen führt.
+
 ### Speichern mit Medien
 
 **HTML speichern** sichert die komplette Präsentation einschließlich Folienstruktur, importierter Medien und Schriften, Logos, Texten und Einstellungen in einer wieder bearbeitbaren Datei. Das Herunterladen kann bei großen Videos entsprechend länger dauern. Große Medien werden nicht im begrenzten Browser-Zwischenspeicher gesichert: In diesem Fall zeigt die Statuszeile ausdrücklich den Hinweis auf **HTML speichern**. Der Export funktioniert weiterhin.
