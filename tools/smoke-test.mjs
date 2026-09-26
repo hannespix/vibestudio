@@ -101,10 +101,17 @@ try{
  check((await speedOf(0))===0.75&&(await speedOf(2))===1.5,'Bewegung: eigener Wert nur auf dieser Folie');
  await page.click('#motion-inherit');check((await speedOf(0))===1.5,'Bewegung: „Globale Bewegung übernehmen“ entfernt den eigenen Wert');
  await page.selectOption('#motion-scope','global');await slide('1');await page.click('#tab-slide');
+ /* Bühne: Randfarbe bei Breitbild */
+ check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(0, 0, 0)','Bühne: Standard schwarz');
+ await page.click('#tab-background');await page.click('#stage-swatches button[data-stage="#ffffff"]');
+ check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rand weiß');
+ await page.click('#stage-swatches button[data-stage="#000000"]');
+ check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(0, 0, 0)'&&(await page.evaluate(()=>document.querySelector('#stage-swatches button[data-stage="#000000"]').getAttribute('aria-pressed')))==='true','Bühne: Rand schwarz und Auswahl markiert');
+ await page.click('#editor-undo');check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rückgängig stellt die vorige Randfarbe wieder her');await page.click('#tab-slide');
  /* Export enthält den Zustand */
  const [download]=await Promise.all([page.waitForEvent('download'),page.click('#editor-save')]);
  const exported=await readFile(await download.path(),'utf8');
- check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js')&&exported.includes('design.js'),'Export enthält Zustand und neue Skripte');
+ check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js')&&exported.includes('design.js')&&exported.includes('"stage"'),'Export enthält Zustand, Bühne und neue Skripte');
  await page.click('#editor-present');await page.waitForTimeout(200);
  check(!(await page.evaluate(()=>document.body.classList.contains('editing'))),'Zurück im Präsentationsmodus');
  await page.screenshot({path:join(shots,'present.png')});
