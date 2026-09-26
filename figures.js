@@ -1,0 +1,23 @@
+/* Animated vector figures for the six content slides. Static line art is inline SVG; every moving part is an HTML element animated with transform/opacity only (figures.css), so the compositor drives it. Figures are inserted at load and are idempotent: a slide that already carries its figure (duplicate, stored HTML) is left alone. */
+window.addEventListener('DOMContentLoaded',()=>{
+ const F1=`<svg viewBox="0 0 1420 150" width="1420" height="150"><path class="f1-main in" d="M60 100H1360"/><path class="f1-branch in" d="M430 100C500 100 520 40 600 40H900C980 40 1000 100 1070 100"/><g class="f1-spark"><circle cx="60" cy="100" r="5"/><path d="M60 82v-10M60 118v10M42 100H32M78 100h10M47 87l-7-7M73 87l7-7M47 113l-7 7M73 113l7 7"/></g><g class="f1-nodes"><circle class="f1-node m" style="--d:0s" cx="200" cy="100" r="7"/><circle class="f1-node m" style="--d:1.3s" cx="340" cy="100" r="7"/><circle class="f1-node fork m" style="--d:2.6s" cx="430" cy="100" r="8"/><circle class="f1-node br m" style="--d:3.9s" cx="650" cy="40" r="6"/><circle class="f1-node m" style="--d:5.2s" cx="760" cy="100" r="7"/><circle class="f1-node br m" style="--d:6.5s" cx="800" cy="40" r="6"/><circle class="f1-node fork m" style="--d:7.8s" cx="1070" cy="100" r="8"/><circle class="f1-node m" style="--d:9.1s" cx="1220" cy="100" r="7"/></g><g class="f1-review"><circle cx="1150" cy="58" r="14"/><path d="M1143 58l5 5 9-10"/></g><text class="f1-label" x="1300" y="88">main</text><text class="f1-label branch" x="750" y="26" text-anchor="middle">branch</text><text class="f1-label review" x="1150" y="34" text-anchor="middle">review</text></svg><i class="f1-dot m" style="--d:0s"></i><i class="f1-dot m" style="--d:3s"></i><i class="f1-dot m" style="--d:6s"></i><i class="f1-branch-dot m"></i>`;
+ const F3='<i class="f3-hand m"></i><i class="f3-flash m"></i>';
+ const F5='<i class="f5-pulse m" style="--d:0s"></i><i class="f5-pulse m" style="--d:4s"></i><i class="f5-sat m" style="--r:250px;--t:26s;--a:20deg;--s:12px;--c:#e6d3b8"></i><i class="f5-sat m" style="--r:284px;--t:38s;--a:200deg;--s:9px;--c:#c79e74;--dir:reverse"></i><i class="f5-sat m" style="--r:250px;--t:26s;--a:190deg;--s:8px;--c:#9fb3a2"></i>';
+ const F7=`<svg viewBox="0 0 360 84" width="360" height="84"><path class="f7-back" d="M330 30C330 -12 30 -12 30 30"/><path class="f7-line" d="M30 30H330"/><circle class="f7-node m" style="--d:0s" cx="30" cy="30" r="9"/><circle class="f7-node m" style="--d:1.8s" cx="180" cy="30" r="9"/><circle class="f7-node m" style="--d:3.6s" cx="330" cy="30" r="9"/><text x="30" y="66" text-anchor="middle">beschreiben</text><text x="180" y="66" text-anchor="middle">ausprobieren</text><text x="330" y="66" text-anchor="middle">freigeben</text></svg><i class="f7-dot m"></i>`;
+ const F9a='<svg viewBox="0 0 170 64" width="170" height="64"><path class="f9-line" d="M12 32H148"/><path class="f9-head" d="M138 22l12 10-12 10"/></svg><i class="f9-pkt m" style="--d:0s"></i><i class="f9-pkt m" style="--d:1.6s"></i>';
+ const F9b='<svg viewBox="0 0 170 64" width="170" height="64"><path class="f9-line" d="M12 32H158"/><path class="f9-head" d="M148 22l10 10-10 10"/><path class="f9-head" d="M22 22l-10 10 10 10"/></svg><i class="f9-dot to m"></i><i class="f9-dot back m"></i>';
+ const F11='<i class="f11-block a">Container</i><i class="f11-block b">Datenbank</i><i class="f11-slab">GitLab · gemeinsame Grundlage</i><i class="f11-pole"></i><i class="f11-flag"></i><i class="f11-ring" style="--d:0s"></i><i class="f11-ring" style="--d:1.2s"></i>';
+ const fig=(cls,style,markup)=>`<div class="fig ${cls}" aria-hidden="true" style="${style}">${markup}</div>`;
+ const once=(node,cls,style,markup,where='beforeend')=>{if(!node.querySelector('.'+cls))node.insertAdjacentHTML(where,fig(cls,style,markup))};
+ const build={
+  'tools-intro':s=>once(s,'fig-commits','left:90px;top:668px;width:1420px;height:150px',F1),
+  'context-slide':s=>once(s,'fig-context','left:0;top:0;width:1600px;height:900px',F3),
+  'freedom-slide':s=>{const orbit=s.querySelector('.repo-orbit');if(orbit)once(orbit,'fig-orbit','left:0;top:0;width:100%;height:100%',F5,'afterbegin')},
+  'workflow-slide':s=>once(s,'fig-round','left:1150px;top:96px;width:360px;height:84px',F7),
+  'runtime-slide':s=>s.querySelectorAll('.runtime-link i').forEach((el,i)=>{if(!el.querySelector('svg')){el.innerHTML=i?F9b:F9a;el.classList.add('fig-link')}}),
+  'decision-slide':s=>once(s,'fig-foundation','left:90px;top:712px;width:1420px;height:114px',F11)
+ };
+ function apply(root=document){root.querySelectorAll('.slides>section').forEach(s=>{for(const [cls,make] of Object.entries(build))if(s.classList.contains(cls))make(s)})}
+ apply();
+ window.VibeFigures={apply};
+});
