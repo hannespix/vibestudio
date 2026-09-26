@@ -103,17 +103,26 @@ try{
  await page.selectOption('#motion-scope','global');await slide('1');await page.click('#tab-slide');
  /* Bühne: Randfarbe bei Breitbild */
  check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(0, 0, 0)','Bühne: Standard schwarz');
- await page.click('#tab-background');await page.click('#stage-swatches button[data-stage="#ffffff"]');
+ const settle=()=>page.waitForTimeout(850);
+ await page.click('#tab-background');await page.click('#stage-swatches button[data-stage="#ffffff"]');await settle();
  check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rand weiß');
- await page.click('#stage-swatches button[data-stage="#000000"]');
+ await page.click('#stage-swatches button[data-stage="#000000"]');await settle();
  check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(0, 0, 0)'&&(await page.evaluate(()=>document.querySelector('#stage-swatches button[data-stage="#000000"]').getAttribute('aria-pressed')))==='true','Bühne: Rand schwarz und Auswahl markiert');
- await page.click('#editor-undo');check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rückgängig stellt die vorige Randfarbe wieder her');
+ await page.click('#editor-undo');await settle();check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rückgängig stellt die vorige Randfarbe wieder her');
  const hexToRgb=h=>'rgb('+[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(', ')+')',bodyColour=()=>page.evaluate(()=>getComputedStyle(document.body).backgroundColor);
- const edge=await page.evaluate(()=>VibeStudio.stageFromImage());
+ const edge=await page.evaluate(()=>VibeStudio.stageFromImage());await settle();
  check(/^#[0-9a-f]{6}$/.test(edge||'')&&(await bodyColour())===hexToRgb(edge),'Bühne: Farbe vom Bildrand übernommen ('+edge+')');
- const picked=await page.evaluate(()=>{const r=document.querySelector('.slides>section.present').getBoundingClientRect();return VibeStudio.pickStageAt(r.left+r.width*.5,r.top+r.height*.85)});
+ const picked=await page.evaluate(()=>{const r=document.querySelector('.slides>section.present').getBoundingClientRect();return VibeStudio.pickStageAt(r.left+r.width*.5,r.top+r.height*.85)});await settle();
  check(/^#[0-9a-f]{6}$/.test(picked||'')&&picked!==edge&&(await bodyColour())===hexToRgb(picked),'Bühne: Pipette liest die Bildfarbe an der Klickstelle ('+picked+')');
- await page.click('#tab-slide');
+ /* Bühne je Folie */
+ await page.selectOption('#stage-scope','slide');await page.click('#stage-swatches button[data-stage="#ffffff"]');await page.waitForTimeout(800);
+ check((await bodyColour())==='rgb(255, 255, 255)','Bühne: eigene Farbe für diese Folie');
+ await page.evaluate(()=>deck.slide(2));await page.waitForTimeout(900);
+ check((await bodyColour())===hexToRgb(picked),'Bühne: andere Folie behält die globale Farbe');
+ await page.evaluate(()=>deck.slide(0));await page.waitForTimeout(900);
+ check((await bodyColour())==='rgb(255, 255, 255)','Bühne: Rückkehr zeigt wieder die eigene Farbe');
+ await page.click('#stage-inherit');await page.waitForTimeout(800);check((await bodyColour())===hexToRgb(picked),'Bühne: „Globale Bühne übernehmen“ entfernt die eigene Farbe');
+ await page.selectOption('#stage-scope','global');await page.click('#tab-slide');
  /* Export enthält den Zustand */
  const [download]=await Promise.all([page.waitForEvent('download'),page.click('#editor-save')]);
  const exported=await readFile(await download.path(),'utf8');
