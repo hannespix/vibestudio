@@ -19,7 +19,7 @@ Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr si
 | `assets/` | Reveal.js, DM Sans, BaWue Sans/Serif (`assets/fonts/`), Motive und Screenshots |
 | `build.mjs` | Baut die Ein-Datei-Fassung nach `dist/` |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
-| `tools/scene-network.html`, `tools/render-scene.mjs` | Generator und Renderer für das Netzknoten-Motiv der Danke-Folie |
+| `tools/scene-network.html`, `tools/scene-dawn.html`, `tools/render-scene.mjs` | Generatoren und Renderer für die prozeduralen Motive (Netzknoten der Danke-Folie, Morgenlicht der Ermöglichen-Folie) |
 | `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
 | `demo/pflanzenlernen.html` | Kleines zusätzliches Übungsbeispiel, nicht Teil des Decks |
 | `QUELLEN.md` | Quellen und Bildnachweise |
@@ -196,7 +196,7 @@ Die bisherige kleine Pflanzen-App bleibt als zusätzliches Übungsbeispiel unter
 
 ## Anpassen
 
-Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `scene-network.jpg` (Danke-Folie) entsteht prozedural aus `tools/scene-network.html`; `node tools/render-scene.mjs [seed] [scale] [quality]` rendert es neu, andere Seeds ergeben andere Netze. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
+Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `scene-network.jpg` (Danke-Folie) und `scene-dawn.jpg` (Ermöglichen) entstehen prozedural aus `tools/scene-network.html` und `tools/scene-dawn.html`; `node tools/render-scene.mjs network|dawn [seed] [scale] [quality]` rendert sie neu, andere Seeds ergeben andere Bilder. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
 
 Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird nicht im Repo gepflegt, sondern bei jedem Stand auf `main` automatisch gebaut und veröffentlicht.
 
@@ -205,7 +205,7 @@ Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird
 Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUELLEN.md`.
 
 - Visuelle Inspiration: https://www.reddit.com/r/unixporn/comments/1wps5f4/hyprland_tacit_i_ported_linux_to_my_snapdragon/ . Keine Videoausschnitte übernommen.
-- Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante) sowie ein prozedural erzeugtes Netzknoten-Motiv für die Danke-Folie (`tools/scene-network.html`, kein KI-Bild). Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
+- Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante) sowie zwei prozedural erzeugte Motive, Morgenlicht über dem Horizont für „Ermöglichen“ und Netzknoten auf einem Kreisbogen für die Danke-Folie (`tools/scene-dawn.html`, `tools/scene-network.html`, keine KI-Bilder). Jede Kapitelfolie hat damit ein eigenes Motiv. Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
 - Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
 - DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
 - BaWue Sans und BaWue Serif, Luzi Type, lizenziert für das Land Baden-Württemberg (nicht frei): `assets/fonts/`, EULA https://luzi-type.ch/source/EULA-Web.pdf
