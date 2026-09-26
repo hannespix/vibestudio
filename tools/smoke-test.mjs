@@ -132,6 +132,16 @@ try{
  await page.screenshot({path:join(shots,'present.png')});
  check(errors.length===0,'Quellfassung ohne Konsolenfehler'+(errors.length?': '+errors.join(' | '):''));
  await page.close();
+ /* Responsiver Editor: schmale Fenster */
+ for(const [w,h] of [[900,700],[430,900]]){const small=await browser.newPage({viewport:{width:w,height:h}});const errs=[];small.on('pageerror',e=>errs.push(e.message));await small.goto(base+'/index.html');await small.waitForSelector('.reveal.ready');await small.keyboard.press('e');await small.waitForSelector('body.editing');await small.waitForTimeout(400);
+  const m=await small.evaluate(()=>({reveal:document.querySelector('.reveal').getBoundingClientRect().width,win:innerWidth,railHidden:getComputedStyle(document.querySelector('#studio-rail')).display==='none',toggles:getComputedStyle(document.querySelector('.panel-toggles')).display!=='none',toolbarVar:getComputedStyle(document.documentElement).getPropertyValue('--toolbar-h').trim(),toolbarH:document.querySelector('#editor-toolbar').offsetHeight,scrollW:document.documentElement.scrollWidth,scale:deck.getScale(),top:Math.round(document.querySelector('.reveal').getBoundingClientRect().top),scrollView:document.body.classList.contains('reveal-scroll')}));
+  check(Math.round(m.reveal)===m.win&&m.railHidden&&m.toggles&&m.toolbarVar===m.toolbarH+'px'&&m.top===m.toolbarH&&m.scrollW<=m.win&&m.scale>0&&!m.scrollView,`Responsiv ${w} px: Folie volle Breite unter der Toolbar (${m.toolbarH} px), Leisten eingeklappt, kein Scrollmodus`);
+  await small.click('#toggle-rail');await small.waitForTimeout(200);check(await small.evaluate(()=>getComputedStyle(document.querySelector('#studio-rail')).display!=='none'),`Responsiv ${w} px: Folienleiste einblendbar`);
+  await small.click('#toggle-inspector');await small.waitForTimeout(200);const open=await small.evaluate(()=>({rail:getComputedStyle(document.querySelector('#studio-rail')).display!=='none',inspector:getComputedStyle(document.querySelector('#studio-inspector')).display!=='none'}));
+  check(open.inspector&&(w>760?open.rail:!open.rail),`Responsiv ${w} px: Inspektor einblendbar${w>760?'':', Folienleiste weicht'}`);
+  await small.screenshot({path:join(shots,`responsive-${w}.png`)});
+  if(w===430){await small.evaluate(()=>{window.__section=document.querySelector('.slides>section');window.__motion=document.querySelectorAll('.motion-image').length});await small.setViewportSize({width:900,height:430});await small.waitForTimeout(500);await small.setViewportSize({width:430,height:900});await small.waitForTimeout(500);const turned=await small.evaluate(()=>({alive:document.contains(window.__section),same:document.querySelectorAll('.motion-image').length===window.__motion,scroll:document.body.classList.contains('reveal-scroll')}));check(turned.alive&&turned.same&&!turned.scroll,'Drehen des Geräts (430 ↔ 900 px) behält Folien-DOM und Animationen')}
+  check(errs.length===0,`Responsiv ${w} px: ohne Fehler`);await small.close()}
  /* Ein-Datei-Fassung */
  if(existsSync(join(root,'dist','index.html'))){const one=await open(base+'/dist/index.html');
   check(await one.page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Ein-Datei-Fassung: '+expectedSlides+' Folien');

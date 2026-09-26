@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded',()=>{
  const qs=s=>document.querySelector(s);let timer=null,auto=false,uiTimer;
- const deck=new Reveal({width:1600,height:900,margin:0,minScale:.1,maxScale:2,center:false,controls:false,progress:true,hash:true,history:true,transition:'fade',transitionSpeed:'slow',backgroundTransition:'fade',overview:true,keyboard:true,touch:true,help:false,autoAnimate:false});
+ const deck=new Reveal({width:1600,height:900,margin:0,minScale:.1,maxScale:2,center:false,controls:false,progress:true,hash:true,history:true,transition:'fade',transitionSpeed:'slow',backgroundTransition:'fade',overview:true,keyboard:true,touch:true,help:false,autoAnimate:false,scrollActivationWidth:null});
  window.deck=deck;
  function toast(text){qs('#toast').textContent=text;qs('#toast').classList.add('visible');setTimeout(()=>qs('#toast').classList.remove('visible'),2100)}
  function update(){const i=deck.getIndices().h,n=deck.getTotalSlides();qs('#counter').textContent=String(i+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');qs('#prev').disabled=i===0;qs('#next').disabled=i===n-1;qs('#note-title').textContent=deck.getCurrentSlide().dataset.name;qs('#note-content').textContent=deck.getCurrentSlide().querySelector('aside.notes')?.textContent||'';DeckMotion.sync();if(auto)schedule()}
