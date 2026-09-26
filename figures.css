@@ -1,0 +1,115 @@
+/* Animierte Vektor-Infografiken der sechs Inhaltsfolien (figures.js). Bewegte Teile sind HTML-Elemente mit transform/opacity-Animationen und laufen auf dem Compositor; Linien sind SVG. Animationen laufen nur auf der aktuellen Folie, pausieren mit der Hintergrundbewegung (html.motion-paused, Taste M, Bearbeitungsmodus) und entfallen bei prefers-reduced-motion. Ruhezustand (0 %) ist immer der vollständig sichtbare Zustand, damit Miniaturen und der Druck die Grafik zeigen. */
+.fig{position:absolute;pointer-events:none;font:16px/1.2 var(--sans);user-select:none;z-index:1}
+.fig svg{display:block;overflow:visible}
+.fig i{position:absolute;display:block;font-style:normal}
+.fig text{font-family:var(--sans)}
+.fig path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig .m{animation-play-state:paused}
+.present .fig .m{animation-play-state:running}
+html.motion-paused .fig *,html.motion-paused .chat-traces i,html.motion-paused .runtime-node,html.motion-paused .handoff-arrow,html.motion-paused .fig-link *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.fig *,.chat-traces i,.runtime-node,.handoff-arrow,.fig-link *{animation:none!important}}
+@keyframes fig-pop{from{opacity:0;transform:scale(.6)}}
+@keyframes fig-fade{from{opacity:0}}
+
+/* 01 Kombination: Commit-Graph. Ideen (Funke) werden Commits, ein Branch zweigt ab und wird nach dem Review zurückgeführt. */
+.fig-commits path{stroke-width:2}
+.f1-main{stroke:#24231f;opacity:.3}
+.f1-branch{stroke:#ad6549;opacity:.85}
+.f1-spark circle{fill:#ad6549}.f1-spark path{stroke:#ad6549;opacity:.65}
+.f1-node{fill:#eee8df;stroke:#24231f;stroke-width:2;transform-box:fill-box;transform-origin:center}
+.f1-node.br,.f1-node.fork{stroke:#ad6549}
+.f1-review circle{fill:#dbe0d5;stroke:#627364;stroke-width:2}.f1-review path{stroke:#4b5c46;stroke-width:2.4}
+.fig-commits g{transform-box:fill-box;transform-origin:center}
+.f1-label{font-size:15px;fill:#8a8072;letter-spacing:1.4px}.f1-label.branch{fill:#ad6549}.f1-label.review{fill:#627364}
+.f1-dot,.f1-branch-dot{width:10px;height:10px;border-radius:50%;background:#ad6549;box-shadow:0 0 0 4px #ad654926;opacity:0}
+.f1-dot{left:55px;top:95px;animation:f1-travel 9s linear infinite;animation-delay:var(--d)}
+.f1-branch-dot{left:0;top:0;offset-path:path('M430 100C500 100 520 40 600 40H900C980 40 1000 100 1070 100');offset-rotate:0deg;animation:f1-branch 9s linear infinite 1.2s}
+.f1-node.m{animation:f1-pulse 10.4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes f1-travel{0%{transform:translateX(0);opacity:0}4%{opacity:1}92%{opacity:1}100%{transform:translateX(1300px);opacity:0}}
+@keyframes f1-branch{0%{offset-distance:0%;opacity:0}3%{opacity:1}48%{opacity:1}52%{offset-distance:100%;opacity:0}100%{offset-distance:100%;opacity:0}}
+@keyframes f1-pulse{0%,8%,100%{transform:scale(1)}4%{transform:scale(1.45)}}
+.present .fig-commits path.in{animation:f1-draw 1.6s ease-out both}
+.present .f1-branch{animation-delay:.5s}
+.present .f1-spark,.present .f1-review,.present .f1-nodes{animation:fig-pop .8s ease-out both}
+.present .f1-nodes{animation-delay:.6s}
+.present .f1-review{animation-delay:1.4s}
+.present .fig-commits text{animation:fig-fade 1s ease-out both 1.2s}
+@keyframes f1-draw{from{stroke-dasharray:1400;stroke-dashoffset:1400}to{stroke-dasharray:1400;stroke-dashoffset:0}}
+
+/* 02 Kontext: Die Gesprächsspuren werden verdichtet (Details verblassen), das Wesentliche wandert als Notiz ins Repo. */
+.context-slide .chat-traces{display:block;position:relative}
+.context-slide .chat-traces i{position:absolute;left:0;top:calc(11px + var(--n)*36px);transform-origin:left center;opacity:var(--o)}
+.context-slide .chat-traces i:nth-child(1){--n:0;--o:.6}
+.context-slide .chat-traces i:nth-child(2){--n:1;--o:.4}
+.context-slide .chat-traces i:nth-child(3){--n:2;--o:.23}
+.context-slide .chat-traces i:nth-child(4){--n:3;--o:.12}
+.present.context-slide .chat-traces i{animation:f3-bar1 8s ease-in-out infinite}
+.present.context-slide .chat-traces i:nth-child(2){animation-name:f3-bar2}
+.present.context-slide .chat-traces i:nth-child(3){animation-name:f3-bar3}
+.present.context-slide .chat-traces i:nth-child(4){animation-name:f3-bar4}
+@keyframes f3-bar1{0%,28%{transform:none;opacity:var(--o)}40%,70%{transform:scaleX(.55);opacity:.95}78%{transform:scaleX(.55);opacity:0}80%{transform:scaleX(0);opacity:0}88%,100%{transform:none;opacity:var(--o)}}
+@keyframes f3-bar2{0%,30%{transform:none;opacity:var(--o)}42%,80%{transform:translateY(-36px) scaleX(.25);opacity:0}82%,86%{transform:scaleX(0);opacity:0}92%,100%{transform:none;opacity:var(--o)}}
+@keyframes f3-bar3{0%,32%{transform:none;opacity:var(--o)}44%,80%{transform:translateY(-72px) scaleX(.2);opacity:0}84%,90%{transform:scaleX(0);opacity:0}96%,100%{transform:none;opacity:var(--o)}}
+@keyframes f3-bar4{0%,34%{transform:none;opacity:var(--o)}46%,80%{transform:translateY(-108px) scaleX(.15);opacity:0}86%,94%{transform:scaleX(0);opacity:0}100%{transform:none;opacity:var(--o)}}
+.f3-hand{left:404px;top:312px;width:12px;height:12px;border-radius:50%;background:#ad6549;box-shadow:0 0 0 5px #ad654922;opacity:0;animation:f3-hand 8s ease-in-out infinite}
+.f3-flash{left:845px;top:500px;width:665px;height:2px;background:#ad6549;transform-origin:left center;opacity:0;animation:f3-flash 8s ease-out infinite}
+@keyframes f3-hand{0%,44%{opacity:0;transform:translate(0,0)}47%{opacity:1}53%{transform:translate(210px,-34px)}60%{opacity:1;transform:translate(414px,152px)}64%,100%{opacity:0;transform:translate(414px,152px)}}
+@keyframes f3-flash{0%,59%{opacity:0;transform:scaleX(0)}62%{opacity:.9;transform:scaleX(1)}74%,100%{opacity:0;transform:scaleX(1)}}
+
+/* 03 Wechselbare Werkzeuge: Agenten kreisen um das Repo, das Repo gibt seinen Stand in Wellen weiter. */
+.f5-sat{left:calc(50% - var(--s)/2);top:calc(50% - var(--s)/2);width:var(--s);height:var(--s);border-radius:50%;background:var(--c);box-shadow:0 0 14px var(--c);animation:f5-orbit var(--t) linear infinite;animation-direction:var(--dir,normal)}
+@keyframes f5-orbit{from{transform:rotate(var(--a)) translateX(var(--r))}to{transform:rotate(calc(var(--a) + 360deg)) translateX(var(--r))}}
+.f5-pulse{left:calc(50% - 225px);top:calc(50% - 225px);width:450px;height:450px;border-radius:50%;border:1px solid #b2a088;opacity:0;animation:f5-pulse 8s ease-out infinite;animation-delay:var(--d)}
+@keyframes f5-pulse{0%{transform:scale(1);opacity:.5}32%{transform:scale(1.34);opacity:0}100%{transform:scale(1.34);opacity:0}}
+.present.freedom-slide .handoff-arrow{animation:f5-breathe 4s ease-in-out infinite}
+@keyframes f5-breathe{0%,100%{opacity:.6;transform:translateX(-5px)}50%{opacity:1;transform:translateX(5px)}}
+
+/* 04 Workflow: eine Runde. Der Punkt läuft von Beschreiben über Ausprobieren zu Freigeben und über den Bogen zurück. */
+.f7-line{stroke:#4b5c46;stroke-width:2;opacity:.55}
+.f7-back{stroke:#4b5c46;stroke-width:1.5;stroke-dasharray:4 6;opacity:.45}
+.f7-node{fill:#dbe0d5;stroke:#4b5c46;stroke-width:2;transform-box:fill-box;transform-origin:center}
+.f7-node.m{animation:f7-pulse 7.5s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes f7-pulse{0%,10%,100%{transform:scale(1);fill:#dbe0d5}5%{transform:scale(1.5);fill:#4b5c46}}
+.fig-round text{font-size:15px;fill:#4b5c46;letter-spacing:1px;opacity:.85}
+.f7-dot{left:0;top:0;width:10px;height:10px;border-radius:50%;background:#ad6549;box-shadow:0 0 0 4px #ad654926;offset-path:path('M30 30H330C330 -12 30 -12 30 30');offset-rotate:0deg;animation:f7-run 7.5s linear infinite}
+@keyframes f7-run{from{offset-distance:0%}to{offset-distance:100%}}
+.present .f7-line{animation:f7-draw 1.2s ease-out both}
+.present .f7-back,.present .fig-round text{animation:fig-fade 1s ease-out both .9s}
+.present .f7-node{animation:f7-pulse 7.5s ease-in-out infinite var(--d),fig-pop .7s ease-out both .3s}
+@keyframes f7-draw{from{stroke-dasharray:320;stroke-dashoffset:320}to{stroke-dasharray:320;stroke-dashoffset:0}}
+
+/* 05 Zielbild: Deployments wandern von GitLab in den Container, Daten pendeln zwischen Container und Datenbank. */
+.runtime-slide .runtime-link>i{position:relative;display:block;height:64px;margin-top:10px;font-size:0;line-height:0}
+.runtime-slide .runtime-link svg{display:block;margin:0 auto}
+.f9-line{stroke:#8e826c;stroke-width:2;opacity:.8}.f9-head{stroke:#8e826c;stroke-width:2}
+.runtime-link>i>i{position:absolute;display:block;margin:0;opacity:0;font-size:0;line-height:0}
+.f9-pkt{left:6px;top:26px;width:12px;height:12px;border-radius:3px;background:#ad6549;animation:f9-ship 3.2s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes f9-ship{0%{transform:translateX(0);opacity:0}12%{opacity:1}85%{opacity:1}100%{transform:translateX(128px);opacity:0}}
+.f9-dot{width:9px;height:9px;border-radius:50%;background:#627364}
+.f9-dot.to{left:10px;top:20px;animation:f9-to 3.4s ease-in-out infinite}
+.f9-dot.back{left:151px;top:35px;animation:f9-back 3.4s ease-in-out infinite 1.7s}
+@keyframes f9-to{0%{transform:translateX(0);opacity:0}12%{opacity:1}85%{opacity:1}100%{transform:translateX(136px);opacity:0}}
+@keyframes f9-back{0%{transform:translateX(0);opacity:0}12%{opacity:1}85%{opacity:1}100%{transform:translateX(-136px);opacity:0}}
+body:not(.editing) .present .runtime-flow>.runtime-node{animation:f9-breathe 7s ease-in-out infinite}
+body:not(.editing) .present .runtime-flow>.runtime-node:nth-child(3){animation-delay:2.3s}
+body:not(.editing) .present .runtime-flow>.runtime-node:nth-child(5){animation-delay:4.6s}
+@keyframes f9-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+
+/* 06 Entscheidung: Container und Datenbank kommen zuerst, GitLab schiebt sich als gemeinsame Grundlage darunter, das Pilotprojekt setzt die Fahne. */
+.f11-block{top:10px;width:190px;height:52px;border:2px solid #ad6549;border-radius:9px;background:#ad654914;color:#90583e;font-size:19px;line-height:48px;text-align:center;letter-spacing:.6px}
+.f11-block.a{left:520px}.f11-block.b{left:730px}
+.f11-slab{left:480px;top:70px;width:490px;height:28px;border:1.5px solid #24231f99;border-radius:6px;background:#24231f0d;color:#4a4740;font-size:17px;line-height:25px;text-align:center;letter-spacing:1px}
+.f11-pole{left:1030px;top:30px;width:2px;height:68px;background:#24231f;opacity:.55;transform-origin:bottom center}
+.f11-flag{left:1032px;top:30px;width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:20px solid #ad6549;transform-origin:left center}
+.f11-ring{left:1017px;top:84px;width:28px;height:28px;border-radius:50%;border:1px solid #ad6549;opacity:0}
+.present .f11-block{animation:f11-block 12s ease-in-out infinite -8.6s}
+.present .f11-block.b{animation-delay:-8s}
+.present .f11-slab{animation:f11-slab 12s ease-in-out infinite -8.6s}
+.present .f11-pole{animation:f11-pole 12s ease-in-out infinite -8.6s}
+.present .f11-flag{animation:f11-flag 12s ease-in-out infinite -8.6s}
+.present .f11-ring{animation:f11-ring 12s ease-out infinite;animation-delay:calc(var(--d) - 8.6s)}
+@keyframes f11-block{0%,64%{opacity:1;transform:none}70%{opacity:0;transform:translateY(-6px)}78%{opacity:0;transform:translateY(-26px)}86%,100%{opacity:1;transform:none}}
+@keyframes f11-slab{0%,64%{opacity:1;transform:none}70%,88%{opacity:0;transform:translateX(-40px)}94%,100%{opacity:1;transform:none}}
+@keyframes f11-pole{0%,64%{transform:scaleY(1);opacity:.55}70%,95%{transform:scaleY(0);opacity:0}100%{transform:scaleY(1);opacity:.55}}
+@keyframes f11-flag{0%,64%{opacity:1;transform:scale(1)}68%,97%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:scale(1)}}
+@keyframes f11-ring{0%{transform:scale(.4);opacity:.7}12%{transform:scale(1.9);opacity:0}100%{transform:scale(1.9);opacity:0}}

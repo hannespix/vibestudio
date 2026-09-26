@@ -126,7 +126,7 @@ try{
  /* Export enthält den Zustand */
  const [download]=await Promise.all([page.waitForEvent('download'),page.click('#editor-save')]);
  const exported=await readFile(await download.path(),'utf8');
- check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js')&&exported.includes('design.js')&&exported.includes('"stage"'),'Export enthält Zustand, Bühne und neue Skripte');
+ check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js')&&exported.includes('design.js')&&exported.includes('figures.js')&&exported.includes('"stage"'),'Export enthält Zustand, Bühne und neue Skripte');
  await page.click('#editor-present');await page.waitForTimeout(200);
  check(!(await page.evaluate(()=>document.body.classList.contains('editing'))),'Zurück im Präsentationsmodus');
  /* Überblenden: die verlassene Folie bleibt bis zum Ende der Überblendung sichtbar und in Bewegung, danach ist sie unsichtbar und pausiert; Nachbarfotos sind vordekodiert */
@@ -139,6 +139,18 @@ try{
  check(fadeEnd.decoded.every(d=>d==='1'),'Nachbarfolien: Hintergrundfotos vorab dekodiert');
  const layers=await page.evaluate(()=>{const s=document.querySelectorAll('.slides>section')[0],cs=el=>getComputedStyle(el);const parts=[...s.querySelectorAll('.motion-dust,.motion-dof')];return{parts:parts.length,plain:parts.every(el=>cs(el).mixBlendMode==='normal'&&cs(el).filter==='none'),grain:cs(s.querySelector('.motion-grain')).mixBlendMode,noWillChange:[s.querySelector('.motion-layer'),s.querySelector('.motion-image')].every(el=>cs(el).willChange==='auto')}});
  check(layers.parts===15&&layers.plain&&layers.grain==='soft-light'&&layers.noWillChange,'Effekte: Staub und Lichter ohne Mischmodus und Filter, Ebenen ohne will-change, Körnung soft-light');
+ /* Infografiken: sechs Inhaltsfolien tragen animierte Vektorfiguren; sie laufen nur auf der aktuellen Folie, pausieren mit der Hintergrundbewegung und bleiben in der Folie */
+ const figs=await page.evaluate(()=>{const secs=[...document.querySelectorAll('.slides>section')];const has=secs.filter(s=>s.querySelector('.fig, .fig-link')).length;return{has,classes:secs.filter(s=>s.querySelector('.fig, .fig-link')).map(s=>s.className.split(' ').find(c=>c.endsWith('-slide')||c==='tools-intro'))}});
+ check(figs.has===6&&figs.classes.every(Boolean),`Infografiken auf ${figs.has} Inhaltsfolien`);
+ const figRun=await page.evaluate(()=>{const cur=document.querySelector('.slides>section.present'),other=[...document.querySelectorAll('.slides>section')].find(s=>s!==cur&&s.querySelector('.fig'));const running=el=>el.getAnimations({subtree:true}).filter(a=>a.playState==='running').length;return{present:cur.className,here:running(cur.querySelector('.fig, .fig-link')||cur),there:running(other.querySelector('.fig'))}});
+ check(figRun.here>0&&figRun.there===0,`Infografik läuft nur auf der aktuellen Folie (${figRun.here} Animationen, andere Folie ${figRun.there})`);
+ const figPause=await page.evaluate(async()=>{DeckMotion.setPaused(true);await new Promise(r=>setTimeout(r,50));const cur=document.querySelector('.slides>section.present');const paused=document.documentElement.classList.contains('motion-paused')&&cur.getAnimations({subtree:true}).every(a=>a.playState!=='running');DeckMotion.setPaused(false);await new Promise(r=>setTimeout(r,50));return{paused,resumed:!document.documentElement.classList.contains('motion-paused')&&cur.getAnimations({subtree:true}).some(a=>a.playState==='running')}});
+ check(figPause.paused&&figPause.resumed,'Infografiken pausieren mit der Hintergrundbewegung (Taste M) und laufen danach weiter');
+ const figBounds=[];for(const i of [1,3,5,7,9,11]){await page.evaluate(i=>deck.slide(i),i);await page.waitForTimeout(250);figBounds.push(await page.evaluate(()=>{const s=document.querySelector('.slides>section.present'),r=s.getBoundingClientRect();return [...s.querySelectorAll('.fig, .fig-link svg')].every(el=>{const b=el.getBoundingClientRect();return b.left>=r.left-2&&b.top>=r.top-8&&b.right<=r.right+2&&b.bottom<=r.bottom+2})}))}
+ check(figBounds.every(Boolean),'Infografiken bleiben innerhalb der Folie');
+ await page.evaluate(()=>deck.slide(1));await page.waitForTimeout(300);
+ const calm=await browser.newPage({viewport:{width:1280,height:720},reducedMotion:'reduce'});await calm.goto(base+'/index.html');await calm.waitForSelector('.reveal.ready');await calm.evaluate(()=>deck.slide(1));await calm.waitForTimeout(600);
+ check(await calm.evaluate(()=>document.querySelector('.slides>section.present .fig').getAnimations({subtree:true}).filter(a=>a.playState==='running').length===0),'Infografiken ruhen bei prefers-reduced-motion');await calm.close();
  const shrunk=await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=4800;c.height=3200;const g=c.getContext('2d');g.fillStyle='#8a6';g.fillRect(0,0,4800,3200);g.fillStyle='#345';g.fillRect(400,300,2000,1500);const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.8));const a=await VibeMedia.importFile(new File([blob],'gross.jpg',{type:'image/jpeg'}));return{w:a.width,h:a.height,from:a.scaledFrom,mime:a.mime,smaller:a.size<blob.size}});
  check(shrunk.w===3200&&shrunk.h===2133&&shrunk.from==='4800 × 3200'&&shrunk.mime==='image/jpeg'&&shrunk.smaller,'Medienimport: 4800-px-Foto auf 3200 px verkleinert');
  await page.screenshot({path:join(shots,'present.png')});
