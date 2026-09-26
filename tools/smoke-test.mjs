@@ -35,8 +35,11 @@ try{
  check(new Set(scenes).size===scenes.length,'Jede Kapitelfolie hat ein eigenes Hintergrundmotiv ('+scenes.length+')');
  await page.evaluate(()=>deck.slide(10));await page.waitForTimeout(400);check(await page.evaluate(()=>deck.getCurrentSlide().classList.contains('dawn')),'Folie 11 nutzt das Morgenlicht-Motiv');await page.screenshot({path:join(shots,'ermoeglichen.png')});
  await page.evaluate(()=>deck.slide(0));await page.waitForTimeout(300);
- const fonts=await page.evaluate(async()=>Object.fromEntries(await Promise.all(['DM Sans','BaWue Sans','BaWue Serif'].map(async f=>[f,(await document.fonts.load('20px "'+f+'"')).length>0]))));
+ const fonts=await page.evaluate(async()=>Object.fromEntries(await Promise.all(['DM Sans'].map(async f=>[f,(await document.fonts.load('20px "'+f+'"')).length>0]))));
  for(const[f,ok]of Object.entries(fonts))check(ok,'Schrift verfügbar: '+f);
+ check(!(await page.evaluate(()=>[...document.fonts].some(f=>/BaWue/i.test(f.family)))),'Keine BaWue-Schriften eingebettet');
+ const overflow=await page.evaluate(()=>[...document.querySelectorAll('.slides>section.content')].map(s=>[s.dataset.name,s.scrollHeight]).filter(([,h])=>h>902));
+ check(overflow.length===0,'Inhaltsfolien passen in 900 px'+(overflow.length?': '+overflow.map(([n,h])=>n+' '+h).join(', '):''));
  await page.keyboard.press('e');await page.waitForSelector('body.editing');
  check(await page.$('#tab-object')!==null,'Inspektor hat Tab „Objekt“');
  await page.click('#editor-add');await page.waitForTimeout(100);
@@ -94,7 +97,7 @@ try{
   check(await one.page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Ein-Datei-Fassung: '+expectedSlides+' Folien');
   const extra=one.requests.filter(u=>!u.endsWith('/dist/index.html')&&!u.startsWith('data:'));
   check(extra.length===0,'Ein-Datei-Fassung lädt keine externen Dateien'+(extra.length?': '+extra.slice(0,3).join(', '):''));
-  const oneFonts=await one.page.evaluate(async()=>(await document.fonts.load('20px "BaWue Serif"')).length>0&&(await document.fonts.load('20px "DM Sans"')).length>0);
+  const oneFonts=await one.page.evaluate(async()=>(await document.fonts.load('20px "DM Sans"')).length>0);
   check(oneFonts,'Ein-Datei-Fassung: Schriften eingebettet');
   await one.page.keyboard.press('e');await one.page.waitForSelector('body.editing');await one.page.screenshot({path:join(shots,'single-file-editor.png')});
   check(one.errors.length===0,'Ein-Datei-Fassung ohne Konsolenfehler'+(one.errors.length?': '+one.errors.join(' | '):''));await one.page.close()}

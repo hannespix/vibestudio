@@ -16,7 +16,7 @@ let html=readFileSync(join(root,'index.html'),'utf8');
 html=html.replace(/<link rel="stylesheet" href="([^"]+)">/g,(m,href)=>external(href)?m:`<style>${inlineCSS(join(root,href))}</style>`);
 html=html.replace(/<script src="([^"]+)"><\/script>/g,(m,src)=>external(src)?m:`<script>${inlineJS(join(root,src))}</script>`);
 html=html.replace(/(<(?:img|video|source)\b[^>]*\ssrc=")([^"]+)(")/g,(m,a,src,b)=>external(src)?m:a+dataURI(join(root,src))+b);
-html=html.replace('</title>','</title>\n<!-- Ein-Datei-Fassung, erzeugt mit build.mjs. Reveal.js 5.2.1, MIT · DM Sans, SIL OFL 1.1 · BaWue Sans/Serif lizenziert (Luzi Type). Quellen und Bildnachweise: QUELLEN.md im Repository. -->');
+html=html.replace('</title>','</title>\n<!-- Ein-Datei-Fassung, erzeugt mit build.mjs. Reveal.js 5.2.1, MIT · DM Sans, SIL OFL 1.1. Quellen und Bildnachweise: QUELLEN.md im Repository. -->');
 if(/(href|src)="(?!data:|https?:|#)[^"]+\.(css|js|jpe?g|png|woff2?|ttf)"/.test(html))throw Error('Es sind noch relative Verweise übrig: '+html.match(/(href|src)="(?!data:|https?:|#)[^"]+\.(css|js|jpe?g|png|woff2?|ttf)"/g).join(', '));
 
 mkdirSync(out,{recursive:true});

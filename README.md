@@ -16,7 +16,7 @@ Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr si
 | `studio.js` / `studio.css` | Folienleiste, Eigenschaften, Hintergründe, Übergänge |
 | `fonts.js` / `fonts.css` | Schriftvererbung, Vorschau, eigene Schriftdateien |
 | `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
-| `assets/` | Reveal.js, DM Sans, BaWue Sans/Serif (`assets/fonts/`), Motive und Screenshots |
+| `assets/` | Reveal.js, DM Sans, Motive und Screenshots |
 | `build.mjs` | Baut die Ein-Datei-Fassung nach `dist/` |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
 | `tools/scene-network.html`, `tools/scene-dawn.html`, `tools/render-scene.mjs` | Generatoren und Renderer für die prozeduralen Motive (Netzknoten der Danke-Folie, Morgenlicht der Ermöglichen-Folie) |
@@ -107,9 +107,9 @@ Die Vorschau wird beim Folienwechsel und beim Verlassen des Editors beendet. In 
 
 ### Schriften: global, je Feldtyp und individuell
 
-Die aktuelle **DM Sans** bleibt unverändert der Standard und ist eingebettet. Ebenfalls eingebettet sind **BaWue Sans** (Regular, SemiBold, Bold, jeweils mit Kursiv) und **BaWue Serif** (Regular, Bold), die Landesschriften Baden-Württembergs; sie erscheinen in allen Schriftauswahlen direkt hinter DM Sans. Zusätzlich stehen Sans Serif, Serif und Monospace als Systemschriften zur Auswahl. Ihre genaue Darstellung hängt vom Gerät ab.
+Die aktuelle **DM Sans** bleibt unverändert der Standard und ist eingebettet. Zusätzlich stehen Sans Serif, Serif und Monospace als Systemschriften zur Auswahl. Ihre genaue Darstellung hängt vom Gerät ab.
 
-Hinweis zur Lizenz: BaWue Sans und BaWue Serif stammen von Luzi Type und sind für das Land Baden-Württemberg lizenziert (EULA: https://luzi-type.ch/source/EULA-Web.pdf). Die Dateien unter `assets/fonts/` und die veröffentlichte Ein-Datei-Fassung sind öffentlich abrufbar; ob das für die eigene Nutzung von der Lizenz gedeckt ist, bitte selbst prüfen. Die Schriften sind keine freien Schriften.
+Lizenzierte Hausschriften wie **BaWue Sans** und **BaWue Serif** (Luzi Type, lizenziert für das Land Baden-Württemberg) sind aus urheberrechtlichen Gründen nicht im öffentlichen Repo und nicht in der veröffentlichten Fassung enthalten. Wer die Schriftdateien aus dem eigenen Lizenzbestand hat, lädt sie im Schriftenfenster über **Eigene Schriften hochladen** ein (WOFF2 aus dem Web-Paket genügt). Sie werden dann in die eigene exportierte HTML eingebettet und stehen in allen Schriftauswahlen zur Verfügung.
 
 1. Oben **Schriften** öffnen. **Standardschrift** legt die globale Schrift fest.
 2. Unter **Je Feldtyp** kann man Kapitel-Titel, Überschriften, Untertitel, Fließtext/Prompts, Beschriftungen und freie Textfelder getrennt einstellen. **Global übernehmen** folgt wieder der Standardschrift. Diese Einstellungen gelten über alle Folien hinweg.
@@ -208,5 +208,4 @@ Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUEL
 - Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante) sowie zwei prozedural erzeugte Motive, Morgenlicht über dem Horizont für „Ermöglichen“ und Netzknoten auf einem Kreisbogen für die Danke-Folie (`tools/scene-dawn.html`, `tools/scene-network.html`, keine KI-Bilder). Jede Kapitelfolie hat damit ein eigenes Motiv. Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
 - Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
 - DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
-- BaWue Sans und BaWue Serif, Luzi Type, lizenziert für das Land Baden-Württemberg (nicht frei): `assets/fonts/`, EULA https://luzi-type.ch/source/EULA-Web.pdf
 - Technische Referenzen zu Editor-Funktionen: https://revealjs.com/transitions/ ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers ; https://developer.mozilla.org/en-US/docs/Web/API/FontFace ; https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API
