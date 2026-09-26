@@ -107,7 +107,13 @@ try{
  check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rand weiß');
  await page.click('#stage-swatches button[data-stage="#000000"]');
  check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(0, 0, 0)'&&(await page.evaluate(()=>document.querySelector('#stage-swatches button[data-stage="#000000"]').getAttribute('aria-pressed')))==='true','Bühne: Rand schwarz und Auswahl markiert');
- await page.click('#editor-undo');check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rückgängig stellt die vorige Randfarbe wieder her');await page.click('#tab-slide');
+ await page.click('#editor-undo');check((await page.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(255, 255, 255)','Bühne: Rückgängig stellt die vorige Randfarbe wieder her');
+ const hexToRgb=h=>'rgb('+[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(', ')+')',bodyColour=()=>page.evaluate(()=>getComputedStyle(document.body).backgroundColor);
+ const edge=await page.evaluate(()=>VibeStudio.stageFromImage());
+ check(/^#[0-9a-f]{6}$/.test(edge||'')&&(await bodyColour())===hexToRgb(edge),'Bühne: Farbe vom Bildrand übernommen ('+edge+')');
+ const picked=await page.evaluate(()=>{const r=document.querySelector('.slides>section.present').getBoundingClientRect();return VibeStudio.pickStageAt(r.left+r.width*.5,r.top+r.height*.85)});
+ check(/^#[0-9a-f]{6}$/.test(picked||'')&&picked!==edge&&(await bodyColour())===hexToRgb(picked),'Bühne: Pipette liest die Bildfarbe an der Klickstelle ('+picked+')');
+ await page.click('#tab-slide');
  /* Export enthält den Zustand */
  const [download]=await Promise.all([page.waitForEvent('download'),page.click('#editor-save')]);
  const exported=await readFile(await download.path(),'utf8');
