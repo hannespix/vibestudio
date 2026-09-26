@@ -173,13 +173,15 @@ Der Bogen gilt pro Textfeld und funktioniert auch für neu eingefügte Texte. Br
 - **Datei speichern** lädt das ausgewählte Medium separat herunter.
 - Bereits identische Dateien werden wiederverwendet. Importierte Medien bleiben im Bestand, auch wenn ein Bearbeitungsschritt rückgängig gemacht wird.
 
-Die Dateiauswahl ist nicht nach Endungen eingeschränkt. Der Browser prüft, ob er die Datei dekodieren kann. Übliche Bildformate sind JPG, PNG, WebP, GIF, SVG, AVIF und BMP; übliche Videoformate MP4, WebM und OGV. Weitere Formate hängen vom Browser und vom enthaltenen Codec ab. Nicht darstellbare Dateien ersetzen den bisherigen Hintergrund nicht. PSD, AI, Office-Dateien und nicht unterstützte Foto-/Videoformate bitte vorher in ein kompatibles Bild oder Video exportieren. Maximal 100 MB je Datei. Transparenz und Animationen unterstützter Bilddateien bleiben erhalten; der direkte Logo-Upload erzeugt weiterhin ein kompaktes PNG.
+Die Dateiauswahl ist nicht nach Endungen eingeschränkt. Der Browser prüft, ob er die Datei dekodieren kann. Übliche Bildformate sind JPG, PNG, WebP, GIF, SVG, AVIF und BMP; übliche Videoformate MP4, WebM und OGV. Weitere Formate hängen vom Browser und vom enthaltenen Codec ab. Nicht darstellbare Dateien ersetzen den bisherigen Hintergrund nicht. PSD, AI, Office-Dateien und nicht unterstützte Foto-/Videoformate bitte vorher in ein kompatibles Bild oder Video exportieren. Maximal 100 MB je Datei. Fotos mit mehr als 3200 px auf der langen Seite (JPG, PNG, BMP) werden beim Import auf 3200 px verkleinert: Die Folie ist 1600 × 900 px groß, ein 12-Megapixel-Handyfoto kostet sonst nur Speicher, bremst den ersten Folienwechsel und bläht die exportierte HTML auf. Die Medienübersicht zeigt die ursprüngliche Größe mit an. GIF, APNG, WebP, AVIF und SVG bleiben unverändert; Transparenz und Animationen unterstützter Bilddateien bleiben erhalten; der direkte Logo-Upload erzeugt weiterhin ein kompaktes PNG.
 
 ### Übergänge, Zeit und Notizen
 
 Rechts unter **Folie**: Überblenden, Schieben, Zoom, Konvex, Konkav oder kein Übergang. Die **Übergangsdauer** wird in Millisekunden angegeben. Die **Anzeigedauer** steuert den automatischen Durchlauf mit **P** und ist davon unabhängig. **Übergang & Timing auf alle** wendet diese drei Einstellungen auf alle Folien an.
 
 Die Sprechernotizen können direkt im rechten Feld geändert werden. Während der Präsentation zeigt **N** die Notizen der aktuellen Folie. Zur Prüfung von Übergängen oder Videos **Präsentieren** anklicken.
+
+Beim Überblenden bleibt die verlassene Folie bis zum Ende der Überblendung sichtbar und in Bewegung; erst danach wird sie unsichtbar geschaltet und ihre Animation pausiert. Verlassene Folien belegen so keinen Grafikspeicher mehr, was auf schwächeren Grafikkarten flackernde Kacheln beim Folienwechsel vermeidet. Die Hintergrundfotos der Nachbarfolien werden vorab dekodiert, damit der erste Wechsel auf eine neue Folie nicht stockt.
 
 ### Speichern mit Medien
 
