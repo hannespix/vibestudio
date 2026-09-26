@@ -1,8 +1,8 @@
-/* Shared controls are available before the DOMContentLoaded editor hooks run. */
+/* Shared controls are available before the DOMContentLoaded editor hooks run. Defaults are deliberately lively: strong Ken Burns, visible light, dust and grain. */
 window.VibeMotionSettings={
- defaults(node){const scene=node?.dataset.scene||node?.className||'';const network=scene.includes('network'),dawn=scene.includes('dawn');return{motion:!!node?.querySelector('.motion-layer img'),cycle:28,strength:85,movement:network?45:dawn?50:65,rotation:scene.includes('blueprint')?8:network?6:dawn?8:22,speed:1,waves:scene.includes('blueprint')?42:0,dof:network?14:dawn?12:6,dust:network?18:dawn?3:5,texture:8,vividness:10,jiggle:0}},
+ defaults(node){const scene=node?.dataset.scene||node?.className||'';const network=scene.includes('network'),dawn=scene.includes('dawn');return{motion:!!node?.querySelector('.motion-layer img'),cycle:28,strength:95,movement:network?52:dawn?58:76,rotation:scene.includes('blueprint')?11:network?8:dawn?10:28,speed:1,waves:scene.includes('blueprint')?54:0,dof:network?18:dawn?16:10,dust:network?24:dawn?5:9,texture:12,vividness:16,jiggle:0}},
  normalize(value){const c={...this.defaults(null),...value};for(const k of ['strength','movement','rotation','waves','dof','dust','texture','vividness','jiggle'])c[k]=Math.max(0,Math.min(100,Number(c[k])||0));c.speed=Math.max(.25,Math.min(2,Number(c.speed)||1));c.cycle=Math.max(10,Math.min(180,Number(c.cycle)||28));return c},
- presets:{calm:{strength:65,movement:40,rotation:12,speed:.8,waves:12,dof:4,dust:3,texture:6,vividness:6,jiggle:0},vivid:{strength:85,movement:65,rotation:22,speed:1,waves:28,dof:6,dust:5,texture:8,vividness:10,jiggle:0},handheld:{strength:85,movement:45,rotation:12,speed:1,waves:0,dof:6,dust:5,texture:8,vividness:8,jiggle:22}}
+ presets:{calm:{strength:70,movement:48,rotation:14,speed:.8,waves:14,dof:6,dust:5,texture:8,vividness:8,jiggle:0},vivid:{strength:95,movement:76,rotation:28,speed:1,waves:34,dof:10,dust:9,texture:12,vividness:16,jiggle:0},handheld:{strength:95,movement:54,rotation:14,speed:1,waves:0,dof:10,dust:9,texture:12,vividness:12,jiggle:26}}
 };
 window.addEventListener('DOMContentLoaded',()=>{
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),scenes=new Map();let paused=reduced.matches,preview=false,raf=0,last=0;

@@ -48,7 +48,7 @@ Im Repo lässt sich auch `index.html` direkt öffnen. Den Ordner dabei vollstän
 - P: automatischer Durchlauf
 - Home: zum Anfang
 
-Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die neue Grundeinstellung zeigt einen deutlicheren Ken-Burns-Zoom mit sanfter Drehung und einem 28-Sekunden-Zyklus. Wasserringe verformen sich leicht; Licht, Staub und Körnung bleiben sehr dezent. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
+Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die Grundeinstellung ist bewusst kräftig: deutlicher Ken-Burns-Zoom mit leichter Drehung, sichtbares weiches Licht, Staub und Körnung, ein 28-Sekunden-Zyklus. Wer es ruhiger mag, wählt im Editor das Preset **Ruhig · warm** oder senkt die Effektstärke. Wasserringe verformen sich leicht; Licht, Staub und Körnung bleiben sehr dezent. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
 
 ## Direkt in der HTML bearbeiten
 
