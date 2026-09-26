@@ -129,6 +129,16 @@ try{
  check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js')&&exported.includes('design.js')&&exported.includes('"stage"'),'Export enthält Zustand, Bühne und neue Skripte');
  await page.click('#editor-present');await page.waitForTimeout(200);
  check(!(await page.evaluate(()=>document.body.classList.contains('editing'))),'Zurück im Präsentationsmodus');
+ /* Überblenden: die verlassene Folie bleibt bis zum Ende der Überblendung sichtbar und in Bewegung, danach ist sie unsichtbar und pausiert; Nachbarfotos sind vordekodiert */
+ await page.evaluate(()=>deck.slide(0));await page.waitForTimeout(1300);await page.evaluate(()=>deck.slide(1));await page.waitForTimeout(350);
+ const fadeMid=await page.evaluate(()=>{const s=document.querySelectorAll('.slides>section'),anims=s[0].getAnimations({subtree:true});return{leaving:getComputedStyle(s[0]).visibility,incoming:getComputedStyle(s[1]).visibility,running:anims.filter(a=>a.playState==='running').length,total:anims.length}});
+ check(fadeMid.leaving==='visible'&&fadeMid.incoming==='visible'&&fadeMid.total>0&&fadeMid.running===fadeMid.total,`Überblenden: verlassene Folie bleibt sichtbar und in Bewegung (${fadeMid.running} Animationen)`);
+ await page.waitForTimeout(1100);
+ const fadeEnd=await page.evaluate(()=>{const s=document.querySelectorAll('.slides>section'),anims=s[0].getAnimations({subtree:true});return{leaving:getComputedStyle(s[0]).visibility,present:getComputedStyle(s[1]).visibility,paused:anims.filter(a=>a.playState==='paused').length,total:anims.length,decoded:[0,2].map(i=>s[i].querySelector('.motion-layer>img')?.dataset.decoded)}});
+ check(fadeEnd.leaving==='hidden'&&fadeEnd.present==='visible'&&fadeEnd.paused===fadeEnd.total,'Überblenden: danach ist die verlassene Folie unsichtbar, ihre Bewegung pausiert');
+ check(fadeEnd.decoded.every(d=>d==='1'),'Nachbarfolien: Hintergrundfotos vorab dekodiert');
+ const shrunk=await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=4800;c.height=3200;const g=c.getContext('2d');g.fillStyle='#8a6';g.fillRect(0,0,4800,3200);g.fillStyle='#345';g.fillRect(400,300,2000,1500);const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.8));const a=await VibeMedia.importFile(new File([blob],'gross.jpg',{type:'image/jpeg'}));return{w:a.width,h:a.height,from:a.scaledFrom,mime:a.mime,smaller:a.size<blob.size}});
+ check(shrunk.w===3200&&shrunk.h===2133&&shrunk.from==='4800 × 3200'&&shrunk.mime==='image/jpeg'&&shrunk.smaller,'Medienimport: 4800-px-Foto auf 3200 px verkleinert');
  await page.screenshot({path:join(shots,'present.png')});
  check(errors.length===0,'Quellfassung ohne Konsolenfehler'+(errors.length?': '+errors.join(' | '):''));
  await page.close();
