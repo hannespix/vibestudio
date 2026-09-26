@@ -83,10 +83,28 @@ try{
  await page.screenshot({path:join(shots,'editor-rotated.png')});
  await page.click('#editor-undo');
  check(await page.evaluate(id=>DeckEditor.textData(document.querySelector(`[data-edit-id="${id}"]`))?.rotate,id)!==dragged,'Rückgängig setzt Drehung zurück');
+ /* Design-Dialog: globale Größe, Laufweite je Feldtyp, Zurücksetzen */
+ const h2Size=()=>page.evaluate(()=>parseFloat(getComputedStyle(document.querySelector('.slides>section.content h2')).fontSize));
+ const h2Base=await h2Size();await page.click('#editor-design');await page.waitForSelector('#design-dialog[open]');
+ await page.fill('#design-dialog .design-row[data-level="global"] input[data-key="size"]','120');
+ const h2Scaled=await h2Size();check(Math.abs(h2Scaled-h2Base*1.2)<0.6,'Design: globale Größe 120 % skaliert Überschriften ('+h2Base+' → '+h2Scaled+' px)');
+ await page.fill('#design-dialog .design-row[data-level="label"] input[data-key="tracking"]','0.1');
+ const eyebrow=await page.evaluate(()=>{const cs=getComputedStyle(document.querySelector('.slides>section.content .eyebrow'));return{ls:parseFloat(cs.letterSpacing),size:parseFloat(cs.fontSize)}});
+ check(Math.abs(eyebrow.ls-(2.2+0.1*eyebrow.size))<0.6,'Design: Laufweite je Feldtyp ('+eyebrow.ls.toFixed(1)+' px bei '+eyebrow.size.toFixed(1)+' px)');
+ await page.click('#design-reset');check(Math.abs((await h2Size())-h2Base)<0.6,'Design: Zurücksetzen stellt die Vorlage wieder her');await page.click('#design-done');
+ /* Bewegung: globale Werte, eigene Werte einer Folie, Übernahme */
+ const speedOf=index=>page.evaluate(i=>JSON.parse(document.querySelectorAll('.slides>section')[i].querySelector('.motion-layer').dataset.motionSettings).speed,index);
+ const slide=async v=>{await page.evaluate(v=>{const el=document.querySelector('#background-speed');el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))},v)};
+ await page.click('#tab-background');await page.selectOption('#motion-scope','global');await slide('1.5');
+ check((await speedOf(2))===1.5&&(await speedOf(0))===1.5,'Bewegung: globaler Wert gilt für alle Folien');
+ await page.selectOption('#motion-scope','slide');await slide('0.75');
+ check((await speedOf(0))===0.75&&(await speedOf(2))===1.5,'Bewegung: eigener Wert nur auf dieser Folie');
+ await page.click('#motion-inherit');check((await speedOf(0))===1.5,'Bewegung: „Globale Bewegung übernehmen“ entfernt den eigenen Wert');
+ await page.selectOption('#motion-scope','global');await slide('1');await page.click('#tab-slide');
  /* Export enthält den Zustand */
  const [download]=await Promise.all([page.waitForEvent('download'),page.click('#editor-save')]);
  const exported=await readFile(await download.path(),'utf8');
- check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js'),'Export enthält Zustand und neue Skripte');
+ check(exported.includes('id="deck-user-data"')&&exported.includes('"added"')&&exported.includes('arrange.js')&&exported.includes('design.js'),'Export enthält Zustand und neue Skripte');
  await page.click('#editor-present');await page.waitForTimeout(200);
  check(!(await page.evaluate(()=>document.body.classList.contains('editing'))),'Zurück im Präsentationsmodus');
  await page.screenshot({path:join(shots,'present.png')});

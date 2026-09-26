@@ -13,6 +13,7 @@ Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr si
 | `deck.js` | Navigation, Tastatur, automatischer Durchlauf |
 | `editor.js` / `editor.css` | Textbearbeitung, Griffe, Drehung, Rückgängig, HTML-Export |
 | `arrange.js` / `arrange.css` | Fanglinien, Raster, Ausrichten am Folienrand, Inspektor-Tab „Objekt“ |
+| `design.js` / `design.css` | Design-Dialog: Größe, Laufweite, Zeilenabstand, Schnitt und Versalien je Feldtyp; individuelle Textmaße im Objekt-Tab |
 | `studio.js` / `studio.css` | Folienleiste, Eigenschaften, Hintergründe, Übergänge |
 | `fonts.js` / `fonts.css` | Schriftvererbung, Vorschau, eigene Schriftdateien |
 | `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
@@ -90,7 +91,7 @@ Videos laufen stumm in Schleife. Nur das Video auf der aktuellen Folie spielt; b
 
 ### Bewegung und Material
 
-Alle Werte gelten für die aktuelle Folie und werden beim Duplizieren, Rückgängigmachen und HTML-Export mitgenommen.
+Unter **Gilt für** lässt sich wie beim Logo wählen, ob die Bewegungswerte **nur für diese Folie** oder als **Standard für alle Folien** gelten. Folien ohne eigene Werte folgen dem Standard; motivabhängige Voreinstellungen wie die Wellen der Wasserfolie bleiben, solange man sie nicht überschreibt. Hat eine Folie eigene Werte, zeigt der Inspektor das an, und **Globale Bewegung übernehmen** löscht sie wieder. Bild, Flächenfarbe und Ausschnitt gelten immer je Folie. Alle Werte werden beim Duplizieren, Rückgängigmachen und HTML-Export mitgenommen.
 
 - **Hintergrundeffekte aktiv** schaltet die erzeugten Effekte ein oder aus. Ein Video behält seine eigene Bewegung.
 - **Effektstärke gesamt** dosiert Kamera, Rotation, Jiggle, Wellen, Licht, Staub, Körnung und Farbverstärkung gemeinsam. 0 ergibt einen unveränderten Hintergrund; native Videos laufen weiter.
@@ -132,6 +133,17 @@ Alle Werte gelten in Folienpixeln (1600 × 900) und werden mit Rückgängig, Dup
 - **Drehen:** Der runde Griff über dem Feld dreht es per Ziehen um seine Mitte. Umschalt rastet in 15°-Schritten; nahe 0°, 90° und 180° rastet die Drehung von selbst ein, mit Alt nicht. Doppelklick auf den Griff oder **0°** stellt gerade. Pfeiltasten auf dem fokussierten Griff drehen um 1° (Umschalt: 15°). Genaue Werte stehen im Feld **Drehung** oben und im Inspektor.
 - **Objekt-Tab:** Rechts unter **Objekt** lassen sich X, Y, Breite und Drehung als Zahl eingeben, die Ausrichtungsknöpfe erneut aufrufen sowie Fanglinien, Raster und Rastergröße einstellen. Diese Einstellungen merkt sich der Browser, sie gehören nicht zur Datei.
 - **Blocksatz:** Unter **Ausrichtung** steht neben Links, Mitte und Rechts auch Blocksatz. Blocksatz aktiviert automatische Silbentrennung (deutsch), damit die Zeilen ruhig bleiben.
+
+### Design: Größen, Laufweite und Zeilenabstand
+
+**Design** oben öffnet eine Tabelle mit einer Zeile **Global** und je einer Zeile pro Feldtyp (Kapitel-Titel, Überschriften, Untertitel, Fließtext & Prompts, Beschriftungen, freie Textfelder). Fünf Maße stehen zur Verfügung:
+
+- **Größe** in Prozent der gestalteten Vorlage. 100 % ist der Ausgangszustand; 120 % vergrößert alle Texte des Feldtyps im Verhältnis, die Hierarchie bleibt erhalten. Die Spalte **Beispiel** zeigt für den Feldtyp eine typische Größe vor und nach der Skalierung.
+- **Laufweite** in em, zusätzlich zur Vorlage. 0,05 em ergeben bei 22 px etwa 1 px mehr Buchstabenabstand; negative Werte verdichten.
+- **Zeilenabstand** in Prozent der Vorlage.
+- **Schnitt** (Leicht bis Fett) und **Versalien** (Versalien, Kleinbuchstaben, Kapitälchen, wie geschrieben).
+
+Es gilt dieselbe Vererbung wie bei den Schriften: **einzelner Text → Feldtyp → global → Vorlage**. Leere Felder bei einem Feldtyp übernehmen die globale Zeile. Einzeln formatierte Texte behalten ihre eigenen Werte: Größe, Farbe und Fett stehen oben in der Formatzeile; **Laufweite** (in Folienpixeln), **Zeilenabstand** (in Prozent der Schriftgröße) und **Versalien** für den ausgewählten Text stehen rechts im Tab **Objekt** unter **Text**, mit einem Knopf zurück zum Feldtyp. Alle Werte werden mit Rückgängig, Duplizieren und HTML-Export mitgenommen.
 
 ### Titel als Bogen
 
@@ -196,7 +208,7 @@ Die bisherige kleine Pflanzen-App bleibt als zusätzliches Übungsbeispiel unter
 
 ## Anpassen
 
-Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `scene-network.jpg` (Danke-Folie) und `scene-dawn.jpg` (Ermöglichen) entstehen prozedural aus `tools/scene-network.html` und `tools/scene-dawn.html`; `node tools/render-scene.mjs network|dawn [seed] [scale] [quality]` rendert sie neu, andere Seeds ergeben andere Bilder. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
+Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `design.js` / `design.css` enthalten den Design-Dialog mit Größe, Laufweite, Zeilenabstand, Schnitt und Versalien je Feldtyp. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. `scene-network.jpg` (Danke-Folie) und `scene-dawn.jpg` (Ermöglichen) entstehen prozedural aus `tools/scene-network.html` und `tools/scene-dawn.html`; `node tools/render-scene.mjs network|dawn [seed] [scale] [quality]` rendert sie neu, andere Seeds ergeben andere Bilder. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
 
 Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird nicht im Repo gepflegt, sondern bei jedem Stand auf `main` automatisch gebaut und veröffentlicht.
 
