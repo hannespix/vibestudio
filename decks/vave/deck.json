@@ -5,6 +5,7 @@
  "audience": "vave · Impuls online",
  "author": "Hannes Pix",
  "lang": "de",
+ "typeScale": "large",
  "minutes": 30,
  "description": "Impulsvortrag für vave: kurze Vorstellung, was Vibecoding ist, was ein Sprachmodell tut, was ein Agent ist, woher Git kommt und was es bringt, wie beide Linien zusammenkommen, eine echte Runde und ein echter Auftrag aus der Entstehung dieser Präsentation, drei Regeln und der Einstieg. Wenig Text, Zitate, Kurioses, Animationen.",
  "cover": "assets/scene-light.jpg",

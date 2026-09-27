@@ -9,7 +9,7 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 | Pfad | Inhalt |
 | --- | --- |
 | `decks/<kurzname>/slides.html` | Die Folien eines Vortrags (`<section>`-Elemente mit Sprechernotizen); Bildverweise sind vom Repo-Wurzelordner aus gerechnet (`assets/…`) |
-| `decks/<kurzname>/deck.json` | Titel, Untertitel, Publikum, Dauer, Beschreibung, Titelbild, Herkunft (`basedOn`) |
+| `decks/<kurzname>/deck.json` | Titel, Untertitel, Publikum, Dauer, Beschreibung, Titelbild, Herkunft (`basedOn`), Schriftgrößen (`typeScale`) |
 | `decks/<kurzname>/state.json` | Zustand aus dem Editor (Texte, Zusätze, Logo, Hintergründe, Design), wie ihn **HTML speichern** ausgibt |
 | `shell.html` | Hülle eines Vortrags: Kopfzeile, Steuerung, Dialoge, Skripte; `build.mjs` setzt Folien und Zustand ein |
 | `index.html` | Übersicht aller Vorträge, von `build.mjs` erzeugt |
@@ -49,6 +49,23 @@ Jeder Vortrag ist ein Ordner unter `decks/` und erscheint unter `https://hannesp
 - **Aus dem Editor übernehmen:** Im Vortrag **HTML speichern**, dann `node tools/new-deck.mjs kurzname --from-export Vibecoding-bearbeitet.html`. Folien und Zustand der gespeicherten Datei werden zum neuen Vortrag; genauso lässt sich ein bestehender Vortrag aktualisieren, indem `slides.html` und `state.json` ersetzt werden.
 - **Leer beginnen:** `node tools/new-deck.mjs kurzname --blank`.
 - **Kurzname:** Kleinbuchstaben, Ziffern, Bindestrich; er ist zugleich der Pfad.
+- **Schriftgrößen:** `"typeScale": "large"` in `deck.json` schaltet das große Typo-Konzept ein (siehe unten), ohne Angabe gilt `standard`. Kopien übernehmen die Einstellung.
+
+### Typo-Konzept „large“ (vave)
+
+Große Titel gegen kleine Texte, aber nichts unter 24 px: So bleibt jede Folie auch lesbar, wenn sie im Videocall nur halb so groß ankommt. Die Stufen gelten in Folienpixeln (1600 × 900):
+
+| Stufe | Größe | Einsatz |
+| --- | --- | --- |
+| Display | 180 px, Zahl 190 px | Kapitelwort, große Zahl |
+| Titel | 116 / 104 / 76 / 72 px | kurzes Zitat, Aussage, langes Zitat, Titel einer Inhaltsfolie |
+| Lead | 40 px | Unterzeile direkt unter dem Titel |
+| Text | 32 px | Fließtext, Karten, Regeln; Fußzeile 36 px |
+| Klein | 28 px | Endnoten, Quellen |
+| Label | 26 px | Kopfzeile über dem Titel, Etiketten, Kapitel-Untertitel 32 px |
+| Grafik | mindestens 24 px | Beschriftungen in den Animationen |
+
+Abstände: Label → Titel 22 px, Titel → Lead 36 px, Lead → Grafik mindestens 40 px. Der Smoke-Test prüft die kleinste Schrift und den Abstand unter jedem Titel. Der Vortrag rp nutzt weiterhin die Standardgrößen.
 
 Vorhandene Vorträge: `rp` (Regierungspräsidium · Verwaltung, 13 Folien, etwa sieben Minuten) und `vave` (Impuls online, 28 Folien, etwa 25 Minuten plus Fragen; roter Faden „Sprache trifft Gedächtnis“: Vorstellung, was Sprachmodelle und Agenten sind, woher Git kommt und was es bringt, wie beide Linien 2025 zusammenkommen, eine echte Runde und ein echter Auftrag aus der Entstehung dieser Präsentation, drei Regeln, der Einstieg; wenig Text, Zitate, Kurioses, Animationen).
 
