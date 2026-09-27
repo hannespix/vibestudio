@@ -67,7 +67,7 @@ Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von 
 - P: automatischer Durchlauf
 - Home: zum Anfang
 
-Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die Grundeinstellung ist bewusst kräftig: deutlicher Ken-Burns-Zoom mit leichter Drehung, sichtbares weiches Licht, Staub und Körnung, ein 28-Sekunden-Zyklus. Wer es ruhiger mag, wählt im Editor das Preset **Ruhig · warm** oder senkt die Effektstärke. Wasserringe verformen sich leicht; Licht, Staub und Körnung bleiben sehr dezent. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
+Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die Grundeinstellung ist bewusst lebendig, aber ruhig: ein Ken-Burns-Zoom mit leichter Drehung, den man nach wenigen Sekunden bemerkt, weiches Licht, Staub, Körnung und ein Lichtschimmer, ein 18-Sekunden-Zyklus. Wer es ruhiger mag, wählt im Editor das Preset **Ruhig · warm** oder senkt die Effektstärke. Wasserringe verformen sich leicht; Licht, Staub, Schimmer und Körnung sind gerade so sichtbar, dass sie auffallen, ohne vom Titel abzulenken. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
 
 ## Direkt in der HTML bearbeiten
 
@@ -118,7 +118,7 @@ Unter **Gilt für** lässt sich wie beim Logo wählen, ob die Bewegungswerte **n
 - **Geschwindigkeit** reicht von 0,25× bis 2×. Sie steuert erzeugte Bewegungen und die Wiedergabegeschwindigkeit von Hintergrundvideos.
 - **Handycam / Jiggle** ergänzt weiche, leicht unregelmäßige Kamerabewegungen. 0 = aus; geringe Werte wirken ruhig und handgeführt. Es gibt keine zufälligen Sprünge zwischen Bildern.
 - **Wellenbewegung** verformt den unteren Bildbereich fließend. Das passt besonders gut zu den Wasserringen; bei anderen Motiven nach Geschmack nutzen. Der Effekt benötigt WebGL; ohne WebGL bleibt das Bild mit den übrigen Effekten sichtbar.
-- **Weiches Licht / DOF** fügt sanft wandernde, unscharfe Lichtflecken hinzu. **Schwebender Staub** ergänzt wenige weiche Partikel. Das ist eine gestalterische Lichtsimulation, keine aus dem Motiv berechnete Tiefenkarte.
+- **Weiches Licht / DOF** fügt sanft wandernde, leicht pulsierende, unscharfe Lichtflecken hinzu. **Lichtschimmer** lässt einmal je Zyklus ein weiches, warmes Lichtband schräg über das Motiv ziehen, zum ersten Mal kurz nach dem Erscheinen der Folie. **Schwebender Staub** ergänzt wenige weiche, aufsteigende und leicht funkelnde Partikel. Das ist eine gestalterische Lichtsimulation, keine aus dem Motiv berechnete Tiefenkarte.
 - **Material / Körnung** ergänzt eine feine, ruhige Textur ohne flackerndes Rauschen. **Lebendigkeit / Farbe** erhöht die Farbsättigung behutsam.
 - Presets: **Ruhig · warm**, **Lebendig · organisch** und **Handycam · weich**. Die Einzelwerte bleiben anschließend frei einstellbar.
 - Unter **Zyklus & Zurücksetzen** lässt sich die Dauer eines ganzen Hin- und Rückwegs bei Tempo 1× verändern.
