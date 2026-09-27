@@ -25,7 +25,7 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 | `assets/` | Reveal.js, DM Sans, Motive und Screenshots |
 | `build.mjs` | Baut je Vortrag die Entwicklerfassung `decks/<kurzname>/index.html` (nicht eingecheckt) und die Ein-Datei-Fassung `dist/<kurzname>/index.html`, dazu die Übersicht |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
-| `tools/scene-network.html`, `tools/scene-dawn.html`, `tools/render-scene.mjs` | Generatoren und Renderer für die prozeduralen Motive (Netzknoten der Danke-Folie, Morgenlicht der Ermöglichen-Folie) |
+| `tools/scene-*.html`, `tools/render-scene.mjs` | Generatoren und Renderer für die prozeduralen Kapitelmotive: Netzknoten, Morgenlicht, Planstand, Lichtbogen, Materialfächer (`node tools/render-scene.mjs plan`) |
 | `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
 | `demo/pflanzenlernen.html` | Kleines zusätzliches Übungsbeispiel, nicht Teil des Decks |
 | `QUELLEN.md` | Quellen und Bildnachweise |
@@ -50,7 +50,9 @@ Jeder Vortrag ist ein Ordner unter `decks/` und erscheint unter `https://hannesp
 - **Leer beginnen:** `node tools/new-deck.mjs kurzname --blank`.
 - **Kurzname:** Kleinbuchstaben, Ziffern, Bindestrich; er ist zugleich der Pfad.
 
-Vorhandene Vorträge: `rp` (Regierungspräsidium · Verwaltung, 13 Folien) und `vave` (vave studio · Kommunikation im Raum, 14 Folien: technischer, mit „Git in drei Minuten“, „So arbeitet ein Agent“ und „Vom Repo in den Raum“; Zielbild und Entscheidung ohne LVM-Bezug). Neue Folientypen bringen ihre Infografiken mit: `git-basics-slide` (Commit-Graph), `agent-loop-slide` (Runde mit fünf Stationen, Beschriftung über `data-fig-stations`), und die Fundament-Grafik der `decision-slide` liest ihre Beschriftungen aus `data-fig-blocks` und `data-fig-slab`.
+Vorhandene Vorträge: `rp` (Regierungspräsidium · Verwaltung, 13 Folien, etwa sieben Minuten) und `vave` (Impuls online, 37 Folien, etwa dreißig Minuten plus Fragen: wenig Text, Zitate, Kurioses, Zahlen, Animationen; was Sprachmodelle und Agenten sind, woher Git kommt und was es bringt, wie eine Runde läuft, welche Werkzeuge entstehen).
+
+Folientypen mit eigener Infografik, alle über Klassen und `data-`-Attribute in `slides.html` steuerbar: `tools-intro` und `git-basics-slide` (Commit-Graph), `context-slide` (Verdichtung), `freedom-slide` (Orbit), `workflow-slide` (Runde), `agent-loop-slide` und `statement-slide` mit `data-fig-stations` (Runde mit beliebig vielen Stationen), `runtime-slide` (Pakete), `decision-slide` mit `data-fig-blocks` und `data-fig-slab` (Fundament), `tokens-slide` mit `data-fig-sentence` und `data-fig-candidates` (nächstes Wort), `timeline-slide` mit `data-fig-years` (Zeitleiste), `rounds-slide` mit `data-fig-rounds` (wachsende Balken). `data-fig-top` setzt die Höhe der Grafik, `data-count` an einer Zahl zählt sie beim Erscheinen hoch, die Klasse `stagger` lässt Listen gestaffelt erscheinen. Kapitelmotive: `paper`, `wood`, `blueprint`, `landscape`, `orbit`, `dawn`, `network`, `plan`, `light`, `fan` (die letzten fünf prozedural erzeugt, siehe `tools/scene-*.html`).
 
 Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von Folien je Publikum oder Länge, per `?set=kurz` aufrufbar), damit Kurz- und Langfassung denselben Stand teilen.
 
