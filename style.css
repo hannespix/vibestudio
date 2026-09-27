@@ -74,14 +74,18 @@ html,body.reveal-viewport{background-color:var(--stage,#000)}html.stage-ready,ht
 
 /* Ermöglichen: Morgenlicht über dem Horizont (prozedural erzeugt, tools/scene-dawn.html). */
 .dawn{background:#ebdcc7;color:#2c241c}.dawn .chapter-title{text-shadow:0 1px 26px #f7e9d5aa}
-/* Sonne mit Sonnenflecken (prozedural erzeugt, tools/scene-sun.html): heller Titel im schwarzen Raum über der Scheibe */
-.sun{background:#050608;color:#f4ece1}.sun .chapter-title{text-shadow:0 2px 34px #000d}.sun .signature{opacity:.75}
-/* Kapitelmotive planstand, lichtbogen, fächer, laufbahn, stollen, schallplatte, lupe, torbogen */
+/* Fotomotive auf dunklem Grund (tools/scene-*.html mit tools/scene-photo.js): heller Titel im leeren Raum über der Scheibe */
+.sun{background:#050608;color:#f4ece1}.moon{background:#000;color:#eef1f4}.earth{background:#000;color:#eef3f8}.nightearth{background:#020306;color:#eef2f6}
+.vault{background:#0d1115;color:#e9eef2}.dial{background:#120e0a;color:#f5ead8}.astrolabe{background:#0b1119;color:#f1e6cf}.manhole{background:#3b3834;color:#f6f2ea}
+:is(.sun,.moon,.earth,.nightearth,.vault,.dial,.astrolabe) .chapter-title{text-shadow:0 2px 34px #000d}:is(.sun,.moon,.earth,.nightearth,.vault,.dial,.astrolabe,.manhole) .signature{opacity:.75}
+.manhole .chapter-title{text-shadow:0 2px 12px #000c,0 2px 44px #000e}
+/* Sonnenblume: dunkler Titel über den hellen Blütenblättern */
+.sunflower{background:#e0b21c;color:#2a1d06}.sunflower .chapter-title{text-shadow:0 1px 22px #fff1b8cc,0 0 60px #ffe58f99}
+/* Frühere prozedurale Motive (Generatoren in tools/, derzeit auf keiner Folie) */
 .plan{background:#ebe3d3;color:#2f3e49}.plan .chapter-title{text-shadow:0 1px 22px #f3ecdd99}
 .light{background:#0d1117;color:#f4ecdc}.light .chapter-title{text-shadow:0 2px 40px #000c}.light .signature{opacity:.75}
 .fan{background:#e2dbce;color:#2a2622}.fan .chapter-title{text-shadow:0 1px 22px #f0e9dd99}
 .track{background:#e6dfd0;color:#2a2622}.track .chapter-title{text-shadow:0 1px 22px #f0e9dd99}
-.vault{background:#d6dee4;color:#1f2a33}.vault .chapter-title{text-shadow:0 1px 26px #eaf0f4aa}
 .record{background:#e6dfd2;color:#1f1f1f}.record .chapter-title{text-shadow:0 1px 22px #efe9dd99}
 .lens{background:#efe9dd;color:#2f2a24}.lens .chapter-title{text-shadow:0 1px 22px #f5f0e6aa}
 .arch{background:#dccdb7;color:#3a2f27}.arch .chapter-title{text-shadow:0 1px 22px #efe6d8aa}
