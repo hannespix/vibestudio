@@ -21,5 +21,8 @@ await page.goto(pathToFileURL(source).href+'?'+query);
 await page.waitForFunction(()=>window.rendered,null,{timeout:120000});
 const pivot=await page.evaluate(()=>window.scenePivot);if(pivot)console.log(`Drehpunkt für motion.js (pivots): [${pivot.join(',')}]`);
 const data=await page.evaluate(()=>window.sceneDataURL),buffer=Buffer.from(data.split(',')[1],'base64'),out=target?resolve(target):join(root,'assets',`scene-${name}.jpg`);
-await writeFile(out,buffer);await browser.close();
+await writeFile(out,buffer);
+/* Motive mit eigener Scheibenebene (split in tools/scene-photo.js): zweite Datei <ziel>-disc.webp, Lage als Hinweis für .motion-disc in style.css */
+const layer=await page.evaluate(()=>window.sceneLayer&&{box:window.sceneLayer,data:window.sceneLayerDataURL});await browser.close();
 console.log(`${out}: ${(buffer.length/1024).toFixed(0)} KB (Motiv ${name}, Seed ${seed||'Standard'}, ${1600*scale} × ${900*scale})`);
+if(layer){const discOut=out.replace(/\.jpe?g$/i,'')+'-disc.webp',disc=Buffer.from(layer.data.split(',')[1],'base64');await writeFile(discOut,disc);const b=layer.box;console.log(`${discOut}: ${(disc.length/1024).toFixed(0)} KB, Scheibenebene: left ${b.left}px, top ${b.top}px, width ${b.width}px, height ${b.height}px`)}
