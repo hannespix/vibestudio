@@ -67,7 +67,7 @@ Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von 
 - P: automatischer Durchlauf
 - Home: zum Anfang
 
-Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die Grundeinstellung ist bewusst lebendig, aber ruhig: ein Ken-Burns-Zoom mit leichter Drehung, den man nach wenigen Sekunden bemerkt, weiches Licht, Staub, Körnung und ein Lichtschimmer, ein 18-Sekunden-Zyklus. Wer es ruhiger mag, wählt im Editor das Preset **Ruhig · warm** oder senkt die Effektstärke. Wasserringe verformen sich leicht; Licht, Staub, Schimmer und Körnung sind gerade so sichtbar, dass sie auffallen, ohne vom Titel abzulenken. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
+Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisch. Nur die Kapitelhintergründe bewegen sich. Die Kamerafahrt läuft direkt im Browser mit kontinuierlicher Subpixel-Bewegung. Die Grundeinstellung ist bewusst lebendig, aber ruhig: Jede Scheibe dreht sich langsam, aber deutlich um ihre eigene Mitte, dazu kommen ein Ken-Burns-Zoom, weiches Licht, Staub, Körnung und ein Lichtschimmer, alles in einem 18-Sekunden-Zyklus. Wer es ruhiger mag, wählt im Editor das Preset **Ruhig · warm** oder senkt die Effektstärke. Wasserringe verformen sich leicht; Licht, Staub, Schimmer und Körnung sind gerade so sichtbar, dass sie auffallen, ohne vom Titel abzulenken. Es werden keine Einzelbilder mit Zufallszittern versetzt. Die Systemeinstellung für reduzierte Bewegung wird berücksichtigt.
 
 ## Direkt in der HTML bearbeiten
 
@@ -114,7 +114,7 @@ Unter **Gilt für** lässt sich wie beim Logo wählen, ob die Bewegungswerte **n
 
 - **Hintergrundeffekte aktiv** schaltet die erzeugten Effekte ein oder aus. Ein Video behält seine eigene Bewegung.
 - **Effektstärke gesamt** dosiert Kamera, Rotation, Jiggle, Wellen, Licht, Staub, Körnung und Farbverstärkung gemeinsam. 0 ergibt einen unveränderten Hintergrund; native Videos laufen weiter.
-- **Bewegungsstärke / Ken Burns** steuert Zoom und Kamerafahrt. **Rotation** ergänzt langsame Drehungen um das Motiv.
+- **Bewegungsstärke / Ken Burns** steuert Zoom und Kamerafahrt. **Rotation** dreht das Bild um die Mitte seiner Scheibe, also um Teller, Holzscheibe, Schallplatte, Laufbahn, Bogen oder Sonne. Bei 100 wandert der Scheibenrand bis zu 80 px weit, höchstens aber 6°. In der Grundeinstellung dreht jedes Motiv um etwa ±2° bis ±5°. Den Zoom berechnet die Kamerafahrt für jede Stellung so, dass nie eine Bildkante sichtbar wird. Eigene Hintergründe drehen sich um die Bildmitte.
 - **Geschwindigkeit** reicht von 0,25× bis 2×. Sie steuert erzeugte Bewegungen und die Wiedergabegeschwindigkeit von Hintergrundvideos.
 - **Handycam / Jiggle** ergänzt weiche, leicht unregelmäßige Kamerabewegungen. 0 = aus; geringe Werte wirken ruhig und handgeführt. Es gibt keine zufälligen Sprünge zwischen Bildern.
 - **Wellenbewegung** verformt den unteren Bildbereich fließend. Das passt besonders gut zu den Wasserringen; bei anderen Motiven nach Geschmack nutzen. Der Effekt benötigt WebGL; ohne WebGL bleibt das Bild mit den übrigen Effekten sichtbar.

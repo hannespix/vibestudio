@@ -17,6 +17,9 @@ const failures=[],notes=[];const check=(ok,label)=>{(ok?notes:failures).push((ok
 await mkdir(shots,{recursive:true});
 const expectedSlides=((await readFile(join(root,'decks','rp','slides.html'),'utf8')).match(/<section\b/g)||[]).length;
 const browser=await chromium.launch();
+/* Kapitelmotive: Die Kamera dreht jede Scheibe sichtbar um ihre Mitte (mindestens ±1°), und in keiner Stellung der Fahrt wird eine Bildkante sichtbar. */
+async function discTurns(page){return page.evaluate(async()=>{const res=[];DeckMotion.setPaused(true);for(const [i,s] of [...document.querySelectorAll('.slides>section')].entries()){if(!s.classList.contains('chapter'))continue;deck.slide(i);await new Promise(r=>setTimeout(r,60));let min=Infinity,max=-Infinity,gaps=0;for(let t=0;t<=9;t+=1.5){DeckMotion.render(t);const cam=s.querySelector('.motion-camera');if(!cam){gaps++;continue}const m=new DOMMatrix(getComputedStyle(cam).transform),inv=m.inverse(),deg=Math.atan2(m.b,m.a)*180/Math.PI;min=Math.min(min,deg);max=Math.max(max,deg);gaps+=[[0,0],[1600,0],[0,900],[1600,900]].filter(([x,y])=>{const p=inv.transformPoint(new DOMPoint(x,y));return p.x<-1||p.x>1601||p.y<-1||p.y>901}).length}res.push({scene:s.dataset.scene,swing:max-min,gaps})}DeckMotion.setPaused(false);deck.slide(0);await new Promise(r=>setTimeout(r,60));return res})}
+const turnLabel=list=>list.map(d=>d.scene+' ±'+(d.swing/2).toFixed(1)+'°').join(', ');
 async function open(url){const page=await browser.newPage({viewport:{width:1600,height:1000}});const errors=[],requests=[];page.on('pageerror',e=>errors.push('pageerror: '+e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text())});page.on('request',r=>requests.push(r.url()));await page.goto(url);await page.waitForSelector('.reveal.ready',{timeout:20000});await page.evaluate(()=>document.fonts.ready);return{page,errors,requests}}
 try{
  /* Quellfassung */
@@ -31,7 +34,9 @@ try{
  check((await page.evaluate(()=>deck.getCurrentSlide().classList.contains('network')&&deck.getCurrentSlide().querySelector('h1')?.textContent.trim()))==='danke','Letzte Folie ist die Danke-Folie');
  await page.screenshot({path:join(shots,'danke.png')});
  const motion=await page.evaluate(()=>VibeMotionSettings.defaults(document.querySelector('.slides>section.chapter.paper')));
- check(motion.strength===95&&motion.movement===80&&motion.rotation===28&&motion.texture===12&&motion.cycle===18&&motion.dof===24&&motion.dust===18&&motion.shine===34,'Lebendige Effekt-Grundeinstellung (Stärke '+motion.strength+', Bewegung '+motion.movement+', Zyklus '+motion.cycle+' s, Licht '+motion.dof+', Staub '+motion.dust+', Schimmer '+motion.shine+')');
+ check(motion.strength===95&&motion.movement===80&&motion.rotation===70&&motion.texture===12&&motion.cycle===18&&motion.dof===24&&motion.dust===18&&motion.shine===34,'Lebendige Effekt-Grundeinstellung (Stärke '+motion.strength+', Bewegung '+motion.movement+', Drehung '+motion.rotation+', Zyklus '+motion.cycle+' s, Licht '+motion.dof+', Staub '+motion.dust+', Schimmer '+motion.shine+')');
+ const turns=await discTurns(page);
+ check(turns.length===7&&turns.every(d=>d.swing>=2&&d.gaps===0),'Kapitelscheiben drehen sich sichtbar um ihre Mitte, ohne Bildkante ('+turnLabel(turns)+')');
  const scenes=await page.evaluate(()=>[...document.querySelectorAll('.slides>section.chapter .motion-image')].map(i=>i.getAttribute('src')));
  check(new Set(scenes).size===scenes.length,'Jede Kapitelfolie hat ein eigenes Hintergrundmotiv ('+scenes.length+')');
  await page.evaluate(()=>deck.slide(10));await page.waitForTimeout(400);check(await page.evaluate(()=>deck.getCurrentSlide().classList.contains('dawn')),'Folie 11 nutzt das Morgenlicht-Motiv');await page.screenshot({path:join(shots,'ermoeglichen.png')});
@@ -189,6 +194,7 @@ try{
   check(conv.running>=5&&conv.inside&&conv.below>40,`Zwei Linien: ${conv.running} Animationen, Grafik in der Folie und unter dem Text`);
   const dayIndex=await vave.page.evaluate(()=>[...document.querySelectorAll('.slides>section')].findIndex(s=>s.querySelector('[data-count="4"]')));
   await vave.page.evaluate(i=>deck.slide(i),dayIndex);await vave.page.waitForTimeout(1900);const counted=await vave.page.evaluate(()=>document.querySelector('.slides>section.present [data-count]')?.textContent);check(counted==='4','Zähler zählt beim Erscheinen auf den Zielwert');
+  const vTurns=await discTurns(vave.page);check(vTurns.length===11&&vTurns.every(d=>d.swing>=2&&d.gaps===0),'Vortrag vave: Kapitelscheiben drehen sichtbar, ohne Bildkante ('+turnLabel(vTurns)+')');
   check(vave.errors.length===0,'Vortrag vave ohne Konsolenfehler');await vave.page.close()}
  else notes.push('· decks/vave/index.html fehlt (node build.mjs)');
  if(existsSync(join(root,'dist','rp','index.html'))){const one=await open(base+'/dist/rp/index.html');
