@@ -74,6 +74,8 @@ html,body.reveal-viewport{background-color:var(--stage,#000)}html.stage-ready,ht
 
 /* Ermöglichen: Morgenlicht über dem Horizont (prozedural erzeugt, tools/scene-dawn.html). */
 .dawn{background:#ebdcc7;color:#2c241c}.dawn .chapter-title{text-shadow:0 1px 26px #f7e9d5aa}
+/* Sonne mit Sonnenflecken (prozedural erzeugt, tools/scene-sun.html): heller Titel im schwarzen Raum über der Scheibe */
+.sun{background:#050608;color:#f4ece1}.sun .chapter-title{text-shadow:0 2px 34px #000d}.sun .signature{opacity:.75}
 /* Kapitelmotive planstand, lichtbogen, fächer, laufbahn, stollen, schallplatte, lupe, torbogen */
 .plan{background:#ebe3d3;color:#2f3e49}.plan .chapter-title{text-shadow:0 1px 22px #f3ecdd99}
 .light{background:#0d1117;color:#f4ecdc}.light .chapter-title{text-shadow:0 2px 40px #000c}.light .signature{opacity:.75}

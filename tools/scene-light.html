@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>Motiv: Lichtbogen</title>
-<!-- Prozedural erzeugtes Kapitelmotiv „lichtbogen“: eine gebogene Lichtwand aus schmalen Lamellen, wie auf einem Messestand – warmes Licht in der Mitte, Spiegelung auf glänzendem Boden, Lichtkegel und Staub. Parameter: ?seed=7&scale=2&q=.84. Rendern: node tools/render-scene.mjs light -->
+<!-- Prozedural erzeugtes Kapitelmotiv „lichtbogen“: eine gebogene Lichtwand aus schmalen Lamellen im dunklen Raum – warmes Licht in der Mitte, Lichtkegel und Staub. Kein Boden, keine Spiegelung, kein Horizont: Beim Drehen bewegt sich nur der Bogen mit seinen Strahlen. Parameter: ?seed=7&scale=2&q=.84. Rendern: node tools/render-scene.mjs light -->
 <style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;height:auto}</style>
 <canvas id="c"></canvas>
 <script>
@@ -9,23 +9,20 @@ const params=new URLSearchParams(location.search),seed=+params.get('seed')||7,sc
 const W=1600*scale,H=900*scale,u=scale,canvas=document.getElementById('c');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const rnd=mulberry32(seed),range=(a,b)=>a+(b-a)*rnd(),X=x=>x*u,Y=y=>y*u,TAU=Math.PI*2;
-const C={x:800,y:1580},R=980,A0=Math.PI*1.17,A1=Math.PI*1.83,FLOOR=660;
+const C={x:800,y:1580},R=980,A0=Math.PI*1.17,A1=Math.PI*1.83;
 const P=(r,a)=>[X(C.x+Math.cos(a)*r),Y(C.y+Math.sin(a)*r)];
 const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
-/* 1 · Raum: dunkler Verlauf, glänzender Boden */
-let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#090c11');g.addColorStop(.55,'#131a22');g.addColorStop(.73,'#1a222b');g.addColorStop(.74,'#10161c');g.addColorStop(1,'#05070a');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+/* 1 · Raum: dunkler, weicher Verlauf ohne Boden und ohne Horizont, damit sich beim Drehen nur der Bogen bewegt */
+let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#090c11');g.addColorStop(.6,'#121920');g.addColorStop(1,'#0c1117');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
 /* 2 · Lamellen der Lichtwand */
 const slats=[];for(let a=A0;a<A1;a+=.0062){const c=1-Math.min(1,Math.abs(a-Math.PI*1.5)/(Math.PI*.33)),b=.28+.72*Math.pow(c,1.4)*(rnd()<.07?.55:1)*(rnd()<.03?1.25:1);slats.push({a,b:Math.min(1,b),warm:.35+.65*c+range(-.1,.1)})}
 function drawSlats(alphaScale,glow){for(const s of slats){const col=mix([240,160,70],[255,240,212],Math.max(0,Math.min(1,s.warm)));const [x0,y0]=P(R-72,s.a),[x1,y1]=P(R+48,s.a),[x2,y2]=P(R+48,s.a+.0047),[x3,y3]=P(R-72,s.a+.0047);ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);ctx.closePath();ctx.fillStyle=`rgba(${col},${s.b*alphaScale})`;if(glow){ctx.shadowColor=`rgba(255,190,110,${.55*s.b})`;ctx.shadowBlur=u*40}ctx.fill();ctx.shadowBlur=0}}
-/* 3 · Spiegelung auf dem Boden (gespiegelt, dann nach unten ausgeblendet) */
-ctx.save();ctx.translate(0,Y(FLOOR*2));ctx.scale(1,-1);drawSlats(.3,false);ctx.restore();
-g=ctx.createLinearGradient(0,Y(FLOOR),0,H);g.addColorStop(0,'rgba(8,11,15,.25)');g.addColorStop(.5,'rgba(8,11,15,.8)');g.addColorStop(1,'rgba(8,11,15,1)');ctx.fillStyle=g;ctx.fillRect(0,Y(FLOOR),W,H-Y(FLOOR));
 /* 4 · Weiches Leuchten hinter der Wand, dann die Wand selbst */
 ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(R-10),A0,A1);ctx.lineWidth=u*230;ctx.strokeStyle='rgba(255,176,96,.10)';ctx.shadowColor='rgba(255,176,96,.6)';ctx.shadowBlur=u*140;ctx.stroke();ctx.shadowBlur=0;
 drawSlats(1,true);
 /* 5 · Lichtkegel nach oben und Staub */
 for(const [a,w,al] of [[Math.PI*1.43,.045,.05],[Math.PI*1.5,.04,.075],[Math.PI*1.57,.045,.05],[Math.PI*1.33,.035,.03],[Math.PI*1.67,.035,.03]]){const [x,y]=P(R-70,a),[tx,ty]=P(R+1500,a);const lg=ctx.createLinearGradient(x,y,tx,ty);lg.addColorStop(0,`rgba(255,226,180,${al})`);lg.addColorStop(1,'rgba(255,226,180,0)');ctx.fillStyle=lg;ctx.beginPath();ctx.moveTo(...P(R-70,a-w*.12));ctx.lineTo(...P(R+1500,a-w));ctx.lineTo(...P(R+1500,a+w));ctx.lineTo(...P(R-70,a+w*.12));ctx.closePath();ctx.fill()}
-for(let i=0;i<140;i++){const x=range(0,1600),y=range(40,FLOOR),r=range(.6,2.4),al=range(.08,.5)*(y>300?1:.5);ctx.beginPath();ctx.arc(X(x),Y(y),X(r),0,TAU);ctx.fillStyle=`rgba(255,228,190,${al})`;ctx.fill()}
+for(let i=0;i<150;i++){const x=range(0,1600),y=range(40,880),r=range(.6,2.4),al=range(.08,.5)*(y>300?1:.5);ctx.beginPath();ctx.arc(X(x),Y(y),X(r),0,TAU);ctx.fillStyle=`rgba(255,228,190,${al})`;ctx.fill()}
 /* 6 · Vignette und Körnung */
 g=ctx.createRadialGradient(X(800),Y(560),X(300),X(800),Y(560),X(1200));g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.5)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
 const img=ctx.getImageData(0,0,W,H),px=img.data;for(let i=0;i<px.length;i+=4){const n=(rnd()-.5)*8;px[i]+=n;px[i+1]+=n;px[i+2]+=n}ctx.putImageData(img,0,0);
