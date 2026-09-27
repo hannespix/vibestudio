@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Motiv: Kanaldeckel</title>
+<meta name="scene-source" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Manhole_cover_at_Viborg_Katedralskole.jpg/1920px-Manhole_cover_at_Viborg_Katedralskole.jpg">
+<!-- Kapitelmotiv „festhalten“: ein gusseiserner Kanaldeckel mit Mäanderrand, Noppenkranz und Stern, eingelassen in rissigen Asphalt. Bearbeitung: leicht entzerrt, um 90° gedreht, damit oben mehr Asphalt liegt, Ausschnitt, Asphalt hinter dem Titel abgedunkelt. Rendern: node tools/render-scene.mjs manhole -->
+<style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;height:auto}</style>
+<canvas id="c"></canvas>
+<script>
+/* Rand des Deckels in der Vorlage: Mittelpunkt 1187/694, Radius 552 px waagrecht, 516 px senkrecht */
+window.PHOTO={circle:{x:1187,y:694,r:552},squash:{y:552/516},scale:620/552,apex:{x:800,y:520},turn:90,fill:'#3b3834',grade:'contrast(1.06) saturate(.95)',
+ /* Asphalt hinter dem Titel sanft abdunkeln, damit die Schrift ruhig steht */
+ after:(ctx,{u,W})=>{const g=ctx.createLinearGradient(0,0,0,620*u);g.addColorStop(0,'rgba(16,14,12,.6)');g.addColorStop(.7,'rgba(16,14,12,.38)');g.addColorStop(1,'rgba(16,14,12,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,620*u)}};
+</script>
+<script src="scene-photo.js"></script>

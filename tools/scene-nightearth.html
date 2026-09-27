@@ -1,0 +1,12 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Motiv: Erde bei Nacht</title>
+<meta name="scene-source" content="https://images-assets.nasa.gov/image/iss030e010008/iss030e010008~orig.jpg">
+<!-- Kapitelmotiv „Erde bei Nacht“: die Iberische Halbinsel aus der Umlaufbahn, die Städte als leuchtendes Netz, darüber das grünlich-goldene Luftleuchten am Erdrand. Bearbeitung: Ausschnitt, leichte Farbkorrektur, Sternenhimmel oben ergänzt. Rendern: node tools/render-scene.mjs nightearth -->
+<style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;height:auto}</style>
+<canvas id="c"></canvas>
+<script>
+/* Erdrand (Oberkante des Luftleuchtens) am Original vermessen: Mittelpunkt 2458/9420, Radius 8518 px */
+window.PHOTO={circle:{x:2458,y:9420,r:8518},scale:.43,apex:{x:840,y:560},turn:0,fill:'#020306',stars:520,feather:80,grade:'saturate(1.08) contrast(1.05) brightness(1.04)'};
+</script>
+<script src="scene-photo.js"></script>
