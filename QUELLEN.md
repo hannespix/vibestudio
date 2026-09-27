@@ -49,3 +49,18 @@ Die Rechte an Produktoberflächen, Marken und veröffentlichten Medien verbleibe
 ## Eigene Illustrationen
 
 Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Dekorative Naturhintergründe wurden KI-generiert. Die Motive der Folien „Ermöglichen“ (`assets/scene-dawn.jpg`, Morgenlicht über Hügelketten) und „Danke“ (`assets/scene-network.jpg`, Netzknoten auf einem Kreisbogen) sind prozedural mit HTML-Canvas erzeugte Grafiken aus `tools/scene-dawn.html` und `tools/scene-network.html`; sie sind keine Fotos, keine KI-Bilder und keine Darstellungen realer Orte oder Systeme. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
+
+## Weitere prozedurale Motive (Vortrag vave)
+
+Die Kapitelmotive **Planstand** (`assets/scene-plan.jpg`, Bogen einer technischen Zeichnung mit Schraffur, Maßkette und Änderungswolke), **Lichtbogen** (`assets/scene-light.jpg`, gebogene Lichtwand aus Lamellen mit Spiegelung) und **Materialfächer** (`assets/scene-fan.jpg`, aufgefächerte Materialmuster) sind wie Netzknoten und Morgenlicht prozedural erzeugte Grafiken aus `tools/scene-plan.html`, `tools/scene-light.html` und `tools/scene-fan.html` (Renderer `tools/render-scene.mjs`). Keine Fotos, keine KI-Bilder, keine Darstellung realer Objekte.
+
+## Zitate und Fakten im Vortrag vave
+
+- Andrej Karpathy, „The hottest new programming language is English.“, 24.01.2023: https://x.com/karpathy/status/1617979122625712128
+- Andrej Karpathy, „vibe coding“, 02.02.2025: https://x.com/karpathy/status/1886192184808149383 · Collins Word of the Year 2025: https://www.collinsdictionary.com/woty
+- Linus Torvalds, „Talk is cheap. Show me the code.“, LKML 25.08.2000: https://lkml.org/lkml/2000/8/25/132
+- Git-Entstehung (3. April 2005, erster Commit 7. April 2005 „the information manager from hell“, Name): https://git-scm.com/book/de/v2 · https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290 · https://en.wikipedia.org/wiki/Git#Naming · Handbuchseite: https://git-scm.com/docs/git
+- GitHub Arctic Code Vault (Schnappschuss 02.02.2020, 186 Filmrollen, 21 TB, Svalbard): https://archiveprogram.github.com/arctic-vault/
+- GitHub: 100 Millionen Entwickler (Januar 2023): https://github.blog/news-insights/company-news/100-million-developers-and-counting/ · Microsoft übernimmt GitHub (2018): https://news.microsoft.com/2018/06/04/microsoft-to-acquire-github-for-7-5-billion/
+- Agenten-Definition: Anthropic, „Building effective agents“, Dezember 2024: https://www.anthropic.com/research/building-effective-agents · Claude Code: https://www.anthropic.com/news/claude-3-7-sonnet
+- Die Screenshots der Workflow-Folie: siehe oben (Tessl, öffentliche Produktdemo). Preise, Module und Zahlen im Beispielauftrag sind erfunden.
