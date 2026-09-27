@@ -6,16 +6,21 @@ window.addEventListener('DOMContentLoaded',()=>{
  const F7=`<svg viewBox="0 0 360 84" width="360" height="84"><path class="f7-back" d="M330 30C330 -12 30 -12 30 30"/><path class="f7-line" d="M30 30H330"/><circle class="f7-node m" style="--d:0s" cx="30" cy="30" r="9"/><circle class="f7-node m" style="--d:1.8s" cx="180" cy="30" r="9"/><circle class="f7-node m" style="--d:3.6s" cx="330" cy="30" r="9"/><text x="30" y="66" text-anchor="middle">beschreiben</text><text x="180" y="66" text-anchor="middle">ausprobieren</text><text x="330" y="66" text-anchor="middle">freigeben</text></svg><i class="f7-dot m"></i>`;
  const F9a='<svg viewBox="0 0 170 64" width="170" height="64"><path class="f9-line" d="M12 32H148"/><path class="f9-head" d="M138 22l12 10-12 10"/></svg><i class="f9-pkt m" style="--d:0s"></i><i class="f9-pkt m" style="--d:1.6s"></i>';
  const F9b='<svg viewBox="0 0 170 64" width="170" height="64"><path class="f9-line" d="M12 32H158"/><path class="f9-head" d="M148 22l10 10-10 10"/><path class="f9-head" d="M22 22l-10 10 10 10"/></svg><i class="f9-dot to m"></i><i class="f9-dot back m"></i>';
- const F11='<i class="f11-block a">Container</i><i class="f11-block b">Datenbank</i><i class="f11-slab">GitLab · gemeinsame Grundlage</i><i class="f11-pole"></i><i class="f11-flag"></i><i class="f11-ring" style="--d:0s"></i><i class="f11-ring" style="--d:1.2s"></i>';
+ const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+ const F11=s=>{const [a,b]=(s.dataset.figBlocks||'Container|Datenbank').split('|'),slab=s.dataset.figSlab||'GitLab · gemeinsame Grundlage';return `<i class="f11-block a">${esc(a)}</i><i class="f11-block b">${esc(b)}</i><i class="f11-slab">${esc(slab)}</i><i class="f11-pole"></i><i class="f11-flag"></i><i class="f11-ring" style="--d:0s"></i><i class="f11-ring" style="--d:1.2s"></i>`};
+ /* Fünf Stationen als Runde für „So arbeitet ein Agent“; Beschriftungen aus data-fig-stations (durch | getrennt). */
+ const F10=s=>{const names=(s.dataset.figStations||'Auftrag|Kontext|Änderung|Prüfung|Merge').split('|').slice(0,5);const xs=[40,375,710,1045,1380];const path='M40 40H1380C1380 -14 40 -14 40 40';return `<svg viewBox="0 0 1420 104" width="1420" height="104"><path class="f7-back" d="M1380 40C1380 -14 40 -14 40 40"/><path class="f7-line f10-line" d="M40 40H1380"/>${xs.map((x,i)=>`<circle class="f7-node m" style="--d:${(i*1.47).toFixed(2)}s" cx="${x}" cy="40" r="9"/>`).join('')}${xs.map((x,i)=>`<text x="${x}" y="80" text-anchor="middle">${esc(names[i]||'')}</text>`).join('')}</svg><i class="f7-dot f10-dot m" style="offset-path:path('${path}')"></i>`};
  const fig=(cls,style,markup)=>`<div class="fig ${cls}" aria-hidden="true" style="${style}">${markup}</div>`;
  const once=(node,cls,style,markup,where='beforeend')=>{if(!node.querySelector('.'+cls))node.insertAdjacentHTML(where,fig(cls,style,markup))};
  const build={
-  'tools-intro':s=>once(s,'fig-commits','left:90px;top:668px;width:1420px;height:150px',F1),
+  'tools-intro':s=>once(s,'fig-commits',`left:90px;top:${s.dataset.figTop||668}px;width:1420px;height:150px`,F1),
+  'git-basics-slide':s=>once(s,'fig-commits',`left:90px;top:${s.dataset.figTop||596}px;width:1420px;height:150px`,F1),
+  'agent-loop-slide':s=>once(s,'fig-round fig-loop5',`left:90px;top:${s.dataset.figTop||700}px;width:1420px;height:104px`,F10(s)),
   'context-slide':s=>once(s,'fig-context','left:0;top:0;width:1600px;height:900px',F3),
   'freedom-slide':s=>{const orbit=s.querySelector('.repo-orbit');if(orbit)once(orbit,'fig-orbit','left:0;top:0;width:100%;height:100%',F5,'afterbegin')},
   'workflow-slide':s=>once(s,'fig-round','left:1150px;top:96px;width:360px;height:84px',F7),
   'runtime-slide':s=>s.querySelectorAll('.runtime-link i').forEach((el,i)=>{if(!el.querySelector('svg')){el.innerHTML=i?F9b:F9a;el.classList.add('fig-link')}}),
-  'decision-slide':s=>once(s,'fig-foundation','left:90px;top:712px;width:1420px;height:114px',F11)
+  'decision-slide':s=>once(s,'fig-foundation',`left:90px;top:${s.dataset.figTop||712}px;width:1420px;height:114px`,F11(s))
  };
  function apply(root=document){root.querySelectorAll('.slides>section').forEach(s=>{for(const [cls,make] of Object.entries(build))if(s.classList.contains(cls))make(s)})}
  apply();

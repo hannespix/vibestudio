@@ -2,7 +2,7 @@
 
 Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung, animierte Infografiken. Alles läuft ohne Server, Build-Tool oder Internetzugang im Browser. Mehrere Vorträge liegen nebeneinander in `decks/`, jeder unter seiner eigenen Adresse.
 
-**Übersicht aller Vorträge:** https://hannespix.github.io/vibestudio/ · **Vibecoding im LVM:** https://hannespix.github.io/vibestudio/rp/ · **Zum Herunterladen:** https://hannespix.github.io/vibestudio/rp/Vibecoding-rp.html
+**Übersicht aller Vorträge:** https://hannespix.github.io/vibestudio/ · **Vibecoding im LVM:** https://hannespix.github.io/vibestudio/rp/ · **Vibecoding für vave studio:** https://hannespix.github.io/vibestudio/vave/ · **Zum Herunterladen:** `…/<kurzname>/Vibecoding-<kurzname>.html`
 
 ## Repo-Aufbau
 
@@ -49,6 +49,8 @@ Jeder Vortrag ist ein Ordner unter `decks/` und erscheint unter `https://hannesp
 - **Aus dem Editor übernehmen:** Im Vortrag **HTML speichern**, dann `node tools/new-deck.mjs kurzname --from-export Vibecoding-bearbeitet.html`. Folien und Zustand der gespeicherten Datei werden zum neuen Vortrag; genauso lässt sich ein bestehender Vortrag aktualisieren, indem `slides.html` und `state.json` ersetzt werden.
 - **Leer beginnen:** `node tools/new-deck.mjs kurzname --blank`.
 - **Kurzname:** Kleinbuchstaben, Ziffern, Bindestrich; er ist zugleich der Pfad.
+
+Vorhandene Vorträge: `rp` (Regierungspräsidium · Verwaltung, 13 Folien) und `vave` (vave studio · Kommunikation im Raum, 14 Folien: technischer, mit „Git in drei Minuten“, „So arbeitet ein Agent“ und „Vom Repo in den Raum“; Zielbild und Entscheidung ohne LVM-Bezug). Neue Folientypen bringen ihre Infografiken mit: `git-basics-slide` (Commit-Graph), `agent-loop-slide` (Runde mit fünf Stationen, Beschriftung über `data-fig-stations`), und die Fundament-Grafik der `decision-slide` liest ihre Beschriftungen aus `data-fig-blocks` und `data-fig-slab`.
 
 Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von Folien je Publikum oder Länge, per `?set=kurz` aufrufbar), damit Kurz- und Langfassung denselben Stand teilen.
 

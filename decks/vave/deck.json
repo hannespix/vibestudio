@@ -1,0 +1,14 @@
+{
+ "slug": "vave",
+ "title": "Vibecoding · agentisches Coding mit Git",
+ "subtitle": "Wie aus Ideen eigene Werkzeuge werden: LLM-Agenten, Git als Gedächtnis und ein Workflow, der hält",
+ "audience": "vave studio · Kommunikation im Raum",
+ "author": "Hannes Pix",
+ "lang": "de",
+ "minutes": 12,
+ "description": "Vibecoding für ein Studio: Was Git ist, wie agentisches Coding gut funktioniert und wie aus einem Prototyp ein Werkzeug im Raum wird.",
+ "cover": "assets/scene-blueprint.jpg",
+ "primary": false,
+ "basedOn": "rp",
+ "created": "2026-09-27"
+}

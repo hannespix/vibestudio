@@ -170,13 +170,19 @@ try{
  /* Ein-Datei-Fassung */
  /* Mehrere Vorträge: Übersicht, Adresse je Vortrag, ?edit, Verweis zur Übersicht, Anlegen einer Kopie */
  {const overPage=await browser.newPage({viewport:{width:1280,height:900}});await overPage.goto(base+'/index.html');await overPage.waitForSelector('.deck');const over={page:overPage};const cards=await over.page.evaluate(()=>[...document.querySelectorAll('.deck')].map(d=>({title:d.querySelector('h2').textContent,href:d.querySelector('a.primary').getAttribute('href'),edit:[...d.querySelectorAll('.actions a')].some(a=>a.getAttribute('href').endsWith('?edit'))})));
-  check(cards.length>=1&&cards.some(c=>c.href==='rp/index.html'&&c.edit&&/Vibecoding/.test(c.title)),`Übersicht listet ${cards.length} Vortrag/Vorträge mit Adresse, Bearbeiten und Herunterladen`);await over.page.close();
+  check(cards.length>=2&&cards.some(c=>c.href==='rp/index.html'&&c.edit&&/Vibecoding/.test(c.title))&&cards.some(c=>c.href==='vave/index.html'),`Übersicht listet ${cards.length} Vorträge mit Adresse, Bearbeiten und Herunterladen`);await over.page.close();
   const edit=await open(base+'/decks/rp/index.html?edit');await edit.page.waitForSelector('body.editing',{timeout:8000}).catch(()=>{});
   const flags=await edit.page.evaluate(()=>({editing:document.body.classList.contains('editing'),home:document.querySelector('.deck-ui a#decks')?.getAttribute('href'),deck:document.documentElement.dataset.deck}));
   check(flags.editing&&flags.home==='../../index.html'&&flags.deck==='rp','Vortrag: ?edit öffnet den Editor, Verweis zur Übersicht und Kennung vorhanden');await edit.page.close();
   const probeDir=join(root,'dist','smoke-decks');rmSync(probeDir,{recursive:true,force:true});
   let made=false;try{execFileSync('node',[join(root,'tools','new-deck.mjs'),'probe','--from','rp','--title','Probevortrag','--audience','Test','--dir',probeDir],{stdio:'pipe'});const meta=JSON.parse(await readFile(join(probeDir,'probe','deck.json'),'utf8'));const copy=await readFile(join(probeDir,'probe','slides.html'),'utf8');made=meta.title==='Probevortrag'&&meta.basedOn==='rp'&&meta.primary===false&&(copy.match(/<section\b/g)||[]).length===expectedSlides&&existsSync(join(probeDir,'probe','state.json'))}catch(e){notes.push('· new-deck: '+e.message)}
   check(made,'new-deck.mjs legt eine Kopie mit allen Folien, Zustand und Metadaten an');rmSync(probeDir,{recursive:true,force:true})}
+/* Zweiter Vortrag: vave (Kopie mit eigenen Folien und Figuren) */
+ if(existsSync(join(root,'decks','vave','index.html'))){const vave=await open(base+'/decks/vave/index.html');
+  const v=await vave.page.evaluate(()=>({total:deck.getTotalSlides(),deckId:document.documentElement.dataset.deck,git:!!document.querySelector('.git-basics-slide .fig-commits'),loop:document.querySelectorAll('.agent-loop-slide .fig-loop5 .f7-node').length,blocks:[...document.querySelectorAll('.decision-slide .f11-block')].map(b=>b.textContent).join('|'),title:document.title}));
+  check(v.total===14&&v.deckId==='vave'&&v.git&&v.loop===5&&v.blocks==='Pilot|Tests'&&/agentisches Coding/.test(v.title),`Vortrag vave: ${v.total} Folien, Git-Graph, Fünfer-Runde, eigene Fundament-Beschriftung`);
+  check(vave.errors.length===0,'Vortrag vave ohne Konsolenfehler');await vave.page.close()}
+ else notes.push('· decks/vave/index.html fehlt (node build.mjs)');
  if(existsSync(join(root,'dist','rp','index.html'))){const one=await open(base+'/dist/rp/index.html');
   check(await one.page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Ein-Datei-Fassung: '+expectedSlides+' Folien');
   const extra=one.requests.filter(u=>!u.endsWith('/dist/rp/index.html')&&!u.startsWith('data:'));
