@@ -1,0 +1,38 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Motiv: Schallplatte</title>
+<!-- Prozedural erzeugtes Kapitelmotiv „aufzeichnen“: der obere Bogen einer Schallplatte – feine Rillen, dunklere Trennbänder zwischen den Stücken, zwei Lichtreflexe, matter Rand auf warmem Grund. Parameter: ?seed=9&scale=2&q=.84. Rendern: node tools/render-scene.mjs record -->
+<style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;height:auto}</style>
+<canvas id="c"></canvas>
+<script>
+const params=new URLSearchParams(location.search),seed=+params.get('seed')||9,scale=+params.get('scale')||2,quality=+params.get('q')||.84;
+const W=1600*scale,H=900*scale,u=scale,canvas=document.getElementById('c');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry32(seed),range=(a,b)=>a+(b-a)*rnd(),X=x=>x*u,Y=y=>y*u,TAU=Math.PI*2;
+const C={x:800,y:1300},R=735;
+const disc=()=>{ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(R),0,TAU);ctx.closePath()};
+/* 1 · Warmer Grund mit weichem Schatten unter der Platte */
+let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#ece5d8');g.addColorStop(1,'#d8cfbf');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+g=ctx.createRadialGradient(X(C.x),Y(C.y+30),X(R-40),X(C.x),Y(C.y+30),X(R+160));g.addColorStop(0,'rgba(50,35,25,.45)');g.addColorStop(.5,'rgba(50,35,25,.16)');g.addColorStop(1,'rgba(50,35,25,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+/* 2 · Die Platte: fast schwarz, Rillen als feine Ringe, Trennbänder zwischen den Stücken */
+disc();ctx.fillStyle='#17181a';ctx.fill();
+ctx.save();disc();ctx.clip();
+for(let r=40;r<R-16;r+=3.4){ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(r),Math.PI*.95,TAU*1.03);ctx.lineWidth=u*1.1;ctx.strokeStyle=`rgba(205,210,215,${range(.07,.2)})`;ctx.stroke()}
+const gaps=[R-96,R-232,R-388,R-520,R-640];for(const r of gaps){ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(r),Math.PI*.95,TAU*1.03);ctx.lineWidth=u*7;ctx.strokeStyle='rgba(8,9,10,.9)';ctx.stroke();ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(r+5),Math.PI*.95,TAU*1.03);ctx.lineWidth=u*1.2;ctx.strokeStyle='rgba(220,225,230,.16)';ctx.stroke()}
+/* 3 · Zwei Lichtreflexe: kegelförmige Aufhellung um die Achse, dazu ein weicher Glanz von links oben */
+const cg=ctx.createConicGradient(0,X(C.x),Y(C.y));
+const stops=[[0,0],[.63,0],[.68,.06],[.725,.4],[.77,.08],[.80,0],[.82,0],[.85,.07],[.88,.3],[.915,.07],[.95,0],[1,0]];for(const [p,a] of stops)cg.addColorStop(p,`rgba(255,240,220,${a})`);
+ctx.fillStyle=cg;ctx.fillRect(0,0,W,H);
+g=ctx.createRadialGradient(X(C.x-380),Y(C.y-560),X(40),X(C.x-380),Y(C.y-560),X(520));g.addColorStop(0,'rgba(255,245,230,.26)');g.addColorStop(1,'rgba(255,245,230,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ctx.fillStyle='rgba(230,235,240,.5)';for(let i=0;i<90;i++){const a=range(Math.PI*1.02,Math.PI*1.98),r=range(60,R-20);ctx.beginPath();ctx.arc(X(C.x+Math.cos(a)*r),Y(C.y+Math.sin(a)*r),X(range(.5,1.6)),0,TAU);ctx.fill()}
+ctx.restore();
+/* 4 · Rand: matte Fase mit Lichtkante */
+ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(R-6),Math.PI*.95,TAU*1.03);ctx.lineWidth=u*12;ctx.strokeStyle='#202224';ctx.stroke();
+ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(R-1),Math.PI*.95,TAU*1.03);ctx.lineWidth=u*2.2;ctx.strokeStyle='rgba(255,245,230,.55)';ctx.stroke();
+{const lg=ctx.createLinearGradient(X(C.x-R),0,X(C.x+R),0);lg.addColorStop(0,'rgba(255,245,230,0)');lg.addColorStop(.35,'rgba(255,245,230,.5)');lg.addColorStop(.5,'rgba(255,245,230,.15)');lg.addColorStop(.7,'rgba(255,245,230,.45)');lg.addColorStop(1,'rgba(255,245,230,0)');ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(R-22),Math.PI*1.08,Math.PI*1.92);ctx.lineWidth=u*26;ctx.strokeStyle=lg;ctx.globalAlpha=.35;ctx.stroke();ctx.globalAlpha=1}
+ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(R-12),Math.PI*.95,TAU*1.03);ctx.lineWidth=u*1.2;ctx.strokeStyle='rgba(255,245,230,.12)';ctx.stroke();
+/* 5 · Vignette und Körnung */
+g=ctx.createRadialGradient(X(800),Y(450),X(420),X(800),Y(450),X(1150));g.addColorStop(0,'rgba(60,40,25,0)');g.addColorStop(1,'rgba(60,40,25,.2)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+const img=ctx.getImageData(0,0,W,H),px=img.data;for(let i=0;i<px.length;i+=4){const v=(rnd()-.5)*7;px[i]+=v;px[i+1]+=v;px[i+2]+=v}ctx.putImageData(img,0,0);
+window.sceneDataURL=canvas.toDataURL('image/jpeg',quality);window.rendered=true;
+</script>
