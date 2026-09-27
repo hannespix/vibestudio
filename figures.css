@@ -77,6 +77,18 @@ html.motion-paused .fig *,html.motion-paused .chat-traces i,html.motion-paused .
 .present .f7-back,.present .fig-round text{animation:fig-fade 1s ease-out both .9s}
 .present .f7-node{animation:f7-pulse 7.5s ease-in-out infinite var(--d),fig-pop .7s ease-out both .3s}
 @keyframes f7-draw{from{stroke-dasharray:320;stroke-dashoffset:320}to{stroke-dasharray:320;stroke-dashoffset:0}}
+/* Runde mit fünf Stationen (agent-loop-slide), auch auf dunklen Folien */
+.fig-loop5 text{font-size:18px;letter-spacing:1.2px}
+.f10-dot{animation:f7-run 12s linear infinite}
+.fig-loop5 .f7-node.m{animation-duration:12s}
+.present .fig-loop5 .f7-node{animation:f7-pulse 12s ease-in-out infinite var(--d),fig-pop .7s ease-out both .3s}
+.present .f10-line{animation:f7-draw 1.4s ease-out both}
+@keyframes f10-pulse{0%,10%,100%{transform:scale(1);fill:#252a2b}5%{transform:scale(1.5);fill:#c79e74}}
+.ink .fig-round text{fill:#d2d1c6}.ink .f7-line,.ink .f7-back{stroke:#c2a98d}.ink .f7-node{fill:#252a2b;stroke:#c2a98d}.ink .f7-dot{background:#c79e74;box-shadow:0 0 0 4px #c79e7433}
+.ink .f7-node.m,.ink .present .f7-node{animation-name:f10-pulse}
+.ink.present .fig-loop5 .f7-node{animation:f10-pulse 12s ease-in-out infinite var(--d),fig-pop .7s ease-out both .3s}
+@keyframes f7-draw5{from{stroke-dasharray:1400;stroke-dashoffset:1400}to{stroke-dasharray:1400;stroke-dashoffset:0}}
+.present .f10-line{animation-name:f7-draw5}
 
 /* 05 Zielbild: Deployments wandern von GitLab in den Container, Daten pendeln zwischen Container und Datenbank. */
 .runtime-slide .runtime-link>i{position:relative;display:block;height:64px;margin-top:10px;font-size:0;line-height:0}
