@@ -1,0 +1,42 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Motiv: Laufbahn</title>
+<!-- Prozedural erzeugtes Kapitelmotiv „schleife“: sechs Bahnen einer Laufbahn aus der Vogelperspektive, deren Kurve einen Bogen beschreibt – weiße Bahnlinien, Startlinie mit Bahnnummern, gestaffelte Startmarken. Parameter: ?seed=5&scale=2&q=.84. Rendern: node tools/render-scene.mjs track -->
+<style>html,body{margin:0;background:#000}canvas{display:block;max-width:100vw;height:auto}</style>
+<canvas id="c"></canvas>
+<script>
+const params=new URLSearchParams(location.search),seed=+params.get('seed')||5,scale=+params.get('scale')||2,quality=+params.get('q')||.84;
+const W=1600*scale,H=900*scale,u=scale,canvas=document.getElementById('c');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry32(seed),range=(a,b)=>a+(b-a)*rnd(),X=x=>x*u,Y=y=>y*u,TAU=Math.PI*2;
+const C={x:800,y:1445},RO=840,LANES=6,LW=62,RI=RO-LANES*LW,A0=Math.PI*1.02,A1=Math.PI*1.98;
+const P=(r,a)=>[X(C.x+Math.cos(a)*r),Y(C.y+Math.sin(a)*r)];
+const ring=(r0,r1,style)=>{ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(r1),0,TAU);ctx.arc(X(C.x),Y(C.y),X(r0),0,TAU,true);ctx.fillStyle=style;ctx.fill('evenodd')};
+const arc=(r,w,style,dash)=>{ctx.beginPath();ctx.arc(X(C.x),Y(C.y),X(r),A0,A1);ctx.lineWidth=u*w;ctx.strokeStyle=style;ctx.setLineDash(dash?dash.map(d=>d*u):[]);ctx.stroke();ctx.setLineDash([])};
+/* 1 · Umgebung: helles, warmes Grau mit feiner Körnung, dazu ein schmaler Rasenstreifen außen */
+let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#ece5d8');g.addColorStop(1,'#d9d1c1');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+g=ctx.createRadialGradient(X(C.x),Y(C.y),X(RO+60),X(C.x),Y(C.y),X(RO+260));g.addColorStop(0,'rgba(50,35,25,.22)');g.addColorStop(1,'rgba(50,35,25,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ring(RO+18,RO+92,'#c6cdb7');
+ctx.fillStyle='rgba(60,70,50,.18)';for(let i=0;i<5000;i++){const a=range(A0-.2,A1+.2),r=range(RO+18,RO+92);const[x,y]=P(r,a);if(y<0||y>H)continue;ctx.fillRect(x,y,u*1.2,u*1.2)}
+/* 2 · Schatten der Bahn auf dem Boden */
+g=ctx.createRadialGradient(X(C.x),Y(C.y),X(RO),X(C.x),Y(C.y),X(RO+120));g.addColorStop(0,'rgba(50,35,25,.28)');g.addColorStop(1,'rgba(50,35,25,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+/* 3 · Die Bahn: Terrakotta mit leichtem Verlauf und Körnung */
+g=ctx.createRadialGradient(X(C.x),Y(C.y),X(RI),X(C.x),Y(C.y),X(RO));g.addColorStop(0,'#a9532f');g.addColorStop(.5,'#b9623d');g.addColorStop(1,'#ad5a37');ring(RI,RO,g);
+ctx.fillStyle='rgba(255,235,220,.16)';for(let i=0;i<26000;i++){const a=range(A0-.1,A1+.1),r=range(RI,RO);const[x,y]=P(r,a);if(y<0)continue;ctx.fillRect(x,y,u*1.1,u*1.1)}
+ctx.fillStyle='rgba(60,20,10,.14)';for(let i=0;i<14000;i++){const a=range(A0-.1,A1+.1),r=range(RI,RO);const[x,y]=P(r,a);if(y<0)continue;ctx.fillRect(x,y,u*1.1,u*1.1)}
+/* 4 · Bordsteine und Bahnlinien */
+arc(RO+9,18,'#e9e4d9');arc(RO+1,3,'rgba(90,60,40,.35)');
+for(let k=1;k<LANES;k++)arc(RO-k*LW,4.5,'rgba(255,250,242,.94)');
+arc(RI+2,6,'rgba(255,250,242,.94)');ring(RI-16,RI,'#d9d1c1');
+/* 5 · Ziellinie mit Bahnnummern, gestaffelte Startmarken */
+const finish=Math.PI*1.62;{const [ax,ay]=P(RI,finish),[bx,by]=P(RO,finish);ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.lineWidth=u*11;ctx.strokeStyle='rgba(255,250,242,.96)';ctx.stroke()}
+ctx.fillStyle='rgba(255,250,242,.92)';ctx.font=`500 ${Math.round(24*u)}px "DM Sans",Arial,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+for(let k=0;k<LANES;k++){const r=RO-(k+.5)*LW,a=finish+.035;const[x,y]=P(r,a);ctx.save();ctx.translate(x,y);ctx.rotate(a+Math.PI/2);ctx.fillText(String(k+1),0,0);ctx.restore()}
+for(let k=0;k<LANES;k++){const a=finish-.16-k*.055,r0=RO-(k+1)*LW+8,r1=RO-k*LW-8;const[ax,ay]=P(r0,a),[bx,by]=P(r1,a);ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.lineWidth=u*5;ctx.strokeStyle='rgba(255,250,242,.9)';ctx.stroke()}
+for(let k=0;k<LANES;k++){const a=Math.PI*1.22+k*.03;const[x,y]=P(RO-(k+.5)*LW,a);ctx.beginPath();ctx.arc(x,y,X(4),0,TAU);ctx.fillStyle='rgba(255,250,242,.8)';ctx.fill()}
+/* 6 · Streiflicht von links oben, Vignette und Körnung */
+g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'rgba(255,250,240,.22)');g.addColorStop(.5,'rgba(255,250,240,0)');g.addColorStop(1,'rgba(40,20,10,.14)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+g=ctx.createRadialGradient(X(800),Y(450),X(420),X(800),Y(450),X(1150));g.addColorStop(0,'rgba(60,40,25,0)');g.addColorStop(1,'rgba(60,40,25,.18)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+const img=ctx.getImageData(0,0,W,H),px=img.data;for(let i=0;i<px.length;i+=4){const v=(rnd()-.5)*8;px[i]+=v;px[i+1]+=v;px[i+2]+=v}ctx.putImageData(img,0,0);
+window.sceneDataURL=canvas.toDataURL('image/jpeg',quality);window.rendered=true;
+</script>

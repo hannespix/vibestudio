@@ -64,79 +64,89 @@ html,body.reveal-viewport{background-color:var(--stage,#000)}html.stage-ready,ht
 
 /* Ermöglichen: Morgenlicht über dem Horizont (prozedural erzeugt, tools/scene-dawn.html). */
 .dawn{background:#ebdcc7;color:#2c241c}.dawn .chapter-title{text-shadow:0 1px 26px #f7e9d5aa}
-/* Git in drei Minuten (vave) */
-.git-basics{display:grid;grid-template-columns:repeat(5,1fr);gap:34px;margin-top:58px}
-.git-basics h4{font-size:27px;font-weight:500;letter-spacing:-.6px;margin:8px 0 8px}
-.git-basics p{font-size:23px;line-height:1.4;color:#766d5f}
-.git-basics-bottom{font-size:36px;letter-spacing:-1px;margin-top:56px}
-/* So arbeitet ein Agent (vave) */
-.agent-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:90px;margin-top:44px}
-.loop-steps>div{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px solid #ffffff1f}
-.loop-steps b{font-size:19px;color:#c79e74;letter-spacing:1.5px;font-weight:400}
-.loop-steps h4{font-size:28px;font-weight:500;letter-spacing:-.6px;margin:0}
-.loop-steps p{font-size:22px;color:#c9c9bc;margin:2px 0 0}
-.loop-rules h3{font-size:22px;letter-spacing:1.8px;text-transform:uppercase;color:#c2a98d;font-weight:500;margin:6px 0 14px}
-.loop-rules p{font-size:27px;line-height:1.35;padding:9px 0;border-bottom:1px solid #ffffff1f;margin:0}
-.agent-bottom{font-size:31px;letter-spacing:-.7px;margin-top:38px}
-/* Kapitelmotive planstand, lichtbogen, fächer */
+/* Kapitelmotive planstand, lichtbogen, fächer, laufbahn, stollen, schallplatte, lupe, torbogen */
 .plan{background:#ebe3d3;color:#2f3e49}.plan .chapter-title{text-shadow:0 1px 22px #f3ecdd99}
 .light{background:#0d1117;color:#f4ecdc}.light .chapter-title{text-shadow:0 2px 40px #000c}.light .signature{opacity:.75}
 .fan{background:#e2dbce;color:#2a2622}.fan .chapter-title{text-shadow:0 1px 22px #f0e9dd99}
-/* Impuls-Folien: Zitat, Aussage, Zahl */
-.quote-slide h2{font-size:64px;line-height:1.18;letter-spacing:-2.1px;font-weight:400;max-width:1340px;margin-top:150px;text-wrap:balance}
-.quote-by{font-size:26px;color:#8a604d;margin-top:38px;letter-spacing:.3px}.ink .quote-by{color:#c2a98d}
-.statement-slide h2{font-size:92px;line-height:1.05;letter-spacing:-3.6px;font-weight:500;max-width:1400px;margin-top:120px;text-wrap:balance}
-.statement-sub{font-size:34px;line-height:1.35;letter-spacing:-.8px;color:#6f675b;margin-top:34px;max-width:1240px}.ink .statement-sub{color:#c9c9bc}
-.quote-slide .endnote,.statement-slide .endnote,.count-slide .endnote{margin-top:30px;text-align:left}
-.count-slide h2{font-size:150px;line-height:1;letter-spacing:-7px;font-weight:500;margin-top:110px}.count-slide h2 .count{color:#ad6549}.ink.count-slide h2 .count{color:#c79e74}
-.count-slide .statement-sub{font-size:38px;letter-spacing:-1px;margin-top:26px;max-width:1300px}
-/* Verschiebung früher → heute */
-.shift-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin-top:54px}
-.shift-grid>div{display:grid;grid-template-columns:1fr auto 1fr;column-gap:16px;align-items:baseline}
-.shift-grid>div>:nth-child(1){grid-area:1/1}.shift-grid>div>:nth-child(2){grid-area:2/1}.shift-grid>div>:nth-child(3){grid-area:1/2/3/3;align-self:center}.shift-grid>div>:nth-child(4){grid-area:1/3}.shift-grid>div>:nth-child(5){grid-area:2/3}.shift-grid>div>:nth-child(6){grid-area:3/1/4/4}
-.shift-grid .small-label{margin:0 0 6px}
-.shift-grid h3{font-size:33px;letter-spacing:-1px;font-weight:500;margin:0}.shift-grid>div>:nth-child(2){color:#8a8072}
-.shift-arrow{font-size:40px;color:#ad6549;font-style:normal;display:inline-block}
-.shift-grid p{font-size:25px;line-height:1.4;color:#766d5f;margin:18px 0 0}
-.shift-slide .shift-bottom{font-size:40px;letter-spacing:-1.2px;margin-top:60px;padding-top:30px;border-top:1px solid #c8bcaa}
+.track{background:#e6dfd0;color:#2a2622}.track .chapter-title{text-shadow:0 1px 22px #f0e9dd99}
+.vault{background:#d6dee4;color:#1f2a33}.vault .chapter-title{text-shadow:0 1px 26px #eaf0f4aa}
+.record{background:#e6dfd2;color:#1f1f1f}.record .chapter-title{text-shadow:0 1px 22px #efe9dd99}
+.lens{background:#efe9dd;color:#2f2a24}.lens .chapter-title{text-shadow:0 1px 22px #f5f0e6aa}
+.arch{background:#dccdb7;color:#3a2f27}.arch .chapter-title{text-shadow:0 1px 22px #efe6d8aa}
+
+/* Impuls-Folien (vave). Gemeinsame Fußzeile: jede Inhaltsfolie schließt auf derselben Linie ab. */
+.foot{position:absolute;left:90px;right:90px;bottom:60px;margin:0;padding-top:24px;border-top:1px solid #c8bcaa;z-index:2}
+.ink .foot{border-color:#ffffff24}.sage .foot{border-color:#a9b5a3}
+.reveal .foot>p{font-size:32px;letter-spacing:-.8px;line-height:1.3;margin:0}
+.reveal .foot>p.endnote{font-size:24px;letter-spacing:0;color:#6e6759;margin:0;text-align:left}
+.reveal .foot>p+p.endnote{margin-top:10px}
+.ink .foot .endnote{color:#a3a99e}.sage .foot .endnote{color:#627259}
+/* Zitat: vertikal ausgewogen, Akzentstrich, Lichtlauf beim Erscheinen */
+/* Reveal setzt display:block inline; die Zitatfolie zentriert ihren Block deshalb mit !important. */
+.reveal .slides>section.quote-slide.present{display:flex!important;flex-direction:column;justify-content:center}.quote-slide{--qc:#24231f}.ink.quote-slide{--qc:#eee9de}
+.quote-slide .eyebrow{position:absolute;top:64px;left:90px;margin:0}
+.quote-slide h2{font-size:66px;line-height:1.18;letter-spacing:-2.2px;font-weight:400;max-width:1360px;margin:0;text-wrap:balance}
+.quote-slide.big h2{font-size:98px;line-height:1.08;letter-spacing:-4px}
+.quote-slide h2::before{content:'';display:block;width:64px;height:3px;background:#ad6549;margin-bottom:38px}.ink.quote-slide h2::before{background:#c79e74}
+.quote-by{font-size:27px;color:#8a604d;margin-top:40px;letter-spacing:.3px}.ink .quote-by{color:#c2a98d}
+.quote-slide .endnote{margin-top:34px;text-align:left;max-width:1200px}
+/* Aussage und Zahl: Kopf oben, Grafik darunter, Fußzeile unten */
+.statement-slide h2{font-size:92px;line-height:1.05;letter-spacing:-3.6px;font-weight:500;max-width:1400px;margin-top:110px;text-wrap:balance}
+.statement-sub{font-size:34px;line-height:1.35;letter-spacing:-.8px;color:#6f675b;margin-top:30px;max-width:1300px}.ink .statement-sub{color:#c9c9bc}
+.statement-slide .endnote,.count-slide .endnote{margin-top:30px;text-align:left}
+.count-slide h2{font-size:150px;line-height:1;letter-spacing:-7px;font-weight:500;margin-top:100px}.count-slide h2 .count{color:#ad6549}.ink.count-slide h2 .count{color:#c79e74}
+.count-slide .statement-sub{font-size:36px;letter-spacing:-1px;margin-top:26px;max-width:1360px}
+/* Verschiebung früher → heute: drei große Zeilen */
+.shift-rows{margin-top:44px}
+.shift-rows>div{display:grid;grid-template-columns:430px 80px 360px 1fr;column-gap:20px;align-items:center;padding:24px 0;border-bottom:1px solid #c8bcaa}
+.shift-rows .shift-head{padding:0 0 10px;border-bottom:1px solid #a89b88}.shift-rows .shift-head .small-label{margin:0}
+.reveal .shift-rows h3{font-size:46px;letter-spacing:-1.6px;font-weight:500;margin:0;line-height:1.1}
+.reveal .shift-rows h3.was{color:#9a9184;font-weight:400}.reveal .shift-rows h3.now{color:#24231f}
+.shift-arrow{font-size:44px;color:#ad6549;font-style:normal;display:inline-block;text-align:center}
+.reveal .shift-rows p{font-size:25px;line-height:1.4;color:#766d5f;margin:0;padding-left:20px}
 /* Analogie Studio ↔ Git, Fehler → Abhilfe */
-.analogy,.pitfalls{margin-top:44px}
-.analogy>div{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;padding:15px 0;border-bottom:1px solid #c8bcaa}
-.pitfalls>div{display:grid;grid-template-columns:1fr 70px 1.3fr;align-items:center;padding:14px 0;border-bottom:1px solid #c8bcaa}
+.analogy{margin-top:38px}.pitfalls{margin-top:36px}
+.analogy>div{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;padding:19px 0;border-bottom:1px solid #c8bcaa}
+.pitfalls>div{display:grid;grid-template-columns:1fr 70px 1.3fr;align-items:center;padding:16px 0;border-bottom:1px solid #c8bcaa}
 .analogy-head,.pitfalls-head{border-bottom:1px solid #a89b88!important;padding:0 0 10px!important}
 .analogy .small-label,.pitfalls .small-label{margin:0}
-.analogy h4{font-size:36px;letter-spacing:-1px;font-weight:500;margin:0}.analogy h4:last-child{color:#ad6549}
-.analogy .shift-arrow,.pitfalls .shift-arrow{text-align:center;font-size:34px;color:#8a8072}
-.analogy-bottom{font-size:34px;letter-spacing:-.8px;margin-top:44px}
-.pitfalls h4{font-size:31px;letter-spacing:-.9px;font-weight:500;margin:0;color:#8a4a34}
-.pitfalls p{font-size:25px;line-height:1.4;color:#4b463d;margin:0}
+.analogy h4{font-size:40px;letter-spacing:-1.2px;font-weight:500;margin:0}.analogy h4:last-child{color:#ad6549}
+.analogy .shift-arrow,.pitfalls .shift-arrow{text-align:center;font-size:36px;color:#8a8072}
+.pitfalls h4{font-size:34px;letter-spacing:-1px;font-weight:500;margin:0;color:#8a4a34}
+.pitfalls p{font-size:26px;line-height:1.4;color:#4b463d;margin:0}
 /* Beispielauftrag */
 .prompt-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:70px;margin-top:44px;align-items:start}
-.prompt-card{margin:0;padding:34px 38px;border-radius:18px;background:#f6f1e8;border:1px solid #d8cdbb;box-shadow:0 18px 50px #2b241c10}
-.prompt-card p{font-size:28px;line-height:1.5;margin:0}
-.prompt-card b{font-weight:500;padding:1px 5px;border-radius:5px}
+.prompt-card{margin:0;padding:38px 42px;border-radius:20px;background:#f6f1e8;border:1px solid #d8cdbb;box-shadow:0 18px 50px #2b241c10}
+.prompt-card p{font-size:29px;line-height:1.52;margin:0}
+.prompt-card b{font-weight:500;padding:1px 6px;border-radius:6px}
 .p-goal{background:#ad654926;color:#7a4a33}.p-context{background:#62736426;color:#3e5040}.p-check{background:#23384526;color:#233845}.p-limit{background:#c9a14530;color:#6d5620}
-.prompt-parts>div{display:grid;grid-template-columns:22px 1fr;gap:4px 18px;align-items:baseline;padding:14px 0;border-bottom:1px solid #c8bcaa}
+.prompt-parts>div{display:grid;grid-template-columns:22px 1fr;gap:4px 18px;align-items:baseline;padding:19px 0;border-bottom:1px solid #c8bcaa}
 .prompt-parts i{display:block;width:16px;height:16px;border-radius:5px;grid-row:span 2;align-self:center}
 .prompt-parts i.p-goal{background:#ad6549}.prompt-parts i.p-context{background:#627364}.prompt-parts i.p-check{background:#233845}.prompt-parts i.p-limit{background:#c9a145}
-.prompt-parts h4{font-size:30px;letter-spacing:-.8px;font-weight:500;margin:0}
-.prompt-parts p{font-size:24px;line-height:1.4;color:#766d5f;margin:0}
-.prompt-bottom{font-size:32px;letter-spacing:-.8px;margin-top:40px}
-/* Werkzeuge, Eignung, Voraussetzungen */
-.toolbox{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 40px;margin-top:50px}
-.toolbox>div{padding:22px 24px 24px;border-radius:16px;background:#f5f0e7;border:1px solid #d8cdbb}
-.toolbox b{display:block;font-size:20px;color:#a36649;letter-spacing:1.5px;font-weight:400;margin-bottom:10px}
-.toolbox h4{font-size:30px;letter-spacing:-.9px;font-weight:500;margin:0 0 10px}
-.toolbox p{font-size:23px;line-height:1.4;color:#766d5f;margin:0}
-.toolbox-bottom{font-size:31px;letter-spacing:-.8px;margin-top:40px}
-.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;margin-top:50px}
-.fit-col h3{font-size:22px;letter-spacing:1.8px;text-transform:uppercase;font-weight:500;margin:0 0 10px}
+.prompt-parts h4{font-size:32px;letter-spacing:-.9px;font-weight:500;margin:0}
+.prompt-parts p{font-size:25px;line-height:1.4;color:#766d5f;margin:0}
+/* Werkzeuge, Eignung */
+.toolbox{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 36px;margin-top:52px}
+.toolbox>div{padding:28px 30px 30px;border-radius:18px;background:#f5f0e7;border:1px solid #d8cdbb}
+.toolbox b{display:block;font-size:20px;color:#a36649;letter-spacing:1.5px;font-weight:400;margin-bottom:12px}
+.toolbox h4{font-size:31px;letter-spacing:-.9px;font-weight:500;margin:0 0 12px}
+.toolbox p{font-size:24px;line-height:1.4;color:#766d5f;margin:0}
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:52px}
+.fit-col{padding:30px 36px 14px;border-radius:20px;background:#f5f0e7;border:1px solid #d8cdbb}.fit-col.care{background:#f4e9e2;border-color:#e0c8bb}
+.fit-col h3{font-size:22px;letter-spacing:1.8px;text-transform:uppercase;font-weight:500;margin:0 0 8px}
 .fit-col.good h3{color:#3e5a44}.fit-col.care h3{color:#a04a30}
-.fit-col p{font-size:30px;line-height:1.35;padding:14px 0;border-bottom:1px solid #c8bcaa;margin:0}
-.fit-col.good p::before{content:'✓';color:#3e5a44;margin-right:14px}.fit-col.care p::before{content:'!';color:#a04a30;margin-right:16px;font-weight:600}
-.fit-bottom{font-size:32px;letter-spacing:-.8px;margin-top:44px}
-.needs{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin-top:58px}
-.needs .small-label{margin:0 0 14px}
-.needs h3{font-size:38px;letter-spacing:-1.2px;font-weight:500;margin:0 0 16px}
-.needs p{font-size:26px;line-height:1.45;color:#5f594f;margin:0}
-.needs-slide .endnote{margin-top:64px}
+.fit-col p{font-size:31px;line-height:1.3;padding:19px 0;border-bottom:1px solid #d8cdbb;margin:0}.fit-col p:last-child{border-bottom:0}.fit-col.care p{border-color:#e6d2c6}
+.fit-col.good p::before{content:'✓';color:#3e5a44;margin-right:16px}.fit-col.care p::before{content:'!';color:#a04a30;margin-right:18px;font-weight:600}
+/* Git in drei Minuten */
+.git-basics{display:grid;grid-template-columns:repeat(5,1fr);gap:34px;margin-top:56px}
+.git-basics h4{font-size:28px;font-weight:500;letter-spacing:-.7px;margin:8px 0 8px}
+.git-basics p{font-size:23px;line-height:1.4;color:#766d5f}
+/* So arbeitet ein Agent: fünf Stationen über der Runde */
+.loop-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0 24px;margin-top:62px;text-align:center}
+.loop-steps b{display:block;font-size:20px;color:#c79e74;letter-spacing:2px;font-weight:400;margin-bottom:14px}
+.loop-steps h4{font-size:32px;font-weight:500;letter-spacing:-.8px;margin:0 0 10px}
+.loop-steps p{font-size:23px;line-height:1.4;color:#c9c9bc;margin:0}
+/* Entscheidung mit größerem Fundament */
+[data-deck=vave] .decision-slide .decision-priorities{margin-top:40px}
+[data-deck=vave] .decision-slide .fig-foundation{width:600px!important;left:490px!important;transform:scale(1.35);transform-origin:275px 100%}
+[data-deck=vave] .decision-slide .fig-foundation>i{margin-left:-480px}
