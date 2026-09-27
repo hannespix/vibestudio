@@ -63,4 +63,5 @@ Die Kapitelmotive **Planstand** (`assets/scene-plan.jpg`, Bogen einer technische
 - GitHub Arctic Code Vault (Schnappschuss 02.02.2020, 186 Filmrollen, 21 TB, Svalbard): https://archiveprogram.github.com/arctic-vault/
 - GitHub: 100 Millionen Entwickler (Januar 2023): https://github.blog/news-insights/company-news/100-million-developers-and-counting/ · Microsoft übernimmt GitHub (2018): https://news.microsoft.com/2018/06/04/microsoft-to-acquire-github-for-7-5-billion/
 - Agenten-Definition: Anthropic, „Building effective agents“, Dezember 2024: https://www.anthropic.com/research/building-effective-agents · Claude Code: https://www.anthropic.com/news/claude-3-7-sonnet
-- Die Screenshots der Workflow-Folie: siehe oben (Tessl, öffentliche Produktdemo). Preise, Module und Zahlen im Beispielauftrag sind erfunden.
+- Transformer-Architektur: Vaswani u. a., „Attention Is All You Need“, Juni 2017: https://arxiv.org/abs/1706.03762 · ChatGPT, 30.11.2022: https://openai.com/index/chatgpt/
+- Die Aufträge auf den Folien „Eine Runde“ und „Mein Auftrag, wörtlich“ stammen aus der Entstehung dieses Repos (Pull Requests #11, #12 und #13), sprachlich nur geglättet; die Diff-Zeilen sind echte Änderungen aus `studio.css` in diesen Pull Requests.
