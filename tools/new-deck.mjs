@@ -26,7 +26,7 @@ if(opts['from-export']){
  slides=html.slice(open+'<div class="slides">'.length,close).trim();
  const m=html.match(/<script id="deck-user-data" type="application\/json">([\s\S]*?)<\/script>/);
  state=m?JSON.parse(m[1].replace(/\\u003c/g,'<')):null;
- const title=html.match(/<title>([^<]*)<\/title>/);base={title:title?title[1].replace(/ · Hannes Pix$/,''):slug};
+ const title=html.match(/<title>([^<]*)<\/title>/),scale=html.match(/<html[^>]*\sdata-type-scale="([\w-]+)"/);base={title:title?title[1].replace(/ · Hannes Pix$/,''):slug,typeScale:scale?scale[1]:undefined};
 }else if(opts.blank){
  slides=`<section class="chapter paper" data-scene="paper" data-name="Titel" data-duration="7000"><div class="motion-layer" aria-hidden="true"><img class="motion-image" src="assets/scene-paper.jpg" alt=""></div><div class="chapter-title"><h1>${slug}</h1><p>ein neuer vortrag</p></div><div class="signature">Hannes Pix <span>Vibe Studio</span></div><aside class="notes"></aside></section>
 <section class="content cream" data-name="Erste Folie" data-duration="30000"><div class="eyebrow">01 / erster gedanke</div><h2>Dein Titel</h2><p class="slide-copy">Hier beginnt deine Geschichte.</p><aside class="notes"></aside></section>`;
@@ -39,7 +39,7 @@ if(opts['from-export']){
  base=JSON.parse(readFileSync(join(src,'deck.json'),'utf8'));base.basedOn=from;
  if(existsSync(join(src,'assets'))){mkdirSync(target,{recursive:true});cpSync(join(src,'assets'),join(target,'assets'),{recursive:true})}
 }
-const meta={slug,title:opts.title||base.title||slug,subtitle:opts.subtitle||base.subtitle||'',audience:opts.audience||base.audience||'',author:base.author||'Hannes Pix',lang:base.lang||'de',minutes:Number(opts.minutes||base.minutes||7),description:opts.description||base.description||opts.subtitle||base.subtitle||'',cover:base.cover||'assets/scene-paper.jpg',primary:false,basedOn:base.basedOn||null,created:new Date().toISOString().slice(0,10)};
+const meta={slug,title:opts.title||base.title||slug,subtitle:opts.subtitle||base.subtitle||'',audience:opts.audience||base.audience||'',author:base.author||'Hannes Pix',lang:base.lang||'de',typeScale:base.typeScale||'standard',minutes:Number(opts.minutes||base.minutes||7),description:opts.description||base.description||opts.subtitle||base.subtitle||'',cover:base.cover||'assets/scene-paper.jpg',primary:false,basedOn:base.basedOn||null,created:new Date().toISOString().slice(0,10)};
 mkdirSync(target,{recursive:true});
 writeFileSync(join(target,'slides.html'),slides+'\n');
 writeFileSync(join(target,'state.json'),JSON.stringify(state||{schema:1,updatedAt:0,texts:{},added:[],logo:null})+'\n');

@@ -35,6 +35,7 @@ try{
  await page.screenshot({path:join(shots,'danke.png')});
  const motion=await page.evaluate(()=>VibeMotionSettings.defaults(document.querySelector('.slides>section.chapter.paper')));
  check(motion.strength===95&&motion.movement===80&&motion.rotation===70&&motion.texture===12&&motion.cycle===18&&motion.dof===24&&motion.dust===18&&motion.shine===34,'Lebendige Effekt-Grundeinstellung (Stärke '+motion.strength+', Bewegung '+motion.movement+', Drehung '+motion.rotation+', Zyklus '+motion.cycle+' s, Licht '+motion.dof+', Staub '+motion.dust+', Schimmer '+motion.shine+')');
+ check(await page.evaluate(()=>document.documentElement.dataset.typeScale)==='standard','Vortrag rp nutzt die Standard-Schriftgrößen');
  const turns=await discTurns(page);
  check(turns.length===7&&turns.every(d=>d.swing>=2&&d.gaps===0),'Kapitelscheiben drehen sich sichtbar um ihre Mitte, ohne Bildkante ('+turnLabel(turns)+')');
  const scenes=await page.evaluate(()=>[...document.querySelectorAll('.slides>section.chapter .motion-image')].map(i=>i.getAttribute('src')));
@@ -194,6 +195,9 @@ try{
   check(conv.running>=5&&conv.inside&&conv.below>40,`Zwei Linien: ${conv.running} Animationen, Grafik in der Folie und unter dem Text`);
   const dayIndex=await vave.page.evaluate(()=>[...document.querySelectorAll('.slides>section')].findIndex(s=>s.querySelector('[data-count="4"]')));
   await vave.page.evaluate(i=>deck.slide(i),dayIndex);await vave.page.waitForTimeout(1900);const counted=await vave.page.evaluate(()=>document.querySelector('.slides>section.present [data-count]')?.textContent);check(counted==='4','Zähler zählt beim Erscheinen auf den Zielwert');
+  /* Typo-Konzept „large“: keine Schrift unter 24 px (Grafiken mit ihrer festen Vergrößerung gerechnet), unter jedem Titel mindestens 24 px Luft bis zum Text */
+  const typo=await vave.page.evaluate(async()=>{const out={scale:document.documentElement.dataset.typeScale,min:Infinity,at:'',gaps:[]};for(const [i,s] of [...document.querySelectorAll('.slides>section')].entries()){deck.slide(i);await new Promise(r=>setTimeout(r,40));const walk=document.createTreeWalker(s,NodeFilter.SHOW_TEXT);let n;while((n=walk.nextNode())){const el=n.parentElement;if(!n.textContent.trim()||el.closest('.notes,.motion-layer')||!el.getClientRects().length)continue;let fs=parseFloat(getComputedStyle(el).fontSize);if(el.closest('svg')){const m=el.getScreenCTM();fs=fs*Math.hypot(m.a,m.b)/deck.getScale()}else{const t=el.closest('.fig')&&getComputedStyle(el.closest('.fig')).transform;if(t&&t!=='none'){const m=new DOMMatrix(t);fs*=Math.hypot(m.a,m.b)}}if(fs<out.min){out.min=fs;out.at=(i+1)+' „'+n.textContent.trim().slice(0,24)+'“'}}s.querySelectorAll('h1,h2').forEach(h=>{const p=h.nextElementSibling;if(p?.tagName==='P')out.gaps.push(p.offsetTop-(h.offsetTop+h.offsetHeight))})}deck.slide(0);return out});
+  check(typo.scale==='large'&&typo.min>=23.5&&typo.gaps.length>=20&&Math.min(...typo.gaps)>=24,`Typo-Konzept vave: kleinste Schrift ${Math.round(typo.min)} px (Folie ${typo.at}), Titel → Text mindestens ${Math.min(...typo.gaps)} px bei ${typo.gaps.length} Titeln`);
   const vTurns=await discTurns(vave.page);check(vTurns.length===11&&vTurns.every(d=>d.swing>=2&&d.gaps===0),'Vortrag vave: Kapitelscheiben drehen sichtbar, ohne Bildkante ('+turnLabel(vTurns)+')');
   check(vave.errors.length===0,'Vortrag vave ohne Konsolenfehler');await vave.page.close()}
  else notes.push('· decks/vave/index.html fehlt (node build.mjs)');

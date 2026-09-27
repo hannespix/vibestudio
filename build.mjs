@@ -44,7 +44,7 @@ const shell=readFileSync(join(root,'shell.html'),'utf8').replace(/^<!--[\s\S]*?-
 mkdirSync(out,{recursive:true});
 for(const deck of decks){
  const m=deck.meta,title=escape(m.title+(m.author?' · '+m.author:''));
- const html=fill(shell,{slug:escape(deck.slug),lang:escape(m.lang||'de'),title,description:escape(m.description||m.subtitle||''),count:String(deck.count).padStart(2,'0'),state:deck.state.replace(/</g,'\\u003c'),slides:deck.slides,home:'{{home}}'});
+ const html=fill(shell,{slug:escape(deck.slug),lang:escape(m.lang||'de'),typeScale:escape(m.typeScale||'standard'),title,description:escape(m.description||m.subtitle||''),count:String(deck.count).padStart(2,'0'),state:deck.state.replace(/</g,'\\u003c'),slides:deck.slides,home:'{{home}}'});
  writeFileSync(join(deck.dir,'index.html'),'<!-- Erzeugt von build.mjs aus shell.html + slides.html; Änderungen dort vornehmen. -->\n'+relocate(fill(html,{home:'index.html'}),'../../'));
  mkdirSync(join(out,deck.slug),{recursive:true});
  const single=inlineAll(fill(html,{home:'../index.html'}));
