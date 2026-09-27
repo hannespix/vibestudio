@@ -5,6 +5,7 @@
   "description": "Vibecoding-Präsentation mit Vibe-Studio-Editor auf Reveal.js-Basis",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node tools/smoke-test.mjs"
+    "test": "node tools/smoke-test.mjs",
+    "new-deck": "node tools/new-deck.mjs"
   }
 }

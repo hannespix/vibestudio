@@ -1,14 +1,19 @@
 # Vibe Studio · Vibecoding
 
-Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr sieben Minuten) und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung. Alles läuft ohne Server, Build-Tool oder Internet direkt im Browser.
+Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung, animierte Infografiken. Alles läuft ohne Server, Build-Tool oder Internetzugang im Browser. Mehrere Vorträge liegen nebeneinander in `decks/`, jeder unter seiner eigenen Adresse.
 
-**Live:** https://hannespix.github.io/vibestudio/ · **Zum Herunterladen:** https://hannespix.github.io/vibestudio/Vibecoding.html
+**Übersicht aller Vorträge:** https://hannespix.github.io/vibestudio/ · **Vibecoding im LVM:** https://hannespix.github.io/vibestudio/rp/ · **Zum Herunterladen:** https://hannespix.github.io/vibestudio/rp/Vibecoding-rp.html
 
 ## Repo-Aufbau
 
 | Pfad | Inhalt |
 | --- | --- |
-| `index.html` | Folien, Sprechernotizen und Einbindung aller Skripte (Entwicklerfassung, benötigt die Nachbardateien) |
+| `decks/<kurzname>/slides.html` | Die Folien eines Vortrags (`<section>`-Elemente mit Sprechernotizen); Bildverweise sind vom Repo-Wurzelordner aus gerechnet (`assets/…`) |
+| `decks/<kurzname>/deck.json` | Titel, Untertitel, Publikum, Dauer, Beschreibung, Titelbild, Herkunft (`basedOn`) |
+| `decks/<kurzname>/state.json` | Zustand aus dem Editor (Texte, Zusätze, Logo, Hintergründe, Design), wie ihn **HTML speichern** ausgibt |
+| `shell.html` | Hülle eines Vortrags: Kopfzeile, Steuerung, Dialoge, Skripte; `build.mjs` setzt Folien und Zustand ein |
+| `index.html` | Übersicht aller Vorträge, von `build.mjs` erzeugt |
+| `tools/new-deck.mjs` | Legt einen Vortrag an: als Kopie, aus einer gespeicherten HTML-Datei oder leer |
 | `style.css` | Layout der Folien |
 | `deck.js` | Navigation, Tastatur, automatischer Durchlauf |
 | `editor.js` / `editor.css` | Textbearbeitung, Griffe, Drehung, Rückgängig, HTML-Export |
@@ -18,7 +23,7 @@ Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr si
 | `fonts.js` / `fonts.css` | Schriftvererbung, Vorschau, eigene Schriftdateien |
 | `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
 | `assets/` | Reveal.js, DM Sans, Motive und Screenshots |
-| `build.mjs` | Baut die Ein-Datei-Fassung nach `dist/` |
+| `build.mjs` | Baut je Vortrag die Entwicklerfassung `decks/<kurzname>/index.html` (nicht eingecheckt) und die Ein-Datei-Fassung `dist/<kurzname>/index.html`, dazu die Übersicht |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
 | `tools/scene-network.html`, `tools/scene-dawn.html`, `tools/render-scene.mjs` | Generatoren und Renderer für die prozeduralen Motive (Netzknoten der Danke-Folie, Morgenlicht der Ermöglichen-Folie) |
 | `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
@@ -27,16 +32,25 @@ Eine kurze Reveal.js-Präsentation von Hannes Pix (dreizehn Folien, ungefähr si
 
 ## Entwickeln und veröffentlichen
 
-- **Lokal öffnen:** `index.html` direkt im Browser öffnen, oder im Projektordner einen kleinen Server starten (`python3 -m http.server 8000` oder `npx serve`), damit Schriften und Medien sicher geladen werden.
-- **Ein-Datei-Fassung bauen:** `node build.mjs` schreibt `dist/index.html` und `dist/Vibecoding.html`. Darin sind alle Stylesheets, Skripte, Schriften und Bilder als Data-URIs eingebettet. Nur diese Fassung erzeugt beim **HTML speichern** eine vollständig eigenständige Datei; die Entwicklerfassung verweist auf ihre Nachbardateien.
-- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright && npx playwright install chromium`). Der Test öffnet Quell- und Ein-Datei-Fassung, prüft Schriften, Drehung, Ausrichtung, Fanglinien, Raster, Export und Konsolenfehler und legt Screenshots unter `dist/smoke/` ab.
-- **Arbeitsweise:** Änderungen entstehen auf einem Arbeits-Branch, gehen als Pull Request nach `main` und werden nach bestandener Prüfung gemergt. Jeder Stand auf `main` baut die Ein-Datei-Fassung über GitHub Actions und veröffentlicht sie auf GitHub Pages (`pages.yml`). Der Workflow lässt sich unter „Actions“ auch von Hand starten.
+- **Bauen:** `node build.mjs` liest alle `decks/*/deck.json`, schreibt je Vortrag `decks/<kurzname>/index.html` (Entwicklerfassung mit getrennten Dateien) und `dist/<kurzname>/index.html` (alles eingebettet, dazu `Vibecoding-<kurzname>.html` zum Herunterladen) sowie die Übersicht `index.html` und `dist/index.html`. Der Vortrag mit `"primary": true` liegt zusätzlich als `dist/Vibecoding.html`.
+- **Lokal öffnen:** im Projektordner einen kleinen Server starten (`python3 -m http.server 8000` oder `npx serve`) und `index.html` (Übersicht) oder `decks/rp/index.html` öffnen. Nur die Ein-Datei-Fassung aus `dist/` erzeugt beim **HTML speichern** eine vollständig eigenständige Datei.
+- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge und Export.
+- **Arbeitsweise:** Änderungen entstehen auf einem Arbeits-Branch, gehen als Pull Request nach `main` und werden nach bestandener Prüfung gemergt. Jeder Stand auf `main` baut alle Vorträge über GitHub Actions und veröffentlicht sie auf GitHub Pages.
 
 ## Öffnen
 
-`Vibecoding.html` (aus `dist/` oder von der Pages-Adresse oben) ist die komplette Präsentation in einer Datei. Herunterladen und mit Chrome, Edge oder Firefox öffnen. Sie benötigt weder Internet noch Installation.
+`Vibecoding-<kurzname>.html` (aus `dist/<kurzname>/` oder von der Pages-Adresse) ist der komplette Vortrag in einer Datei. Herunterladen und mit Chrome, Edge oder Firefox öffnen. Sie benötigt weder Internet noch Installation.
 
-Im Repo lässt sich auch `index.html` direkt öffnen. Den Ordner dabei vollständig behalten, damit Bilder, Schriften und Reveal.js zusammenbleiben.
+## Mehrere Vorträge
+
+Jeder Vortrag ist ein Ordner unter `decks/` und erscheint unter `https://hannespix.github.io/vibestudio/<kurzname>/`. Die Übersicht auf der Startseite verlinkt **Vorführen**, **Bearbeiten** (`?edit` öffnet direkt den Editor) und **Herunterladen**. Unten rechts in jedem Vortrag führt **☰** zurück zur Übersicht. Entwürfe aus dem Editor werden je Adresse getrennt im Browser gehalten.
+
+- **Kopie anlegen:** `node tools/new-deck.mjs vave --from rp --title "Titel" --audience "Publikum"` kopiert Folien, Zustand und deck-eigene Assets. `deck.json` anpassen, `node build.mjs`, einchecken.
+- **Aus dem Editor übernehmen:** Im Vortrag **HTML speichern**, dann `node tools/new-deck.mjs kurzname --from-export Vibecoding-bearbeitet.html`. Folien und Zustand der gespeicherten Datei werden zum neuen Vortrag; genauso lässt sich ein bestehender Vortrag aktualisieren, indem `slides.html` und `state.json` ersetzt werden.
+- **Leer beginnen:** `node tools/new-deck.mjs kurzname --blank`.
+- **Kurzname:** Kleinbuchstaben, Ziffern, Bindestrich; er ist zugleich der Pfad.
+
+Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von Folien je Publikum oder Länge, per `?set=kurz` aufrufbar), damit Kurz- und Langfassung denselben Stand teilen.
 
 ## Vorführen
 
@@ -53,7 +67,7 @@ Die Steuerung unten rechts erscheint bei Mausbewegung. Die Titel bleiben statisc
 
 ## Direkt in der HTML bearbeiten
 
-1. `Vibecoding.html` herunterladen und im Browser öffnen.
+1. `Vibecoding-<kurzname>.html` herunterladen und im Browser öffnen, oder in der Übersicht **Bearbeiten** wählen.
 2. Unten rechts **Bearbeiten** anklicken oder **E** drücken.
 3. Einen Text anklicken und direkt schreiben. Größe, Farbe, Fett und Ausrichtung stehen oben.
 4. **＋ Text** legt ein neues Textfeld auf der aktuellen Folie an.
@@ -193,7 +207,7 @@ Die Hintergrundeffekte sind so gebaut, dass sie die Grafikkarte wenig belasten: 
 
 **HTML speichern** sichert die komplette Präsentation einschließlich Folienstruktur, importierter Medien und Schriften, Logos, Texten und Einstellungen in einer wieder bearbeitbaren Datei. Das Herunterladen kann bei großen Videos entsprechend länger dauern. Große Medien werden nicht im begrenzten Browser-Zwischenspeicher gesichert: In diesem Fall zeigt die Statuszeile ausdrücklich den Hinweis auf **HTML speichern**. Der Export funktioniert weiterhin.
 
-Zum Bearbeiten und Exportieren die vollständige **Vibecoding.html** (Pages-Adresse oder `dist/`) verwenden. Die `index.html` im Repo benötigt ihre benachbarten Assets und dient als Entwicklerfassung.
+Zum Bearbeiten und Exportieren die vollständige **Vibecoding-<kurzname>.html** (Pages-Adresse oder `dist/<kurzname>/`) verwenden. Die `decks/<kurzname>/index.html` benötigt ihre benachbarten Dateien und dient als Entwicklerfassung.
 
 ## Inhalt
 

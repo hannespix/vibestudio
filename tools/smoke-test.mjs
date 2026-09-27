@@ -1,6 +1,7 @@
 /* Smoke-Test: öffnet die Präsentation headless in Chromium, prüft Editorfunktionen und die gebaute Ein-Datei-Fassung.
    Aufruf: node build.mjs && node tools/smoke-test.mjs   (benötigt das npm-Paket playwright samt Chromium). */
 import {createServer} from 'node:http';
+import {execFileSync} from 'node:child_process';import {rmSync} from 'node:fs';
 import {readFile,mkdir} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {join,extname,dirname,resolve} from 'node:path';
@@ -14,12 +15,12 @@ const server=createServer(async(req,res)=>{try{const path=decodeURIComponent(new
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
 const failures=[],notes=[];const check=(ok,label)=>{(ok?notes:failures).push((ok?'✓ ':'✗ ')+label);if(!ok)console.error('✗ '+label)};
 await mkdir(shots,{recursive:true});
-const expectedSlides=((await readFile(join(root,'index.html'),'utf8')).match(/<section\b/g)||[]).length;
+const expectedSlides=((await readFile(join(root,'decks','rp','slides.html'),'utf8')).match(/<section\b/g)||[]).length;
 const browser=await chromium.launch();
 async function open(url){const page=await browser.newPage({viewport:{width:1600,height:1000}});const errors=[],requests=[];page.on('pageerror',e=>errors.push('pageerror: '+e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text())});page.on('request',r=>requests.push(r.url()));await page.goto(url);await page.waitForSelector('.reveal.ready',{timeout:20000});await page.evaluate(()=>document.fonts.ready);return{page,errors,requests}}
 try{
  /* Quellfassung */
- const {page,errors}=await open(base+'/index.html');
+ const {page,errors}=await open(base+'/decks/rp/index.html');
  check(await page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Quellfassung: '+expectedSlides+' Folien');
  check(await page.$('#fullscreen')!==null,'Vollbild-Knopf in der Steuerleiste');
  await page.click('#fullscreen');await page.waitForTimeout(300);
@@ -149,7 +150,7 @@ try{
  const figBounds=[];for(const i of [1,3,5,7,9,11]){await page.evaluate(i=>deck.slide(i),i);await page.waitForTimeout(250);figBounds.push(await page.evaluate(()=>{const s=document.querySelector('.slides>section.present'),r=s.getBoundingClientRect();return [...s.querySelectorAll('.fig, .fig-link svg')].every(el=>{const b=el.getBoundingClientRect();return b.left>=r.left-2&&b.top>=r.top-8&&b.right<=r.right+2&&b.bottom<=r.bottom+2})}))}
  check(figBounds.every(Boolean),'Infografiken bleiben innerhalb der Folie');
  await page.evaluate(()=>deck.slide(1));await page.waitForTimeout(300);
- const calm=await browser.newPage({viewport:{width:1280,height:720},reducedMotion:'reduce'});await calm.goto(base+'/index.html');await calm.waitForSelector('.reveal.ready');await calm.evaluate(()=>deck.slide(1));await calm.waitForTimeout(600);
+ const calm=await browser.newPage({viewport:{width:1280,height:720},reducedMotion:'reduce'});await calm.goto(base+'/decks/rp/index.html');await calm.waitForSelector('.reveal.ready');await calm.evaluate(()=>deck.slide(1));await calm.waitForTimeout(600);
  check(await calm.evaluate(()=>document.querySelector('.slides>section.present .fig').getAnimations({subtree:true}).filter(a=>a.playState==='running').length===0),'Infografiken ruhen bei prefers-reduced-motion');await calm.close();
  const shrunk=await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=4800;c.height=3200;const g=c.getContext('2d');g.fillStyle='#8a6';g.fillRect(0,0,4800,3200);g.fillStyle='#345';g.fillRect(400,300,2000,1500);const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.8));const a=await VibeMedia.importFile(new File([blob],'gross.jpg',{type:'image/jpeg'}));return{w:a.width,h:a.height,from:a.scaledFrom,mime:a.mime,smaller:a.size<blob.size}});
  check(shrunk.w===3200&&shrunk.h===2133&&shrunk.from==='4800 × 3200'&&shrunk.mime==='image/jpeg'&&shrunk.smaller,'Medienimport: 4800-px-Foto auf 3200 px verkleinert');
@@ -157,7 +158,7 @@ try{
  check(errors.length===0,'Quellfassung ohne Konsolenfehler'+(errors.length?': '+errors.join(' | '):''));
  await page.close();
  /* Responsiver Editor: schmale Fenster */
- for(const [w,h] of [[900,700],[430,900]]){const small=await browser.newPage({viewport:{width:w,height:h}});const errs=[];small.on('pageerror',e=>errs.push(e.message));await small.goto(base+'/index.html');await small.waitForSelector('.reveal.ready');await small.keyboard.press('e');await small.waitForSelector('body.editing');await small.waitForTimeout(400);
+ for(const [w,h] of [[900,700],[430,900]]){const small=await browser.newPage({viewport:{width:w,height:h}});const errs=[];small.on('pageerror',e=>errs.push(e.message));await small.goto(base+'/decks/rp/index.html');await small.waitForSelector('.reveal.ready');await small.keyboard.press('e');await small.waitForSelector('body.editing');await small.waitForTimeout(400);
   const m=await small.evaluate(()=>({reveal:document.querySelector('.reveal').getBoundingClientRect().width,win:innerWidth,railHidden:getComputedStyle(document.querySelector('#studio-rail')).display==='none',toggles:getComputedStyle(document.querySelector('.panel-toggles')).display!=='none',toolbarVar:getComputedStyle(document.documentElement).getPropertyValue('--toolbar-h').trim(),toolbarH:document.querySelector('#editor-toolbar').offsetHeight,scrollW:document.documentElement.scrollWidth,scale:deck.getScale(),top:Math.round(document.querySelector('.reveal').getBoundingClientRect().top),scrollView:document.body.classList.contains('reveal-scroll')}));
   check(Math.round(m.reveal)===m.win&&m.railHidden&&m.toggles&&m.toolbarVar===m.toolbarH+'px'&&m.top===m.toolbarH&&m.scrollW<=m.win&&m.scale>0&&!m.scrollView,`Responsiv ${w} px: Folie volle Breite unter der Toolbar (${m.toolbarH} px), Leisten eingeklappt, kein Scrollmodus`);
   await small.click('#toggle-rail');await small.waitForTimeout(200);check(await small.evaluate(()=>getComputedStyle(document.querySelector('#studio-rail')).display!=='none'),`Responsiv ${w} px: Folienleiste einblendbar`);
@@ -167,15 +168,24 @@ try{
   if(w===430){await small.evaluate(()=>{window.__section=document.querySelector('.slides>section');window.__motion=document.querySelectorAll('.motion-image').length});await small.setViewportSize({width:900,height:430});await small.waitForTimeout(500);await small.setViewportSize({width:430,height:900});await small.waitForTimeout(500);const turned=await small.evaluate(()=>({alive:document.contains(window.__section),same:document.querySelectorAll('.motion-image').length===window.__motion,scroll:document.body.classList.contains('reveal-scroll')}));check(turned.alive&&turned.same&&!turned.scroll,'Drehen des Geräts (430 ↔ 900 px) behält Folien-DOM und Animationen')}
   check(errs.length===0,`Responsiv ${w} px: ohne Fehler`);await small.close()}
  /* Ein-Datei-Fassung */
- if(existsSync(join(root,'dist','index.html'))){const one=await open(base+'/dist/index.html');
+ /* Mehrere Vorträge: Übersicht, Adresse je Vortrag, ?edit, Verweis zur Übersicht, Anlegen einer Kopie */
+ {const overPage=await browser.newPage({viewport:{width:1280,height:900}});await overPage.goto(base+'/index.html');await overPage.waitForSelector('.deck');const over={page:overPage};const cards=await over.page.evaluate(()=>[...document.querySelectorAll('.deck')].map(d=>({title:d.querySelector('h2').textContent,href:d.querySelector('a.primary').getAttribute('href'),edit:[...d.querySelectorAll('.actions a')].some(a=>a.getAttribute('href').endsWith('?edit'))})));
+  check(cards.length>=1&&cards.some(c=>c.href==='rp/index.html'&&c.edit&&/Vibecoding/.test(c.title)),`Übersicht listet ${cards.length} Vortrag/Vorträge mit Adresse, Bearbeiten und Herunterladen`);await over.page.close();
+  const edit=await open(base+'/decks/rp/index.html?edit');await edit.page.waitForSelector('body.editing',{timeout:8000}).catch(()=>{});
+  const flags=await edit.page.evaluate(()=>({editing:document.body.classList.contains('editing'),home:document.querySelector('.deck-ui a#decks')?.getAttribute('href'),deck:document.documentElement.dataset.deck}));
+  check(flags.editing&&flags.home==='../../index.html'&&flags.deck==='rp','Vortrag: ?edit öffnet den Editor, Verweis zur Übersicht und Kennung vorhanden');await edit.page.close();
+  const probeDir=join(root,'dist','smoke-decks');rmSync(probeDir,{recursive:true,force:true});
+  let made=false;try{execFileSync('node',[join(root,'tools','new-deck.mjs'),'probe','--from','rp','--title','Probevortrag','--audience','Test','--dir',probeDir],{stdio:'pipe'});const meta=JSON.parse(await readFile(join(probeDir,'probe','deck.json'),'utf8'));const copy=await readFile(join(probeDir,'probe','slides.html'),'utf8');made=meta.title==='Probevortrag'&&meta.basedOn==='rp'&&meta.primary===false&&(copy.match(/<section\b/g)||[]).length===expectedSlides&&existsSync(join(probeDir,'probe','state.json'))}catch(e){notes.push('· new-deck: '+e.message)}
+  check(made,'new-deck.mjs legt eine Kopie mit allen Folien, Zustand und Metadaten an');rmSync(probeDir,{recursive:true,force:true})}
+ if(existsSync(join(root,'dist','rp','index.html'))){const one=await open(base+'/dist/rp/index.html');
   check(await one.page.evaluate(()=>deck.getTotalSlides())===expectedSlides,'Ein-Datei-Fassung: '+expectedSlides+' Folien');
-  const extra=one.requests.filter(u=>!u.endsWith('/dist/index.html')&&!u.startsWith('data:'));
+  const extra=one.requests.filter(u=>!u.endsWith('/dist/rp/index.html')&&!u.startsWith('data:'));
   check(extra.length===0,'Ein-Datei-Fassung lädt keine externen Dateien'+(extra.length?': '+extra.slice(0,3).join(', '):''));
   const oneFonts=await one.page.evaluate(async()=>(await document.fonts.load('20px "DM Sans"')).length>0);
   check(oneFonts,'Ein-Datei-Fassung: Schriften eingebettet');
   await one.page.keyboard.press('e');await one.page.waitForSelector('body.editing');await one.page.screenshot({path:join(shots,'single-file-editor.png')});
   check(one.errors.length===0,'Ein-Datei-Fassung ohne Konsolenfehler'+(one.errors.length?': '+one.errors.join(' | '):''));await one.page.close()}
- else notes.push('· dist/index.html fehlt, Ein-Datei-Fassung nicht geprüft (node build.mjs)');
+ else notes.push('· dist/rp/index.html fehlt, Ein-Datei-Fassung nicht geprüft (node build.mjs)');
 }catch(e){failures.push('✗ Abbruch: '+(e.stack||e))}
 await browser.close();server.close();
 console.log(notes.join('\n'));if(failures.length){console.error('\n'+failures.join('\n'));process.exit(1)}console.log(`\nAlle ${notes.length} Prüfungen bestanden. Screenshots: ${shots}`);
