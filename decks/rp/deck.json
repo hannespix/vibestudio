@@ -1,0 +1,14 @@
+{
+ "slug": "rp",
+ "title": "Vibecoding · eigene Projekte im LVM",
+ "subtitle": "LLM + Git: vom dauerhaften Projektwissen zu internem GitLab, Containern und Datenbanken",
+ "audience": "Regierungspräsidium · Verwaltung",
+ "author": "Hannes Pix",
+ "lang": "de",
+ "minutes": 7,
+ "description": "LLM + Git für eigene Projekte im LVM. Vom dauerhaften Projektwissen zu internem GitLab, Containern und Datenbanken.",
+ "cover": "assets/scene-paper.jpg",
+ "primary": true,
+ "basedOn": null,
+ "created": "2026-09-26"
+}
