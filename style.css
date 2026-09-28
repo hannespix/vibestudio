@@ -163,6 +163,16 @@ html,body.reveal-viewport{background-color:var(--stage,#000)}html.stage-ready,ht
 .git-basics{display:grid;grid-template-columns:repeat(5,1fr);gap:30px;margin-top:52px}
 .reveal .git-basics h4{font-size:34px;font-weight:500;letter-spacing:-.9px;line-height:1.12;margin:10px 0 10px;min-height:2.24em}
 .reveal .git-basics p{font-size:28px;line-height:1.35;color:#766d5f}
+/* Große Schriften für Werkzeugwechsel und Betriebsbild (zuerst für rpf): keine Beschriftung unter 24 px */
+[data-type-scale=large] .freedom-options .small-label{font-size:26px;letter-spacing:1.6px}
+[data-type-scale=large] .reveal .freedom-options p{font-size:32px;line-height:1.3}
+[data-type-scale=large] .freedom-options>div+div{margin-top:36px}
+[data-type-scale=large] .freedom-grid{margin-top:56px}
+[data-type-scale=large] .repo-orbit{transform:scale(.9)}
+[data-type-scale=large] .boundary-label{font-size:26px}
+[data-type-scale=large] .node-kicker,[data-type-scale=large] .runtime-link span{font-size:26px}
+[data-type-scale=large] .reveal .runtime-node h3{font-size:48px}
+[data-type-scale=large] .reveal .runtime-node p{font-size:28px}
 /* Fünf Sinne (katzen): dieselben fünf Spalten ohne Grafik darunter, dafür größer und mittig zwischen Titel und Fußzeile */
 .senses-slide .git-basics{margin-top:96px;gap:40px}
 .senses-slide .git-basics>div{border-top:2px solid #c8bcaa;padding-top:24px}

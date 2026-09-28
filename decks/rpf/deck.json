@@ -1,0 +1,15 @@
+{
+ "slug": "rpf",
+ "title": "Vibecoding · Grundlagen und eigene Projekte",
+ "subtitle": "5 Minuten Vortrag, 5 Minuten Projekte: wie KI arbeitet, warum das Repo das Gedächtnis ist, wie eine Runde läuft und was wir für eigene Anwendungen brauchen",
+ "audience": "Regierungspräsidium · Verwaltung",
+ "author": "Hannes Pix",
+ "lang": "de",
+ "typeScale": "large",
+ "minutes": 10,
+ "description": "Kurzvortrag für ein gemischtes Publikum: wie ein Sprachmodell und ein Agent arbeiten, warum der Kontext verdichtet wird und das Repo das Gedächtnis bleibt, wie man Claude Code mit einem Repository verbindet und damit arbeitet, was GitHub an Automatik, Sicherheit und Versionierung dazugibt, was neue Fenster und neue Modelle bedeuten, was wir für den Betrieb brauchen. Danach Projekte live. Wenig Text, große animierte Grafiken.",
+ "cover": "assets/scene-landscape.jpg",
+ "primary": false,
+ "basedOn": "rp",
+ "created": "2026-09-28"
+}
