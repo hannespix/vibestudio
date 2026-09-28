@@ -307,6 +307,49 @@ body:not(.editing) .present.voice-slide .voice-bubble b{animation:voice-mark 1.1
 .present .pw{animation:pw-in .5s ease-out both calc(var(--i)*18ms),pw-purr 1.3s ease-in-out infinite calc(var(--i)*40ms + 1.4s)}
 @keyframes pw-in{from{transform:scaleY(0)}}
 @keyframes pw-purr{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.42)}}
+/* Kontextfenster (rpf): Nachrichten füllen das Fenster, ist es voll, werden sie zur Zusammenfassung verdichtet und laufen neu ein; das Repo behält Code, README und Notizen, liest vor (neu einlesen) und nimmt Ergebnisse auf (festhalten). Ruhezustand ist das volle Fenster. */
+.cc-arrows path{stroke:#a39684;stroke-width:2.5}
+.cc-win,.cc-repo{top:0;height:300px;border:2px solid #cdbfa9;border-radius:22px;background:#f7f3ec}
+.cc-win{left:0;width:640px}.cc-repo{left:820px;width:600px;background:#fbf8f2}
+.cc-title{left:26px;top:14px;font-size:26px;letter-spacing:1.4px;color:#7a7163}
+.cc-gauge{right:28px;top:26px;width:170px;height:12px;border-radius:6px;background:#e4dacb;overflow:hidden}
+.cc-fill{left:0;top:0;width:100%;height:100%;background:#ad6549;transform-origin:left center}
+.cc-limit{right:17px;top:17px;width:30px;height:30px;border-radius:50%;border:2px solid #ad6549;opacity:0}
+.cc-sum{left:24px;top:62px;width:592px;height:44px;border-radius:22px;background:#dfe6da;color:#3e5a44;font-size:24px;line-height:44px;text-align:center;letter-spacing:.6px}
+.cc-msg{height:24px;border-radius:12px;transform-origin:center}.cc-msg.l{left:24px;background:#dcd2c2}.cc-msg.r{right:24px;background:#e8c9b6}
+.cc-label{left:648px;width:162px;text-align:center;font-size:24px;color:#8a604d}.cc-label.out{top:62px}.cc-label.in{top:222px}
+.cc-dot{width:12px;height:12px;border-radius:50%;background:#ad6549;box-shadow:0 0 0 4px #ad654926;opacity:0}.cc-dot.out{left:654px;top:98px}.cc-dot.in{left:792px;top:200px}
+.cc-file{left:26px;width:548px;height:40px;padding-left:46px;font-size:28px;line-height:40px;color:#2f2b25;z-index:0}
+.cc-ico{left:6px;top:6px;width:22px;height:28px;border:2px solid #9a8f80;border-radius:4px}
+.cc-hl{left:-10px;top:0;width:calc(100% + 20px);height:40px;border-radius:10px;background:#ad654926;opacity:0;z-index:-1}
+.cc-vlabel{left:26px;top:208px;font-size:24px;letter-spacing:1px;color:#7a7163}
+.cc-line{left:40px;top:257px;width:480px;height:2px;background:#cdbfa9}
+.cc-ver{top:251px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#fbf8f2;border:2px solid #ad6549}
+.cc-save{left:506px;top:244px;width:28px;height:28px;border-radius:50%;border:2px solid #ad6549;opacity:0}
+.present .cc-fill{animation:cc-fill 12s ease-in-out infinite 1.2s}
+.present .cc-limit{animation:cc-limit 12s ease-out infinite 1.2s}
+.present .cc-sum{animation:cc-sum 12s ease-in-out infinite 1.2s}
+.present .cc-msg{animation:cc-c1 12s ease-in-out infinite 1.2s}
+.present .cc-msg.c2{animation-name:cc-c2}.present .cc-msg.c3{animation-name:cc-c3}.present .cc-msg.c4{animation-name:cc-c4}.present .cc-msg.c5{animation-name:cc-c5}
+.present .cc-dot.in{animation:cc-in 12s linear infinite 1.2s}.present .cc-dot.out{animation:cc-out 12s linear infinite 1.2s}
+.present .cc-file .cc-hl{animation:cc-read 12s ease-in-out infinite 1.2s}.present .cc-file.f3 .cc-hl{animation-name:cc-note}
+.present .cc-save{animation:cc-save 12s ease-out infinite 1.2s}
+@keyframes cc-fill{0%,16%{transform:scaleX(1)}20%,30%{transform:scaleX(.2)}33%{transform:scaleX(.36)}44%{transform:scaleX(.52)}55%{transform:scaleX(.68)}66%{transform:scaleX(.84)}77%,100%{transform:scaleX(1)}}
+@keyframes cc-limit{0%{opacity:0;transform:scale(.6)}3%{opacity:1}9%{opacity:0;transform:scale(2.2)}78%{opacity:0;transform:scale(.6)}81%{opacity:1}87%,100%{opacity:0;transform:scale(2.2)}}
+@keyframes cc-sum{0%,9%{transform:none}13%{transform:scale(1.05)}17%,100%{transform:none}}
+@keyframes cc-c1{0%,12%{transform:none;opacity:1}16%{transform:translateY(-46px) scaleY(.2);opacity:0}30%{transform:translateY(10px);opacity:0}33%,100%{transform:none;opacity:1}}
+@keyframes cc-c2{0%,11%{transform:none;opacity:1}15%{transform:translateY(-80px) scaleY(.2);opacity:0}41%{transform:translateY(10px);opacity:0}44%,100%{transform:none;opacity:1}}
+@keyframes cc-c3{0%,10%{transform:none;opacity:1}14%{transform:translateY(-114px) scaleY(.2);opacity:0}52%{transform:translateY(10px);opacity:0}55%,100%{transform:none;opacity:1}}
+@keyframes cc-c4{0%,9%{transform:none;opacity:1}13%{transform:translateY(-148px) scaleY(.2);opacity:0}63%{transform:translateY(10px);opacity:0}66%,100%{transform:none;opacity:1}}
+@keyframes cc-c5{0%,8%{transform:none;opacity:1}12%{transform:translateY(-182px) scaleY(.2);opacity:0}74%{transform:translateY(10px);opacity:0}77%,100%{transform:none;opacity:1}}
+@keyframes cc-in{0%,19%{opacity:0;transform:none}21%{opacity:1;transform:none}29%{opacity:1;transform:translateX(-138px)}31%,100%{opacity:0;transform:translateX(-138px)}}
+@keyframes cc-out{0%,53%{opacity:0;transform:none}55%{opacity:1;transform:none}63%{opacity:1;transform:translateX(138px)}65%,100%{opacity:0;transform:translateX(138px)}}
+@keyframes cc-read{0%,19%{opacity:0}23%{opacity:1}32%,100%{opacity:0}}
+@keyframes cc-note{0%,61%{opacity:0}65%{opacity:1}75%,100%{opacity:0}}
+@keyframes cc-save{0%,63%{opacity:0;transform:scale(.5)}66%{opacity:.9}76%,100%{opacity:0;transform:scale(2.4)}}
+/* GitHub (rpf): die drei Zeichen der Regeln-Folie mit eigenen Symbolen, Überschriften einzeilig */
+.reveal .github-slide .rules h3{min-height:0}
+.github-slide .rule-mark{width:124px;height:124px;margin-bottom:30px}.github-slide .rule-mark circle{stroke-width:1.6}.github-slide .rule-mark path{stroke-width:3.2}
 /* Miau (katzen): kurze Sprechblase links, Antwort rechts */
 .voice-chat.short{max-width:760px}
 .voice-chat.short .voice-bubble{justify-self:start;padding-right:64px}

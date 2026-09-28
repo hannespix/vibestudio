@@ -16,6 +16,7 @@ Geprüft am 25.09.2026. Produktoberflächen und Funktionsumfang können sich än
 - GitHub Review: https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request
 - GitHub Merge: https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request
 - Repository anlegen: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository
+- GitHub Actions (Automatisierung) und geschützte Geheimnisse, Vortrag rpf: https://docs.github.com/en/actions · https://docs.github.com/en/actions/concepts/security/secrets (geprüft am 28.09.2026)
 
 ## Echte öffentliche Screenshots
 
