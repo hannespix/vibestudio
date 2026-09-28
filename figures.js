@@ -28,6 +28,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   const node=(x,y,c,i,big)=>`<circle class="cv-node ${c} m" style="--i:${i}" cx="${x}" cy="${y}" r="${big?11:8}"/>`;
   const lab=(x,y,t,c,a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}">${esc(t)}</text>`;
   return `<svg viewBox="0 0 1420 300" width="1420" height="300"><path class="cv-line lower" d="${LP}"/><path class="cv-line upper" d="${UP}"/><path class="cv-line merged" d="${MP}"/>${lower.map((it,i)=>node(lx[i]??lx[0],236,'lower',i)).join('')}${upper.map((it,i)=>node(ux[i]??ux[0],64,'upper',i+2)).join('')}${node(1040,150,'meet',4,true)}${node(1380,150,'end',5)}<g class="cv-labels">${lower.map((it,i)=>lab((lx[i]??lx[0])-(i?0:9),282,it[0],'cv-year',i?'middle':'start')+lab((lx[i]??lx[0])-(i?0:9),314,it[1],'cv-name',i?'middle':'start')).join('')}${upper.map((it,i)=>lab(ux[i]??ux[0],2,it[0],'cv-year')+lab(ux[i]??ux[0],34,it[1],'cv-name')).join('')}${lab(1066,126,meet,'cv-meet','start')}${end?lab(1392,196,end,'cv-end','end'):''}${names[0]?lab(60,220,names[0],'cv-tag','start'):''}${names[1]?lab(456,72,names[1],'cv-tag','end'):''}</g></svg><i class="cv-dot lower m" style="offset-path:path('${LP}')"></i><i class="cv-dot upper m" style="offset-path:path('${UP}')"></i><i class="cv-dot merged m" style="offset-path:path('${MP}')"></i><i class="cv-ring m"></i>`};
+ /* Schnurren: Wellenform aus data-fig-bars Balken (Standard 64) mit zwei Schüben wie Ein- und Ausatmen; die Balken flattern versetzt, so läuft eine Welle durch. */
+ const F19=s=>{const n=Math.min(96,Math.max(16,Number(s.dataset.figBars)||64)),gap=1420/n;return '<i class="pw-axis"></i>'+[...Array(n)].map((_,i)=>{const e=Math.sin(Math.PI*((2*i/(n-1))%1)),h=Math.round(150*(.08+.92*e*(.5+.5*Math.abs(Math.sin(i*1.7)))));return `<i class="pw m" style="--i:${i};left:${Math.round(gap/2+i*gap-3)}px;top:${(150-h)/2}px;height:${h}px"></i>`}).join('')};
  const fig=(cls,style,markup)=>`<div class="fig ${cls}" aria-hidden="true" style="${style}">${markup}</div>`;
  const once=(node,cls,style,markup,where='beforeend')=>{if(!node.querySelector('.'+cls))node.insertAdjacentHTML(where,fig(cls,style,markup))};
  const build={
@@ -46,7 +48,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   'chat-slide':s=>once(s,'fig-chat',`left:90px;top:${s.dataset.figTop||440}px;width:1420px;height:340px`,F15()),
   'prs-slide':s=>once(s,'fig-prs',`left:90px;top:${s.dataset.figTop||560}px;width:1420px;height:60px`,F16(s)),
   'film-slide':s=>once(s,'fig-film',`left:90px;top:${s.dataset.figTop||540}px;width:1420px;height:150px`,F17()),
-  'converge-slide':s=>once(s,'fig-converge',`left:90px;top:${s.dataset.figTop||420}px;width:1420px;height:300px`,F18(s))
+  'converge-slide':s=>once(s,'fig-converge',`left:90px;top:${s.dataset.figTop||420}px;width:1420px;height:300px`,F18(s)),
+  'purr-slide':s=>once(s,'fig-purr',`left:90px;top:${s.dataset.figTop||560}px;width:1420px;height:150px`,F19(s))
  };
  function apply(root=document){root.querySelectorAll('.slides>section').forEach(s=>{for(const [cls,make] of Object.entries(build))if(s.classList.contains(cls))make(s)})}
  apply();
