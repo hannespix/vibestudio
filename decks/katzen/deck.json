@@ -1,0 +1,15 @@
+{
+ "slug": "katzen",
+ "title": "Katzen · eine kleine Naturgeschichte",
+ "subtitle": "Unterpräsentation, rund 10 Minuten: woher die Hauskatze kommt, wie sie wahrnimmt und schnurrt, warum sie für uns miaut, auf den Pfoten landet und so viel schläft",
+ "audience": "Unterpräsentation · Naturgeschichte",
+ "author": "Hannes Pix",
+ "lang": "de",
+ "typeScale": "large",
+ "minutes": 10,
+ "description": "Kurze Unterpräsentation über Hauskatzen, gebaut aus den vorhandenen Motiven und Folientypen: Herkunft vom Kornspeicher, fünf Sinne, Schnurren, das Miau für den Menschen, drei Dinge, die Katzen mögen, der Stellreflex beim Fallen und ein Tag mit 16 Stunden Schlaf. Wenig Text, Zahlen, Animationen.",
+ "cover": "assets/scene-moon.jpg",
+ "primary": false,
+ "basedOn": "vave",
+ "created": "2026-09-28"
+}

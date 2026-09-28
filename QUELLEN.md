@@ -48,7 +48,7 @@ Die Rechte an Produktoberflächen, Marken und veröffentlichten Medien verbleibe
 
 ## Eigene Illustrationen und Kapitelmotive
 
-Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Die Naturhintergründe Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt und Planetenkante wurden KI-generiert. Die Netzknoten der Danke-Folie im Vortrag rp (`assets/scene-network.jpg`) sind eine prozedural mit HTML-Canvas erzeugte Grafik aus `tools/scene-network.html`, kein Foto und kein KI-Bild. Die Fotomotive (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) sind leicht bearbeitete gemeinfreie Fotos; welche Bearbeitung jeweils vorgenommen wurde, steht in der zugehörigen Datei `tools/scene-*.html`. Sonnenblume und Erde bei Nacht liegen derzeit auf keiner Folie. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
+Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Die Naturhintergründe Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt und Planetenkante wurden KI-generiert. Die Netzknoten der Danke-Folie im Vortrag rp (`assets/scene-network.jpg`) sind eine prozedural mit HTML-Canvas erzeugte Grafik aus `tools/scene-network.html`, kein Foto und kein KI-Bild. Die Fotomotive (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) sind leicht bearbeitete gemeinfreie Fotos; welche Bearbeitung jeweils vorgenommen wurde, steht in der zugehörigen Datei `tools/scene-*.html`. Die Sonnenblume liegt derzeit auf keiner Folie. Der Vortrag katzen verwendet ausschließlich diese vorhandenen Motive. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
 
 ## Frühere prozedurale Motive
 
@@ -65,3 +65,21 @@ Morgenlicht, Planstand, Lichtbogen, Materialfächer, Laufbahn, Schallplatte, Lup
 - Agenten-Definition: Anthropic, „Building effective agents“, Dezember 2024: https://www.anthropic.com/research/building-effective-agents · Claude Code: https://www.anthropic.com/news/claude-3-7-sonnet
 - Transformer-Architektur: Vaswani u. a., „Attention Is All You Need“, Juni 2017: https://arxiv.org/abs/1706.03762 · ChatGPT, 30.11.2022: https://openai.com/index/chatgpt/
 - Die Aufträge auf den Folien „Eine Runde“ und „Mein Auftrag, wörtlich“ stammen aus der Entstehung dieses Repos (Pull Requests #11, #12 und #13), sprachlich nur geglättet; die Diff-Zeilen sind echte Änderungen aus `studio.css` in diesen Pull Requests.
+
+## Fakten im Vortrag katzen
+
+Stand der Prüfung: 28.09.2026. Die Zahlen stehen mit Fundstelle auch in den Sprechernotizen.
+
+- Heimtierbestand 2025 (15,7 Millionen Katzen in 24 Prozent der Haushalte, 10,0 Millionen Hunde), IVH/ZZF: https://www.zzf.de/marktdaten/heimtiere-in-deutschland
+- Abstammung von der Falbkatze, Domestikation im Nahen Osten vor rund 10 000 Jahren: Driscoll u. a., Science 2007: https://doi.org/10.1126/science.1139518
+- Grab auf Zypern, rund 9 500 Jahre alt: Vigne u. a., Science 2004: https://doi.org/10.1126/science.1095335
+- Ankunft in Europa vor rund 2 000 Jahren, aus Nordafrika: Science 2025: https://doi.org/10.1126/science.adt2642
+- Sehen mit etwa einem Sechstel des Lichts, Tapetum lucidum, Jacobson-Organ, Tasthaare: https://en.wikipedia.org/wiki/Cat_senses
+- Hörbereich 48 Hz bis 85 kHz: Heffner und Heffner 1985: https://pubmed.ncbi.nlm.nih.gov/4066516/
+- Kein Süß-Rezeptor (Tas1r2 als Pseudogen): Li u. a., PLoS Genetics 2005: https://doi.org/10.1371/journal.pgen.0010003
+- Schnurren zwischen 25 und 150 Hz, auch bei Geparden, Pumas, Ozelots und Servalen: von Muggenthaler, JASA 2001: https://doi.org/10.1121/1.4777098
+- Erwachsene Katzen miauen untereinander kaum: https://en.wikipedia.org/wiki/Meow
+- Langsames Blinzeln: Humphrey u. a., Scientific Reports 2020: https://www.nature.com/articles/s41598-020-73426-0
+- Futter, Wasser und Toilette getrennt anbieten: AAFP/ISFM Feline Environmental Needs Guidelines 2013: https://doi.org/10.1177/1098612X13477537
+- Stellreflex ab drei bis vier Wochen, sicher mit sechs bis neun Wochen: https://en.wikipedia.org/wiki/Cat_righting_reflex
+- Schlaf 12 bis 16 Stunden, Kätzchen bis zu 20: https://www.petmd.com/cat/behavior/why-do-cats-sleep-so-much · Nickerchen und Dämmerungsaktivität: https://www.sleepfoundation.org/animals-and-sleep/how-much-do-cats-sleep
