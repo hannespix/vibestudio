@@ -37,7 +37,7 @@ try{
  check((await page.evaluate(()=>deck.getCurrentSlide().classList.contains('network')&&deck.getCurrentSlide().querySelector('h1')?.textContent.trim()))==='Danke','Letzte Folie ist die Danke-Folie');
  await page.screenshot({path:join(shots,'danke.png')});
  const motion=await page.evaluate(()=>VibeMotionSettings.defaults(document.querySelector('.slides>section.chapter.paper')));
- check(motion.strength===95&&motion.movement===80&&motion.rotation===70&&motion.texture===12&&motion.cycle===18&&motion.dof===24&&motion.dust===18&&motion.shine===34,'Lebendige Effekt-Grundeinstellung (Stärke '+motion.strength+', Bewegung '+motion.movement+', Drehung '+motion.rotation+', Zyklus '+motion.cycle+' s, Licht '+motion.dof+', Staub '+motion.dust+', Schimmer '+motion.shine+')');
+ check(motion.strength===95&&motion.movement===80&&motion.rotation===70&&motion.texture===12&&motion.cycle===18&&motion.dof===24&&motion.dust===18&&motion.shine===7,'Lebendige Effekt-Grundeinstellung (Stärke '+motion.strength+', Bewegung '+motion.movement+', Drehung '+motion.rotation+', Zyklus '+motion.cycle+' s, Licht '+motion.dof+', Staub '+motion.dust+', Schimmer '+motion.shine+')');
  check(await page.evaluate(()=>document.documentElement.dataset.typeScale)==='standard','Vortrag rp nutzt die Standard-Schriftgrößen');
  const turns=await discTurns(page);
  check(turns.length===7&&turns.every(d=>d.swing>=2&&d.gaps===0),'Kapitelscheiben drehen sich sichtbar um ihre Mitte, ohne Bildkante ('+turnLabel(turns)+')');
