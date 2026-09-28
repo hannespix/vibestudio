@@ -2,8 +2,9 @@
    - decks/<slug>/index.html   Entwicklerfassung mit getrennten Dateien (Verweise auf ../../, nicht eingecheckt)
    - dist/<slug>/index.html    Ein-Datei-Fassung für GitHub Pages, dazu dist/<slug>/Vibecoding-<slug>.html zum Herunterladen
    - index.html und dist/index.html  Übersicht aller Vorträge
+   Entwürfe ("draft": true in deck.json) bekommen nur die Entwicklerfassung zum Ansehen und Prüfen: keine Ein-Datei-Fassung, kein Eintrag in der Übersicht, nichts auf GitHub Pages.
    Keine Abhängigkeiten. Aufruf: node build.mjs [zielordner] */
-import {readFileSync,writeFileSync,mkdirSync,statSync,existsSync,readdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,statSync,existsSync,readdirSync,rmSync} from 'node:fs';
 import {dirname,join,extname,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -46,6 +47,8 @@ for(const deck of decks){
  const m=deck.meta,title=escape(m.title+(m.author?' · '+m.author:''));
  const html=fill(shell,{slug:escape(deck.slug),lang:escape(m.lang||'de'),typeScale:escape(m.typeScale||'standard'),title,description:escape(m.description||m.subtitle||''),count:String(deck.count).padStart(2,'0'),state:deck.state.replace(/</g,'\\u003c'),slides:deck.slides,home:'{{home}}'});
  writeFileSync(join(deck.dir,'index.html'),'<!-- Erzeugt von build.mjs aus shell.html + slides.html; Änderungen dort vornehmen. -->\n'+relocate(fill(html,{home:'index.html'}),'../../'));
+ /* Entwurf: eine ältere Ein-Datei-Fassung aus einem früheren Lauf entfernen, damit nichts davon veröffentlicht wird */
+ if(m.draft){if(/^[a-z0-9][a-z0-9-]*$/.test(deck.slug))rmSync(join(out,deck.slug),{recursive:true,force:true});continue}
  mkdirSync(join(out,deck.slug),{recursive:true});
  const single=inlineAll(fill(html,{home:'../index.html'}));
  writeFileSync(join(out,deck.slug,'index.html'),single);
@@ -103,7 +106,7 @@ footer{margin-top:48px;font-size:13px;color:#9a8c79}
 <main>
 <header><div><h1>Vibe Studio <b>· Vorträge</b></h1></div><p class="lead">Jeder Vortrag hat seine eigene Adresse und lässt sich dort vorführen, im Browser bearbeiten und als eine HTML-Datei herunterladen.</p></header>
 <section class="decks">
-${decks.map(card).join('\n')}
+${decks.filter(d=>!d.meta.draft).map(card).join('\n')}
 </section>
 <section class="howto">
 <h3>Neuen Vortrag anlegen</h3>
@@ -118,4 +121,4 @@ ${decks.map(card).join('\n')}
 writeFileSync(join(root,'index.html'),'<!-- Erzeugt von build.mjs aus decks/*/deck.json; nicht von Hand bearbeiten. -->\n'+overview);
 writeFileSync(join(out,'index.html'),inlineAll(overview));
 writeFileSync(join(out,'.nojekyll'),'');
-console.log(`Gebaut: ${decks.length} Vortrag/Vorträge → ${out}\n`+decks.map(d=>`  /${d.slug}/  ${d.meta.title} · ${d.count} Folien · ${(d.bytes/1024/1024).toFixed(2)} MB`).join('\n')+`\n  Übersicht: index.html · ${cache.size} eingebettete Dateien, ${(embedded/1024/1024).toFixed(2)} MB Rohdaten`);
+console.log(`Gebaut: ${decks.filter(d=>!d.meta.draft).length} Vortrag/Vorträge → ${out}\n`+decks.map(d=>d.meta.draft?`  Entwurf ${d.slug}: ${d.meta.title} · ${d.count} Folien · nur decks/${d.slug}/index.html, nicht veröffentlicht`:`  /${d.slug}/  ${d.meta.title} · ${d.count} Folien · ${(d.bytes/1024/1024).toFixed(2)} MB`).join('\n')+`\n  Übersicht: index.html · ${cache.size} eingebettete Dateien, ${(embedded/1024/1024).toFixed(2)} MB Rohdaten`);

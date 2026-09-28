@@ -4,6 +4,7 @@
    node tools/new-deck.mjs <slug> --from-export <datei>    aus einer im Editor gespeicherten Ein-Datei-Fassung (HTML speichern)
    node tools/new-deck.mjs <slug> --blank                  Titelfolie + eine Textfolie
    Optionen: --title "…" --subtitle "…" --audience "…" --description "…" --minutes 7 --dir decks --force
+             --draft   als Entwurf anlegen ("draft": true): nur Entwicklerfassung, nicht in der Übersicht, nicht veröffentlicht
    Danach: node build.mjs → der Vortrag erscheint unter /<slug>/ und in der Übersicht. */
 import {readFileSync,writeFileSync,mkdirSync,existsSync,cpSync,readdirSync} from 'node:fs';
 import {dirname,join,resolve} from 'node:path';
@@ -39,10 +40,10 @@ if(opts['from-export']){
  base=JSON.parse(readFileSync(join(src,'deck.json'),'utf8'));base.basedOn=from;
  if(existsSync(join(src,'assets'))){mkdirSync(target,{recursive:true});cpSync(join(src,'assets'),join(target,'assets'),{recursive:true})}
 }
-const meta={slug,title:opts.title||base.title||slug,subtitle:opts.subtitle||base.subtitle||'',audience:opts.audience||base.audience||'',author:base.author||'Hannes Pix',lang:base.lang||'de',typeScale:base.typeScale||'standard',minutes:Number(opts.minutes||base.minutes||7),description:opts.description||base.description||opts.subtitle||base.subtitle||'',cover:base.cover||'assets/scene-paper.jpg',primary:false,basedOn:base.basedOn||null,created:new Date().toISOString().slice(0,10)};
+const meta={slug,title:opts.title||base.title||slug,subtitle:opts.subtitle||base.subtitle||'',audience:opts.audience||base.audience||'',author:base.author||'Hannes Pix',lang:base.lang||'de',typeScale:base.typeScale||'standard',minutes:Number(opts.minutes||base.minutes||7),description:opts.description||base.description||opts.subtitle||base.subtitle||'',cover:base.cover||'assets/scene-paper.jpg',primary:false,...(opts.draft?{draft:true}:{}),basedOn:base.basedOn||null,created:new Date().toISOString().slice(0,10)};
 mkdirSync(target,{recursive:true});
 writeFileSync(join(target,'slides.html'),slides+'\n');
 writeFileSync(join(target,'state.json'),JSON.stringify(state||{schema:1,updatedAt:0,texts:{},added:[],logo:null})+'\n');
 writeFileSync(join(target,'deck.json'),JSON.stringify(meta,null,1)+'\n');
 const count=(slides.match(/<section\b/g)||[]).length;
-console.log(`Vortrag angelegt: decks/${slug}/ (${count} Folien${meta.basedOn?', Kopie von '+meta.basedOn:''})\n  Titel: ${meta.title}\n  Nächste Schritte: deck.json prüfen, node build.mjs, dann unter /${slug}/ öffnen.`);
+console.log(`Vortrag angelegt: decks/${slug}/ (${count} Folien${meta.basedOn?', Kopie von '+meta.basedOn:''})\n  Titel: ${meta.title}\n  Nächste Schritte: deck.json prüfen, node build.mjs, dann ${meta.draft?`als Entwurf decks/${slug}/index.html öffnen (zum Veröffentlichen "draft" aus deck.json entfernen)`:`unter /${slug}/ öffnen`}.`);
