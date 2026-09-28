@@ -48,7 +48,7 @@ Die Rechte an Produktoberflächen, Marken und veröffentlichten Medien verbleibe
 
 ## Eigene Illustrationen und Kapitelmotive
 
-Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Die Naturhintergründe Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt und Planetenkante wurden KI-generiert. Die Netzknoten der Danke-Folie im Vortrag rp (`assets/scene-network.jpg`) sind eine prozedural mit HTML-Canvas erzeugte Grafik aus `tools/scene-network.html`, kein Foto und kein KI-Bild. Die Fotomotive (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) sind leicht bearbeitete gemeinfreie Fotos; welche Bearbeitung jeweils vorgenommen wurde, steht in der zugehörigen Datei `tools/scene-*.html`. Die Sonnenblume liegt derzeit auf keiner Folie. Der Vortrag katzen verwendet ausschließlich diese vorhandenen Motive. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
+Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Die Naturhintergründe Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt und Planetenkante wurden KI-generiert. Die Netzknoten der Danke-Folie im Vortrag rp (`assets/scene-network.jpg`) sind eine prozedural mit HTML-Canvas erzeugte Grafik aus `tools/scene-network.html`, kein Foto und kein KI-Bild. Die Fotomotive (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) sind leicht bearbeitete gemeinfreie Fotos; welche Bearbeitung jeweils vorgenommen wurde, steht in der zugehörigen Datei `tools/scene-*.html`. Die Sonnenblume liegt derzeit auf keiner Folie, die Erde bei Nacht nur im unveröffentlichten Entwurf katzen, der ausschließlich diese vorhandenen Motive verwendet. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
 
 ## Frühere prozedurale Motive
 
@@ -66,9 +66,9 @@ Morgenlicht, Planstand, Lichtbogen, Materialfächer, Laufbahn, Schallplatte, Lup
 - Transformer-Architektur: Vaswani u. a., „Attention Is All You Need“, Juni 2017: https://arxiv.org/abs/1706.03762 · ChatGPT, 30.11.2022: https://openai.com/index/chatgpt/
 - Die Aufträge auf den Folien „Eine Runde“ und „Mein Auftrag, wörtlich“ stammen aus der Entstehung dieses Repos (Pull Requests #11, #12 und #13), sprachlich nur geglättet; die Diff-Zeilen sind echte Änderungen aus `studio.css` in diesen Pull Requests.
 
-## Fakten im Vortrag katzen
+## Fakten im Entwurf katzen
 
-Stand der Prüfung: 28.09.2026. Die Zahlen stehen mit Fundstelle auch in den Sprechernotizen.
+Der Vortrag ist derzeit ein Entwurf und nicht veröffentlicht. Stand der Prüfung: 28.09.2026; vor dem Einbinden die Zahlen erneut prüfen. Die Fundstellen stehen auch in den Sprechernotizen.
 
 - Heimtierbestand 2025 (15,7 Millionen Katzen in 24 Prozent der Haushalte, 10,0 Millionen Hunde), IVH/ZZF: https://www.zzf.de/marktdaten/heimtiere-in-deutschland
 - Abstammung von der Falbkatze, Domestikation im Nahen Osten vor rund 10 000 Jahren: Driscoll u. a., Science 2007: https://doi.org/10.1126/science.1139518
