@@ -51,6 +51,10 @@ Die Rechte an Produktoberflächen, Marken und veröffentlichten Medien verbleibe
 
 Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eigenständige, editierbare HTML/CSS-Darstellungen. Sie sind keine Screenshots existierender LVM-Systeme. Die Naturhintergründe Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt und Planetenkante wurden KI-generiert. Die Netzknoten der Danke-Folie im Vortrag rp (`assets/scene-network.jpg`) sind eine prozedural mit HTML-Canvas erzeugte Grafik aus `tools/scene-network.html`, kein Foto und kein KI-Bild. Die Fotomotive (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) sind leicht bearbeitete gemeinfreie Fotos; welche Bearbeitung jeweils vorgenommen wurde, steht in der zugehörigen Datei `tools/scene-*.html`. Die Sonnenblume liegt derzeit auf keiner Folie, die Erde bei Nacht nur im unveröffentlichten Entwurf katzen, der ausschließlich diese vorhandenen Motive verwendet. Die zusätzliche Pflanzen-App und ihre Screenshots sind eigens erstellte Lehrbeispiele.
 
+## QR-Codes der Danke-Folien
+
+Die QR-Codes erzeugt `build.mjs` beim Bauen mit uqr 0.1.3 (MIT-Lizenz, © Project Nayuki, © 2023 Anthony Fu; unverändert in `tools/vendor/uqr.mjs`, Lizenztext in `tools/vendor/uqr-LICENSE.txt`). Sie enthalten nur die öffentliche Adresse des jeweiligen Vortrags. Der Smoke-Test liest sie mit jsQR (Apache-2.0) aus; jsQR wird nur für den Test installiert und ist nicht Teil des Repos.
+
 ## Frühere prozedurale Motive
 
 Morgenlicht, Planstand, Lichtbogen, Materialfächer, Laufbahn, Schallplatte, Lupe und Torbogen (`assets/scene-*.jpg`, Generatoren `tools/scene-*.html`, Renderer `tools/render-scene.mjs`) sind prozedural erzeugte Grafiken, keine Fotos und keine KI-Bilder. Sie liegen derzeit auf keiner Folie und bleiben als Vorlagen erhalten.

@@ -3,10 +3,12 @@
    - dist/<slug>/index.html    Ein-Datei-Fassung für GitHub Pages, dazu dist/<slug>/Vibecoding-<slug>.html zum Herunterladen
    - index.html und dist/index.html  Übersicht aller Vorträge
    Entwürfe ("draft": true in deck.json) bekommen nur die Entwicklerfassung zum Ansehen und Prüfen: keine Ein-Datei-Fassung, kein Eintrag in der Übersicht, nichts auf GitHub Pages.
+   Auf die Danke-Folie kommt ein QR-Code mit der öffentlichen Adresse des Vortrags (SITE_URL + Kurzname, Standard https://hannespix.github.io/vibestudio/).
    Keine Abhängigkeiten. Aufruf: node build.mjs [zielordner] */
 import {readFileSync,writeFileSync,mkdirSync,statSync,existsSync,readdirSync,rmSync} from 'node:fs';
 import {dirname,join,extname,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {encode as qrEncode} from './tools/vendor/uqr.mjs';
 
 const root=dirname(fileURLToPath(import.meta.url)),out=resolve(root,process.argv[2]||'dist');
 const mime={'.ttf':'font/ttf','.otf':'font/otf','.woff':'font/woff','.woff2':'font/woff2','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.gif':'image/gif','.webp':'image/webp','.avif':'image/avif','.svg':'image/svg+xml','.mp4':'video/mp4','.webm':'video/webm'};
@@ -28,6 +30,19 @@ function inlineAll(html){
  return html.replace('</title>','</title>\n<!-- Ein-Datei-Fassung, erzeugt mit build.mjs. Reveal.js 5.2.1, MIT · DM Sans, SIL OFL 1.1. Quellen und Bildnachweise: QUELLEN.md im Repository. -->');
 }
 /* … oder für die Entwicklerfassung in einem Unterordner um ein Präfix ergänzen. */
+/* QR-Code zum Nachlesen: Die Danke-Folie (data-share, sonst die letzte Folie mit „Danke“) bekommt eine Karte mit QR-Code und Adresse des Vortrags.
+   Erzeugt beim Bauen, also ohne Laufzeitbibliothek und auch in der Ein-Datei-Fassung; eine vorhandene Karte, etwa aus einer gespeicherten Datei, wird ersetzt. */
+const site=(process.env.SITE_URL||'https://hannespix.github.io/vibestudio/').replace(/\/*$/,'/');
+function qrSVG(text){const {data,size}=qrEncode(text,{ecc:'Q',border:0});let d='';data.forEach((row,y)=>{for(let x=0;x<size;){if(!row[x]){x++;continue}let w=1;while(x+w<size&&row[x+w])w++;d+=`M${x} ${y}h${w}v1h-${w}z`;x+=w}});return `<svg class="share-code" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges" role="img" aria-label="QR-Code: ${escape(text)}"><path d="${d}"/></svg>`}
+function addShare(slides,url){
+ slides=slides.replace(/<div class="share-qr"[^>]*>[\s\S]*?<\/div>/g,'');
+ const secs=[...slides.matchAll(/<section\b[^>]*>[\s\S]*?<\/section>/g)];
+ let targets=secs.filter(m=>/^<section\b[^>]*\sdata-share\b/.test(m[0]));
+ if(!targets.length)targets=secs.filter(m=>/<h1>\s*Danke\s*<\/h1>/i.test(m[0])).slice(-1);
+ const label=url.replace(/^https?:\/\//,'').replace(/\/$/,''),cut=label.indexOf('/');
+ const card=`<div class="share-qr" data-url="${escape(url)}">${qrSVG(url)}<span class="share-title">Zum Nachlesen</span><span class="share-url">${escape(cut>0?label.slice(0,cut):label)}${cut>0?'<wbr>'+escape(label.slice(cut)):''}</span></div>`;
+ for(const m of targets.reverse()){const sec=m[0],notes=sec.indexOf('<aside class="notes">'),at=notes>=0?notes:sec.lastIndexOf('</section>');slides=slides.slice(0,m.index)+sec.slice(0,at)+card+sec.slice(at)+slides.slice(m.index+sec.length)}
+ return slides}
 const relocate=(html,prefix)=>html.replace(/((?:href|src)=")(?!data:|https?:|\/\/|#|mailto:|\?)([^"]+)(")/g,(m,a,ref,b)=>a+prefix+ref+b);
 
 const decksDir=join(root,'decks');
@@ -45,7 +60,7 @@ const shell=readFileSync(join(root,'shell.html'),'utf8').replace(/^<!--[\s\S]*?-
 mkdirSync(out,{recursive:true});
 for(const deck of decks){
  const m=deck.meta,title=escape(m.title+(m.author?' · '+m.author:''));
- const html=fill(shell,{slug:escape(deck.slug),lang:escape(m.lang||'de'),typeScale:escape(m.typeScale||'standard'),title,description:escape(m.description||m.subtitle||''),count:String(deck.count).padStart(2,'0'),state:deck.state.replace(/</g,'\\u003c'),slides:deck.slides,home:'{{home}}'});
+ const html=fill(shell,{slug:escape(deck.slug),lang:escape(m.lang||'de'),typeScale:escape(m.typeScale||'standard'),title,description:escape(m.description||m.subtitle||''),count:String(deck.count).padStart(2,'0'),state:deck.state.replace(/</g,'\\u003c'),slides:addShare(deck.slides,site+deck.slug+'/'),home:'{{home}}'});
  writeFileSync(join(deck.dir,'index.html'),'<!-- Erzeugt von build.mjs aus shell.html + slides.html; Änderungen dort vornehmen. -->\n'+relocate(fill(html,{home:'index.html'}),'../../'));
  /* Entwurf: eine ältere Ein-Datei-Fassung aus einem früheren Lauf entfernen, damit nichts davon veröffentlicht wird */
  if(m.draft){if(/^[a-z0-9][a-z0-9-]*$/.test(deck.slug))rmSync(join(out,deck.slug),{recursive:true,force:true});continue}
