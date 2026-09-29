@@ -24,7 +24,8 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 | `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
 | `assets/` | Reveal.js, DM Sans, Motive und Screenshots |
 | `build.mjs` | Baut je Vortrag die Entwicklerfassung `decks/<kurzname>/index.html` (nicht eingecheckt) und die Ein-Datei-Fassung `dist/<kurzname>/index.html`, dazu die Übersicht |
-| `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright) |
+| `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright; liest die QR-Codes mit jsQR aus) |
+| `tools/vendor/` | Beim Bauen genutzte Fremdbibliothek: `uqr.mjs` erzeugt die QR-Codes der Danke-Folien (MIT, `uqr-LICENSE.txt`) |
 | `tools/scene-*.html`, `tools/scene-photo.js`, `tools/render-scene.mjs` | Vorlagen und Renderer für die Kapitelmotive: leicht bearbeitete Fotos über `tools/scene-photo.js` (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) und prozedurale Grafiken (Netzknoten, Morgenlicht sowie die früheren Motive Planstand, Lichtbogen, Materialfächer, Laufbahn, Schallplatte, Lupe, Torbogen); Aufruf `node tools/render-scene.mjs sun`, mit `SCENE_CACHE=<ordner>` werden geladene Fotovorlagen zwischengespeichert; mit `split` in der Szenendatei entsteht zusätzlich eine Scheibenebene `assets/scene-<name>-disc.webp` (WebP mit Alpha) |
 | `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
 | `demo/pflanzenlernen.html` | Kleines zusätzliches Übungsbeispiel, nicht Teil des Decks |
@@ -34,7 +35,7 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 
 - **Bauen:** `node build.mjs` liest alle `decks/*/deck.json`, schreibt je Vortrag `decks/<kurzname>/index.html` (Entwicklerfassung mit getrennten Dateien) und `dist/<kurzname>/index.html` (alles eingebettet, dazu `Vibecoding-<kurzname>.html` zum Herunterladen) sowie die Übersicht `index.html` und `dist/index.html`. Der Vortrag mit `"primary": true` liegt zusätzlich als `dist/Vibecoding.html`.
 - **Lokal öffnen:** im Projektordner einen kleinen Server starten (`python3 -m http.server 8000` oder `npx serve`) und `index.html` (Übersicht) oder `decks/rp/index.html` öffnen. Nur die Ein-Datei-Fassung aus `dist/` erzeugt beim **HTML speichern** eine vollständig eigenständige Datei.
-- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Vorträge `rpf` und `vave`, den Entwurf `katzen`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge, Figuren, Schriftgrößen und Export.
+- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright jsqr && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Vorträge `rpf` und `vave`, den Entwurf `katzen`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge, Figuren, Schriftgrößen und Export.
 - **Arbeitsweise:** Änderungen entstehen auf einem Arbeits-Branch, gehen als Pull Request nach `main` und werden nach bestandener Prüfung gemergt. Jeder Stand auf `main` baut alle Vorträge über GitHub Actions und veröffentlicht sie auf GitHub Pages.
 
 ## Öffnen
@@ -50,6 +51,7 @@ Jeder Vortrag ist ein Ordner unter `decks/` und erscheint unter `https://hannesp
 - **Leer beginnen:** `node tools/new-deck.mjs kurzname --blank`.
 - **Kurzname:** Kleinbuchstaben, Ziffern, Bindestrich; er ist zugleich der Pfad.
 - **Entwurf:** `"draft": true` in `deck.json` (beim Anlegen `--draft`) hält einen Vortrag aus Übersicht, `dist/` und GitHub Pages heraus. `node build.mjs` baut für ihn nur die Entwicklerfassung `decks/<kurzname>/index.html` zum Ansehen, und der Smoke-Test prüft sie weiter. Zum Veröffentlichen die Zeile entfernen oder auf `false` setzen, bauen, einchecken; zum Zurückziehen wieder setzen.
+- **QR-Code zum Nachlesen:** `node build.mjs` setzt auf die Danke-Folie (markiert mit `data-share`, sonst die letzte Folie mit „Danke“) eine Karte mit QR-Code und der Adresse des Vortrags, `https://hannespix.github.io/vibestudio/<kurzname>/`. Das Publikum scannt und kann die Folien danach selbst ansehen. Der Code entsteht beim Bauen, steht also auch in der Ein-Datei-Fassung ohne Nachladen, bewegt sich nicht mit dem Motiv und ist nicht editierbar; eine Karte aus einer gespeicherten Datei wird beim nächsten Bauen ersetzt. Andere Adresse, etwa für eine Kopie des Repos: `SITE_URL=https://… node build.mjs`.
 - **Schriftgrößen:** `"typeScale": "large"` in `deck.json` schaltet das große Typo-Konzept ein (siehe unten), ohne Angabe gilt `standard`. Kopien übernehmen die Einstellung.
 
 ### Typo-Konzept „large“ (vave, rpf, katzen)
@@ -266,5 +268,6 @@ Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUEL
 - Visuelle Inspiration: https://www.reddit.com/r/unixporn/comments/1wps5f4/hyprland_tacit_i_ported_linux_to_my_snapdragon/ . Keine Videoausschnitte übernommen.
 - Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante), die Netzknoten der rp-Danke-Folie als prozedurale Grafik und sonst leicht bearbeitete gemeinfreie Fotos (Ausschnitt, Drehung, Entzerrung, Farbabstimmung, freigestellte Scheiben auf ruhigem Grund; `tools/scene-*.html` mit `tools/scene-photo.js`). Jedes Motiv steht für die Aussage seines Kapitels, etwa Jahresringe für „festhalten“, die Tresortür für „bewahren“ oder die Wählscheibe für „beauftragen“; die Sprechernotizen nennen den Bezug. Gestaltungsregel: Jedes Motiv zeigt nur den oberen Bogen einer Scheibe oder eines Planeten, darüber leere Fläche für den Titel, ohne Horizont, Boden oder Raster, weil die Kamera das Bild um die Scheibenmitte dreht. Bewusste Ausnahme sind die Wasserringe mit ihrem Horizont. Jede Kapitelfolie hat damit ein eigenes Motiv. Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
 - Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
+- uqr 0.1.3 (QR-Codes der Danke-Folien, nur beim Bauen), MIT, © Project Nayuki, © 2023 Anthony Fu: `tools/vendor/uqr-LICENSE.txt`, https://github.com/unjs/uqr
 - DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
 - Technische Referenzen zu Editor-Funktionen: https://revealjs.com/transitions/ ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers ; https://developer.mozilla.org/en-US/docs/Web/API/FontFace ; https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API

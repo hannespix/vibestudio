@@ -163,6 +163,13 @@ html,body.reveal-viewport{background-color:var(--stage,#000)}html.stage-ready,ht
 .git-basics{display:grid;grid-template-columns:repeat(5,1fr);gap:30px;margin-top:52px}
 .reveal .git-basics h4{font-size:34px;font-weight:500;letter-spacing:-.9px;line-height:1.12;margin:10px 0 10px;min-height:2.24em}
 .reveal .git-basics p{font-size:28px;line-height:1.35;color:#766d5f}
+/* QR-Code auf der Danke-Folie (build.mjs): Adresse des Vortrags zum Nachlesen. Steht still über dem bewegten Motiv, dunkle Module auf hellem Grund, rundum mindestens vier Module Ruhezone. */
+.share-qr{position:absolute;right:64px;top:116px;z-index:3;width:300px;padding:30px 30px 22px;border-radius:26px;background:#fbf8f2;box-shadow:0 26px 70px #0007,0 0 0 1px #ffffff26;color:#24231f;text-align:center}
+.share-code{display:block;width:240px;height:240px;fill:#1d1f1f}
+.share-title{display:block;margin-top:18px;font-size:26px;line-height:1.2;font-weight:500;letter-spacing:-.3px}
+.share-url{display:block;margin-top:6px;font-size:24px;line-height:1.3;color:#6f675b}
+body:not(.editing) .present .share-qr{animation:fig-rise .8s ease-out both .5s}
+@media(prefers-reduced-motion:reduce){.share-qr{animation:none!important}}
 /* Große Schriften für Werkzeugwechsel und Betriebsbild (zuerst für rpf): keine Beschriftung unter 24 px */
 [data-type-scale=large] .freedom-options .small-label{font-size:26px;letter-spacing:1.6px}
 [data-type-scale=large] .reveal .freedom-options p{font-size:32px;line-height:1.3}
