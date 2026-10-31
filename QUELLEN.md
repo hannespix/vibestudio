@@ -55,6 +55,8 @@ Die schematischen Grafiken zu Kontext, Werkzeugwechsel und Zielbetrieb sind eige
 
 Die QR-Codes erzeugt `build.mjs` beim Bauen mit uqr 0.1.3 (MIT-Lizenz, © Project Nayuki, © 2023 Anthony Fu; unverändert in `tools/vendor/uqr.mjs`, Lizenztext in `tools/vendor/uqr-LICENSE.txt`). Sie enthalten nur die öffentliche Adresse des jeweiligen Vortrags. Der Smoke-Test liest sie mit jsQR (Apache-2.0) aus; jsQR wird nur für den Test installiert und ist nicht Teil des Repos.
 
+Die Live-Ideen-Folie (`live.js`) erzeugt ihren QR-Code mit derselben Bibliothek im Browser; `build.mjs` schreibt sie dafür als `assets/uqr.js` (nicht eingecheckt). Die Ideen des Publikums kommen aus der Firebase Realtime Database des Präsentationstools pix·el (https://pix-el.de, Standort europe-west1) und werden über deren REST-Schnittstelle gelesen; die Folie enthält keine Schlüssel oder Zugangsdaten, und der Zugriff folgt denselben Regeln wie die Publikums-Ansicht von pix·el.
+
 ## Frühere prozedurale Motive
 
 Morgenlicht, Planstand, Lichtbogen, Materialfächer, Laufbahn, Schallplatte, Lupe und Torbogen (`assets/scene-*.jpg`, Generatoren `tools/scene-*.html`, Renderer `tools/render-scene.mjs`) sind prozedural erzeugte Grafiken, keine Fotos und keine KI-Bilder. Sie liegen derzeit auf keiner Folie und bleiben als Vorlagen erhalten.

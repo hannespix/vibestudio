@@ -1,6 +1,6 @@
 # Vibe Studio · Vibecoding
 
-Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung, animierte Infografiken. Alles läuft ohne Server, Build-Tool oder Internetzugang im Browser. Mehrere Vorträge liegen nebeneinander in `decks/`, jeder unter seiner eigenen Adresse.
+Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Studio**: Texte, Logos, Medien, Schriften, Hintergrundbewegung, Anordnung, animierte Infografiken. Alles läuft ohne Server, Build-Tool oder Internetzugang im Browser; nur die optionale Live-Ideen-Folie holt sich ihre Bubbles von pix-el.de. Mehrere Vorträge liegen nebeneinander in `decks/`, jeder unter seiner eigenen Adresse.
 
 **Übersicht aller Vorträge:** https://hannespix.github.io/vibestudio/ · **Vibecoding im LVM:** https://hannespix.github.io/vibestudio/rp/ · **Vibecoding kurz, Grundlagen und Projekte:** https://hannespix.github.io/vibestudio/rpf/ · **Vibecoding für vave studio:** https://hannespix.github.io/vibestudio/vave/ · **Zum Herunterladen:** `…/<kurzname>/Vibecoding-<kurzname>.html`
 
@@ -22,10 +22,11 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 | `studio.js` / `studio.css` | Folienleiste, Eigenschaften, Hintergründe, Übergänge |
 | `fonts.js` / `fonts.css` | Schriftvererbung, Vorschau, eigene Schriftdateien |
 | `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
+| `live.js` / `live.css` | Live-Ideen: Bubbles aus einer pix·el-Präsentation (Firebase REST und Server-Sent Events, ohne SDK), QR-Karte, Inspektor-Abschnitt |
 | `assets/` | Reveal.js, DM Sans, Motive und Screenshots |
 | `build.mjs` | Baut je Vortrag die Entwicklerfassung `decks/<kurzname>/index.html` (nicht eingecheckt) und die Ein-Datei-Fassung `dist/<kurzname>/index.html`, dazu die Übersicht |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright; liest die QR-Codes mit jsQR aus) |
-| `tools/vendor/` | Beim Bauen genutzte Fremdbibliothek: `uqr.mjs` erzeugt die QR-Codes der Danke-Folien (MIT, `uqr-LICENSE.txt`) |
+| `tools/vendor/` | Fremdbibliothek `uqr.mjs` (MIT, `uqr-LICENSE.txt`): erzeugt beim Bauen die QR-Codes der Danke-Folien und wird von `build.mjs` als `assets/uqr.js` (nicht eingecheckt) für den QR-Code der Live-Ideen-Folie bereitgestellt |
 | `tools/scene-*.html`, `tools/scene-photo.js`, `tools/render-scene.mjs` | Vorlagen und Renderer für die Kapitelmotive: leicht bearbeitete Fotos über `tools/scene-photo.js` (Sonne, Mond, Erde, Erde bei Nacht, Tresortür, Wählscheibe, Astrolabium, Sonnenblume, Kanaldeckel) und prozedurale Grafiken (Netzknoten, Morgenlicht sowie die früheren Motive Planstand, Lichtbogen, Materialfächer, Laufbahn, Schallplatte, Lupe, Torbogen); Aufruf `node tools/render-scene.mjs sun`, mit `SCENE_CACHE=<ordner>` werden geladene Fotovorlagen zwischengespeichert; mit `split` in der Szenendatei entsteht zusätzlich eine Scheibenebene `assets/scene-<name>-disc.webp` (WebP mit Alpha) |
 | `.github/workflows/` | `ci.yml` prüft Pull Requests, `pages.yml` veröffentlicht `main` auf GitHub Pages |
 | `demo/pflanzenlernen.html` | Kleines zusätzliches Übungsbeispiel, nicht Teil des Decks |
@@ -35,7 +36,7 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 
 - **Bauen:** `node build.mjs` liest alle `decks/*/deck.json`, schreibt je Vortrag `decks/<kurzname>/index.html` (Entwicklerfassung mit getrennten Dateien) und `dist/<kurzname>/index.html` (alles eingebettet, dazu `Vibecoding-<kurzname>.html` zum Herunterladen) sowie die Übersicht `index.html` und `dist/index.html`. Der Vortrag mit `"primary": true` liegt zusätzlich als `dist/Vibecoding.html`.
 - **Lokal öffnen:** im Projektordner einen kleinen Server starten (`python3 -m http.server 8000` oder `npx serve`) und `index.html` (Übersicht) oder `decks/rp/index.html` öffnen. Nur die Ein-Datei-Fassung aus `dist/` erzeugt beim **HTML speichern** eine vollständig eigenständige Datei.
-- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright jsqr && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Vorträge `rpf` und `vave`, den Entwurf `katzen`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge, Figuren, Schriftgrößen und Export.
+- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright jsqr && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Vorträge `rpf` und `vave`, den Entwurf `katzen`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge, Figuren, Schriftgrößen und Export, dazu die Live-Ideen-Folie mit einem nachgestellten pix·el-Stream ohne Netzzugriff.
 - **Arbeitsweise:** Änderungen entstehen auf einem Arbeits-Branch, gehen als Pull Request nach `main` und werden nach bestandener Prüfung gemergt. Jeder Stand auf `main` baut alle Vorträge über GitHub Actions und veröffentlicht sie auf GitHub Pages.
 
 ## Öffnen
@@ -85,6 +86,7 @@ Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von 
 - Esc oder O: Folienübersicht
 - N: kurze Sprechernotizen zur aktuellen Folie
 - E: Bearbeiten / Präsentieren
+- Q: QR-Code groß auf einer Live-Ideen-Folie, nochmal Q schließt
 - M: Hintergrundbewegung pausieren / fortsetzen
 - P: automatischer Durchlauf
 - Home: zum Anfang
@@ -219,6 +221,19 @@ Die Dateiauswahl ist nicht nach Endungen eingeschränkt. Der Browser prüft, ob 
 
 Die Inhaltsfolien tragen kleine animierte Vektorgrafiken (`figures.js`, `figures.css`), die die Aussage der Folie bildlich erzählen: ein Commit-Graph mit Branch und Review, das Verdichten der Gesprächsspuren und die Notiz ins Repo, Agenten im Orbit um das Repo, eine Workflow-Runde, Deployments und Datenpakete zwischen Repo, Anwendung und Menschen, das Fundament mit der Pilot-Fahne, dazu im Vortrag vave das Raten des nächsten Wortes, Zeitleisten, wachsende Runden, ein Chatverlauf, der sich auflöst, ein laufender Filmstreifen und eine Reihe geprüfter Pull Requests, im Entwurf katzen eine Schnurrwelle. Bewegte Teile sind einfache Elemente mit transform- und opacity-Animationen, die der Compositor führt; sie laufen nur auf der aktuellen Folie, pausieren zusammen mit der Hintergrundbewegung (**M**, Bearbeitungsmodus) und entfallen bei aktiviertem „Bewegung reduzieren“ des Systems. Der Ruhezustand zeigt die vollständige Grafik, auch in Miniaturen und im Druck.
 
+### Live-Ideen: Bubbles aus pix·el
+
+Eine Folie, auf der die Ideen des Publikums live als Bubbles erscheinen. Die Eingabe auf dem Handy und die Datenhaltung übernimmt das Präsentationstool **pix·el** (https://pix-el.de/interactive/), gezeichnet wird in Vibe Studio: Farben und Hintergrund der Folie, die globale Schrift, eine ruhige Bewegung. Diese eine Folie braucht Internet; der Rest des Vortrags bleibt offline nutzbar.
+
+1. In pix·el eine Präsentation anlegen, die eine Folie vom Typ **Ideen-Board** enthält. Der Kurzname aus ihrer Adresse `pix-el.de/interactive/‹slug›` ist der Slug.
+2. In Vibe Studio links das Layout **Live-Ideen · pix·el** wählen und mit **+** einfügen. Eyebrow und Titel sind normale Textfelder.
+3. Rechts unter **Live-Ideen · pix·el** den Slug eintragen; eine eingefügte Adresse genügt. Der Status zeigt die Verbindung und die Zahl der Ideen. **Beispielideen** zeigt die Folie mit acht Mustern ohne Verbindung, **QR-Code und Adresse auf der Folie** blendet die Karte aus, wenn der Code anders gezeigt wird.
+4. Vorführen: Die Karte **Mitmachen** unten rechts trägt QR-Code und Adresse. **Q** oder ein Klick auf die Karte zeigt den Code groß, nochmal Q schließt. Beim Aufruf der Folie wird das Publikum in pix·el auf das Ideen-Board geschaltet. Jede Idee erscheint als Bubble; gleiche Texte werden eine Bubble mit Zähler, lange Texte bekommen größere Kreise mit kleinerer Schrift.
+
+Die Bubbles bewegen sich nur auf der aktuellen Folie, sanft zur Mitte und leicht treibend. **M** hält sie an, bei reduzierter Bewegung stehen sie still, und neue Ideen landen dann direkt an ihrem Platz. Im Editor ist die Fläche gestrichelt markiert; die QR-Karte hält sich die Bubbles vom Leib. Clustern, Abstimmen und Löschen bleiben Sache des pix·el-Presenters, der parallel auf einem zweiten Bildschirm laufen kann (**pix·el-Presenter** im Inspektor öffnet ihn); **Ideen löschen** leert das Board in pix·el nach Rückfrage.
+
+Technik: Die Folie liest die Ideen aus der Firebase Realtime Database von pix·el (Standort europe-west1) über REST und Server-Sent Events, ohne SDK und ohne Schlüssel in der Datei; der Zugriff folgt denselben Regeln wie die Publikums-Ansicht von pix·el. Der QR-Code entsteht im Browser mit `uqr` (`assets/uqr.js`, von `build.mjs` erzeugt). Slug und QR-Einstellung werden je Folie im Zustand gespeichert und mit **HTML speichern**, Duplizieren und Rückgängig mitgenommen.
+
 ### Übergänge, Zeit und Notizen
 
 Rechts unter **Folie**: Überblenden, Schieben, Zoom, Konvex, Konkav oder kein Übergang. Die **Übergangsdauer** wird in Millisekunden angegeben. Die **Anzeigedauer** steuert den automatischen Durchlauf mit **P** und ist davon unabhängig. **Übergang & Timing auf alle** wendet diese drei Einstellungen auf alle Folien an.
@@ -257,7 +272,7 @@ Die bisherige kleine Pflanzen-App bleibt als zusätzliches Übungsbeispiel unter
 
 ## Anpassen
 
-Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `design.js` / `design.css` enthalten den Design-Dialog mit Größe, Laufweite, Zeilenabstand, Schnitt und Versalien je Feldtyp. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. Die prozeduralen Motive entstehen aus `tools/scene-<name>.html`; `node tools/render-scene.mjs <name> [seed] [scale] [quality]` rendert sie neu nach `assets/scene-<name>.jpg`, andere Seeds ergeben andere Bilder. `deck.js` enthält Navigation und Tastatursteuerung. Die Bibliotheken und Bilder befinden sich unter `assets/`.
+Texte und Sprechernotizen stehen in `index.html`. `style.css` enthält das Layout. `motion.js` animiert die Motive mit der Web Animations API und erzeugt die Wellen über einen WebGL-Shader. `editor.js` und `editor.css` enthalten die Textbearbeitung, die Griffe für Verschieben, Breite und Drehung sowie den HTML-Export. `arrange.js` / `arrange.css` liefern Fanglinien, Raster, Ausrichten und den Inspektor-Tab „Objekt“. `design.js` / `design.css` enthalten den Design-Dialog mit Größe, Laufweite, Zeilenabstand, Schnitt und Versalien je Feldtyp. `logos.js` verwaltet globale und individuelle Logos. `fonts.js` / `fonts.css` ergänzen Schriftvererbung, Vorschau und eingebettete Schriftdateien. `studio.js` / `studio.css` verwalten Folien und Eigenschaften; `media.js` enthält die Medienübersicht und den Dateiimport. Unter `assets/scene-*.jpg` liegen die fertig gesetzten Hintergrundmotive ohne Titel. Die prozeduralen Motive entstehen aus `tools/scene-<name>.html`; `node tools/render-scene.mjs <name> [seed] [scale] [quality]` rendert sie neu nach `assets/scene-<name>.jpg`, andere Seeds ergeben andere Bilder. `deck.js` enthält Navigation und Tastatursteuerung. `live.js` / `live.css` zeichnen die Live-Ideen-Folie, sprechen mit pix·el und erzeugen den QR-Code zum Mitmachen. Die Bibliotheken und Bilder befinden sich unter `assets/`.
 
 Die Ein-Datei-Fassung entsteht mit `node build.mjs` aus diesen Dateien; sie wird nicht im Repo gepflegt, sondern bei jedem Stand auf `main` automatisch gebaut und veröffentlicht.
 
@@ -268,6 +283,6 @@ Fachlicher Stand: 25.09.2026. Medienherkunft und offizielle Quellen: siehe `QUEL
 - Visuelle Inspiration: https://www.reddit.com/r/unixporn/comments/1wps5f4/hyprland_tacit_i_ported_linux_to_my_snapdragon/ . Keine Videoausschnitte übernommen.
 - Kapitelmotive: fünf eigens KI-generierte Bilder (Keramikteller, Holzquerschnitt, Wasserringe, Pflanzenquerschnitt im Mikroskopiestil und Planetenkante), die Netzknoten der rp-Danke-Folie als prozedurale Grafik und sonst leicht bearbeitete gemeinfreie Fotos (Ausschnitt, Drehung, Entzerrung, Farbabstimmung, freigestellte Scheiben auf ruhigem Grund; `tools/scene-*.html` mit `tools/scene-photo.js`). Jedes Motiv steht für die Aussage seines Kapitels, etwa Jahresringe für „festhalten“, die Tresortür für „bewahren“ oder die Wählscheibe für „beauftragen“; die Sprechernotizen nennen den Bezug. Gestaltungsregel: Jedes Motiv zeigt nur den oberen Bogen einer Scheibe oder eines Planeten, darüber leere Fläche für den Titel, ohne Horizont, Boden oder Raster, weil die Kamera das Bild um die Scheibenmitte dreht. Bewusste Ausnahme sind die Wasserringe mit ihrem Horizont. Jede Kapitelfolie hat damit ein eigenes Motiv. Dekorative Motive, keine wissenschaftlichen Referenzaufnahmen. Bewegung erfolgt im Browser; Titel bleiben statisch.
 - Reveal.js 5.2.1, MIT: `assets/reveal-LICENSE`, https://revealjs.com
-- uqr 0.1.3 (QR-Codes der Danke-Folien, nur beim Bauen), MIT, © Project Nayuki, © 2023 Anthony Fu: `tools/vendor/uqr-LICENSE.txt`, https://github.com/unjs/uqr
+- uqr 0.1.3 (QR-Codes der Danke-Folien beim Bauen; als `assets/uqr.js` auch im Browser für die Live-Ideen-Folie), MIT, © Project Nayuki, © 2023 Anthony Fu: `tools/vendor/uqr-LICENSE.txt`, https://github.com/unjs/uqr
 - DM Sans, SIL Open Font License 1.1: `assets/font-LICENSE.txt`
 - Technische Referenzen zu Editor-Funktionen: https://revealjs.com/transitions/ ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Containers ; https://developer.mozilla.org/en-US/docs/Web/API/FontFace ; https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API
