@@ -10,7 +10,9 @@ permissions:
 
 jobs:
   smoke:
-    runs-on: ubuntu-latest
+    # ubuntu-latest ist seit Ende Oktober 2026 Ubuntu 26.04, für das Playwright 1.56.1 keine Chromium-Abhängigkeiten installieren kann
+    # („Playwright does not support chromium on ubuntu26.04-x64“). Bis zu einem Playwright-Update bleibt die Prüfung auf 24.04.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
