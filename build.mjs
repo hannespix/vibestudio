@@ -4,6 +4,7 @@
    - index.html und dist/index.html  Übersicht aller Vorträge
    Entwürfe ("draft": true in deck.json) bekommen nur die Entwicklerfassung zum Ansehen und Prüfen: keine Ein-Datei-Fassung, kein Eintrag in der Übersicht, nichts auf GitHub Pages.
    Auf die Danke-Folie kommt ein QR-Code mit der öffentlichen Adresse des Vortrags (SITE_URL + Kurzname, Standard https://hannespix.github.io/vibestudio/).
+   Außerdem entsteht assets/uqr.js (nicht eingecheckt): dieselbe QR-Bibliothek für den Browser, mit der live.js den Code der Live-Ideen-Folie zur Laufzeit erzeugt.
    Keine Abhängigkeiten. Aufruf: node build.mjs [zielordner] */
 import {readFileSync,writeFileSync,mkdirSync,statSync,existsSync,readdirSync,rmSync} from 'node:fs';
 import {dirname,join,extname,resolve} from 'node:path';
@@ -11,6 +12,8 @@ import {fileURLToPath} from 'node:url';
 import {encode as qrEncode} from './tools/vendor/uqr.mjs';
 
 const root=dirname(fileURLToPath(import.meta.url)),out=resolve(root,process.argv[2]||'dist');
+/* uqr für den Browser: gleicher Code wie tools/vendor/uqr.mjs, nur ohne ESM-Export, als window.uqr. live.js braucht ihn, weil der pix·el-Slug erst im Editor eingetragen wird. */
+writeFileSync(join(root,'assets','uqr.js'),'/* uqr 0.1.3, MIT (tools/vendor/uqr-LICENSE.txt). Von build.mjs aus tools/vendor/uqr.mjs erzeugt: gleicher Code ohne ESM-Export, stellt window.uqr bereit. Nicht von Hand bearbeiten. */\n(()=>{\n'+readFileSync(join(root,'tools','vendor','uqr.mjs'),'utf8').replace(/^export \{([^}]*)\};?[ \t]*$/m,(m,names)=>`window.uqr={${names.trim()}};`)+'\n})();\n');
 const mime={'.ttf':'font/ttf','.otf':'font/otf','.woff':'font/woff','.woff2':'font/woff2','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.gif':'image/gif','.webp':'image/webp','.avif':'image/avif','.svg':'image/svg+xml','.mp4':'video/mp4','.webm':'video/webm'};
 const cache=new Map();let embedded=0;
 function dataURI(file){if(!cache.has(file)){const type=mime[extname(file).toLowerCase()]||'application/octet-stream';cache.set(file,`data:${type};base64,${readFileSync(file).toString('base64')}`);embedded+=statSync(file).size}return cache.get(file)}
@@ -27,7 +30,7 @@ function inlineAll(html){
  html=html.replace(/(<(?:img|video|source)\b[^>]*\ssrc=")([^"]+)(")/g,(m,a,src,b)=>external(src)?m:a+dataURI(join(root,src))+b);
  const left=html.match(/(href|src)="(?!data:|https?:|#|mailto:)[^"]+\.(css|js|jpe?g|png|webp|woff2?|ttf)"/g);
  if(left)throw Error('Es sind noch relative Verweise übrig: '+left.join(', '));
- return html.replace('</title>','</title>\n<!-- Ein-Datei-Fassung, erzeugt mit build.mjs. Reveal.js 5.2.1, MIT · DM Sans, SIL OFL 1.1. Quellen und Bildnachweise: QUELLEN.md im Repository. -->');
+ return html.replace('</title>','</title>\n<!-- Ein-Datei-Fassung, erzeugt mit build.mjs. Reveal.js 5.2.1, MIT · DM Sans, SIL OFL 1.1 · uqr 0.1.3, MIT. Quellen und Bildnachweise: QUELLEN.md im Repository. -->');
 }
 /* … oder für die Entwicklerfassung in einem Unterordner um ein Präfix ergänzen. */
 /* QR-Code zum Nachlesen: Die Danke-Folie (data-share, sonst die letzte Folie mit „Danke“) bekommt eine Karte mit QR-Code und Adresse des Vortrags.

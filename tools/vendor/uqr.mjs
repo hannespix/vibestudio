@@ -1,5 +1,6 @@
 /* uqr 0.1.3 (https://github.com/unjs/uqr), MIT-Lizenz, siehe uqr-LICENSE.txt; basiert auf dem QR-Code-Generator von Project Nayuki.
-   Unverändert aus dem npm-Paket (dist/index.mjs) übernommen. Nur build.mjs nutzt es, um beim Bauen die QR-Codes der Danke-Folien zu erzeugen; in den Vorträgen landet nur das fertige SVG. */
+   Unverändert aus dem npm-Paket (dist/index.mjs) übernommen. build.mjs erzeugt damit beim Bauen die QR-Codes der Danke-Folien (nur das fertige SVG landet im Vortrag)
+   und schreibt den Code zusätzlich ohne ESM-Export nach assets/uqr.js, damit live.js den QR-Code der Live-Ideen-Folie im Browser erzeugen kann. */
 var QrCodeDataType = /* @__PURE__ */ ((QrCodeDataType2) => {
   QrCodeDataType2[QrCodeDataType2["Border"] = -1] = "Border";
   QrCodeDataType2[QrCodeDataType2["Data"] = 0] = "Data";
