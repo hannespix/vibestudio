@@ -14,7 +14,9 @@ body:not(.editing) .live-join{cursor:pointer}
 .live-code{display:block;width:180px;height:180px;margin:0 auto;fill:#1d1f1f;transition:width .45s ease,height .45s ease}
 .live-title{display:block;margin-top:12px;font:500 19px/1.2 var(--sans);letter-spacing:-.2px;transition:font-size .45s ease}
 .live-url{display:block;margin-top:4px;font:400 15px/1.3 var(--sans);color:#6f675b;overflow-wrap:break-word;transition:font-size .45s ease}
-.live-url b{font-weight:500;color:#24231f}
+/* Der Slug bleibt eine Einheit: nie am Bindestrich umbrochen (sonst lässt man ihn beim Abtippen weg), notfalls in eigener Zeile und mit kleinerer Schrift, damit er in die Karte passt. --n ist seine Länge (live.js). Ohne eigene Übergangsanimation: Über 1em wächst er mit der Karte mit. */
+.live-url b{display:inline-block;white-space:nowrap;font-weight:500;color:#24231f;font-size:clamp(9px,calc(176px / (var(--n,12) * .6)),1em)}
+.live-slide.join-large .live-url b{font-size:clamp(min(18px,1em),calc(512px / (var(--n,12) * .6)),1em)}
 .live-state{display:block;margin-top:8px;font:500 12px/1 var(--sans);letter-spacing:1.6px;text-transform:uppercase;color:var(--rust)}
 .live-state:empty{display:none}
 .live-slide.join-large .live-join{right:50%;bottom:50%;transform:translate(50%,50%);width:600px;padding:40px 40px 32px;border-radius:32px}
