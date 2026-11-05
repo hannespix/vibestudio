@@ -22,7 +22,7 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 | `studio.js` / `studio.css` | Folienleiste, Eigenschaften, Hintergründe, Übergänge |
 | `fonts.js` / `fonts.css` | Schriftvererbung, Vorschau, eigene Schriftdateien |
 | `logos.js`, `media.js`, `motion.js` | Logos, Medienbestand, Hintergrundbewegung |
-| `live.js` / `live.css` | Live-Ideen: Bubbles aus einer pix·el-Präsentation (Firebase REST und Server-Sent Events, ohne SDK), QR-Karte, Inspektor-Abschnitt |
+| `live.js` / `live.css` | Live-Ideen: Bubbles aus einer pix·el-Präsentation (Firebase REST und Server-Sent Events, ohne SDK), QR-Karte, Inspektor-Abschnitt; QR-Code als Objekt auf jeder Folie („+ QR“) |
 | `assets/` | Reveal.js, DM Sans, Motive und Screenshots |
 | `build.mjs` | Baut je Vortrag die Entwicklerfassung `decks/<kurzname>/index.html` (nicht eingecheckt) und die Ein-Datei-Fassung `dist/<kurzname>/index.html`, dazu die Übersicht |
 | `tools/smoke-test.mjs` | Headless-Prüfung in Chromium (Playwright; liest die QR-Codes mit jsQR aus) |
@@ -36,7 +36,7 @@ Reveal.js-Vorträge von Hannes Pix und der zugehörige Browser-Editor **Vibe Stu
 
 - **Bauen:** `node build.mjs` liest alle `decks/*/deck.json`, schreibt je Vortrag `decks/<kurzname>/index.html` (Entwicklerfassung mit getrennten Dateien) und `dist/<kurzname>/index.html` (alles eingebettet, dazu `Vibecoding-<kurzname>.html` zum Herunterladen) sowie die Übersicht `index.html` und `dist/index.html`. Der Vortrag mit `"primary": true` liegt zusätzlich als `dist/Vibecoding.html`.
 - **Lokal öffnen:** im Projektordner einen kleinen Server starten (`python3 -m http.server 8000` oder `npx serve`) und `index.html` (Übersicht) oder `decks/rp/index.html` öffnen. Nur die Ein-Datei-Fassung aus `dist/` erzeugt beim **HTML speichern** eine vollständig eigenständige Datei.
-- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright jsqr && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Vorträge `rpf` und `vave`, den Entwurf `katzen`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge, Figuren, Schriftgrößen und Export, dazu die Live-Ideen-Folie mit einem nachgestellten pix·el-Stream ohne Netzzugriff.
+- **Prüfen:** `node build.mjs && node tools/smoke-test.mjs` (einmalig `npm install --no-save playwright jsqr && npx playwright install chromium`). Der Test öffnet Entwickler- und Ein-Datei-Fassung des Vortrags `rp`, die Vorträge `rpf` und `vave`, den Entwurf `katzen`, die Übersicht und das Anlegen einer Kopie und prüft Editor, Effekte, Übergänge, Figuren, Schriftgrößen und Export, dazu die Live-Ideen-Folie mit einem nachgestellten pix·el-Stream ohne Netzzugriff und eingefügte QR-Codes samt Großansicht.
 - **Arbeitsweise:** Änderungen entstehen auf einem Arbeits-Branch, gehen als Pull Request nach `main` und werden nach bestandener Prüfung gemergt. Jeder Stand auf `main` baut alle Vorträge über GitHub Actions und veröffentlicht sie auf GitHub Pages.
 
 ## Öffnen
@@ -86,7 +86,7 @@ Geplant: **Foliensätze** innerhalb eines Vortrags (Auswahl und Reihenfolge von 
 - Esc oder O: Folienübersicht
 - N: kurze Sprechernotizen zur aktuellen Folie
 - E: Bearbeiten / Präsentieren
-- Q: QR-Code groß auf einer Live-Ideen-Folie, nochmal Q schließt
+- Q: QR-Code der Folie groß zeigen (Live-Ideen-Karte oder mit **+ QR** eingefügter Code), nochmal Q schließt
 - M: Hintergrundbewegung pausieren / fortsetzen
 - P: automatischer Durchlauf
 - Home: zum Anfang
@@ -233,6 +233,18 @@ Eine Folie, auf der die Ideen des Publikums live als Bubbles erscheinen. Die Ein
 Die Bubbles bewegen sich nur auf der aktuellen Folie, sanft zur Mitte und leicht treibend. **M** hält sie an, bei reduzierter Bewegung stehen sie still, und neue Ideen landen dann direkt an ihrem Platz. Im Editor ist die Fläche gestrichelt markiert; die QR-Karte hält sich die Bubbles vom Leib. Clustern, Abstimmen und Löschen bleiben Sache des pix·el-Presenters, der parallel auf einem zweiten Bildschirm laufen kann (**pix·el-Presenter** im Inspektor öffnet ihn); **Ideen löschen** leert das Board in pix·el nach Rückfrage.
 
 Technik: Die Folie liest die Ideen aus der Firebase Realtime Database von pix·el (Standort europe-west1) über REST und Server-Sent Events, ohne SDK und ohne Schlüssel in der Datei; der Zugriff folgt denselben Regeln wie die Publikums-Ansicht von pix·el. Der QR-Code entsteht im Browser mit `uqr` (`assets/uqr.js`, von `build.mjs` erzeugt). Slug und QR-Einstellung werden je Folie im Zustand gespeichert und mit **HTML speichern**, Duplizieren und Rückgängig mitgenommen.
+
+### QR-Code auf jeder Folie
+
+**+ QR** in der Toolbar setzt einen QR-Code auf die aktuelle Folie, als gewöhnliches Objekt: am Griff verschieben, mit dem Griff rechts unten oder über **Breite** skalieren, drehen, ausrichten, löschen. Code, Überschrift und Adresse wachsen gemeinsam mit. Er funktioniert auf jeder Folie, auch auf der Danke-Folie oder einer Live-Ideen-Folie, deren Bubbles ihm ausweichen.
+
+Rechts im Tab **Objekt** unter **QR-Code**:
+
+- **Ziel:** **pix·el · Mitmachen** führt das Publikum zur Eingabe einer pix·el-Präsentation, `pix-el.de/interactive/‹slug›`. Der Slug wird aus einer Live-Ideen-Folie des Vortrags vorbelegt und bei pix·el geprüft. **Eigene Adresse** nimmt jede Web-Adresse, `https://` wird ergänzt.
+- **Überschrift:** steht über der Adresse, Standard „Mitmachen“ bzw. „Mehr dazu“, leer lässt sie weg.
+- **Als Karte mit heller Fläche:** die Karte wie bei „Zum Nachlesen“. Ohne Karte nimmt der Code die Textfarbe der Folie an und fügt sich ins Layout; auf dunklen Folien lässt er sich mit Karte sicherer scannen.
+
+Ohne Ziel bleibt der QR-Code ein gestrichelter Platzhalter, der nur im Editor sichtbar ist. Beim Vorführen zeigt **Q** oder ein Klick auf den Code ihn groß über der Folie, nochmal Q oder ein Klick schließt. Der Code entsteht im Browser und braucht kein Internet; nur die Prüfung des pix·el-Slugs fragt bei pix·el nach. QR-Codes werden mit **HTML speichern**, Duplizieren und Rückgängig mitgenommen.
 
 ### Übergänge, Zeit und Notizen
 
