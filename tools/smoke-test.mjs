@@ -231,6 +231,29 @@ try{
   await live.reload();await live.waitForSelector('body.editing');await live.evaluate(()=>document.fonts.ready);await live.evaluate(()=>deck.slide(1));await live.waitForFunction(()=>document.querySelector('#live-status')?.textContent.startsWith('Verbunden · 2 Ideen'),null,{timeout:8000}).catch(()=>{});
   const back=await live.evaluate(()=>{const s=deck.getCurrentSlide();return{live:s.classList.contains('live-slide'),slug:document.querySelector('#live-slug').value,bubbles:s.querySelectorAll('.live-bubble').length,qr:!!s.querySelector('.live-join svg.live-code'),status:document.querySelector('#live-status').textContent}});
   check(back.live&&back.slug==='smoke-ideen'&&back.bubbles===2&&back.qr,`Live-Ideen: nach Neuladen kommen Folie, Slug, QR-Karte und Verbindung aus dem Entwurf zurück (${back.status})`);
+  /* QR-Code als Objekt: „+ QR“ setzt auf eine gewöhnliche Folie einen QR-Code; Ziel pix·el (Slug aus der Live-Ideen-Folie vorbelegt) oder eigene Adresse; skalierbar; ohne Ziel ein Platzhalter nur im Editor */
+  const readQR=async png=>{if(!jsqr)return null;await live.addScriptTag({content:jsqr});return live.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);return jsQR(x.getImageData(0,0,c.width,c.height).data,c.width,c.height)?.data||null},png.toString('base64'))};
+  await live.evaluate(()=>deck.slide(2));await live.waitForTimeout(300);await live.click('#editor-add-qr');await live.waitForTimeout(300);
+  await live.waitForFunction(()=>/gefunden/.test(document.querySelector('#qr-check')?.textContent||''),null,{timeout:5000}).catch(()=>{});
+  const qa=await live.evaluate(()=>{const s=deck.getCurrentSlide(),el=s.querySelector('.user-qr');let draft=null;try{draft=JSON.parse(localStorage.getItem('vibecoding-editor-v8:'+location.pathname))}catch{}return{live:s.classList.contains('live-slide'),n:s.querySelectorAll('.user-qr').length,selected:DeckEditor.selected()===el,tab:!document.querySelector('#object-properties').hidden&&!document.querySelector('#object-qr').hidden,label:document.querySelector('#object-label').textContent,mode:document.querySelector('#qr-mode').value,target:document.querySelector('#qr-target').value,url:el?.dataset.qrRendered,title:el?.querySelector('.qr-title')?.textContent,check:document.querySelector('#qr-check').textContent,saved:!!draft?.added?.some(x=>x.kind==='qr'&&x.qr?.slug==='smoke-ideen')}});
+  check(!qa.live&&qa.n===1&&qa.selected&&qa.tab&&qa.label==='QR-Code'&&qa.mode==='pixel'&&qa.target==='smoke-ideen'&&qa.url==='https://pix-el.de/interactive/smoke-ideen'&&qa.title==='Mitmachen'&&/gefunden/.test(qa.check)&&qa.saved,'QR-Code: „+ QR“ setzt auf eine Inhaltsfolie einen ausgewählten QR-Code, Ziel pix·el „smoke-ideen“ aus der Live-Ideen-Folie, bei pix·el geprüft und im Entwurf gesichert');
+  await live.fill('#object-width','400');await live.waitForTimeout(150);
+  const grow=await live.evaluate(()=>{const el=document.querySelector('.slides>section.present .user-qr'),sc=deck.getScale();return{w:el.getBoundingClientRect().width/sc,code:el.querySelector('svg').getBoundingClientRect().width/sc}});
+  check(Math.abs(grow.w-400)<2&&grow.code>300,`QR-Code: Breite 400 px, der Code wächst mit (${Math.round(grow.code)} px)`);
+  await live.selectOption('#qr-mode','url');await live.fill('#qr-target','example.org/umfrage');await live.press('#qr-target','Tab');await live.waitForTimeout(300);
+  const own=await live.evaluate(()=>{const el=document.querySelector('.slides>section.present .user-qr');return{url:el.dataset.qrRendered,shown:el.querySelector('.qr-url').textContent,title:el.querySelector('.qr-title')?.textContent,input:document.querySelector('#qr-target').value}});
+  const ownRead=await readQR(await (await live.$('.slides>section.present .user-qr')).screenshot());
+  check(own.url==='https://example.org/umfrage'&&own.shown==='example.org/umfrage'&&own.title==='Mehr dazu'&&own.input==='https://example.org/umfrage'&&(!jsqr||ownRead==='https://example.org/umfrage'),`QR-Code: eigene Adresse ergänzt, Überschrift „Mehr dazu“, Code lesbar (${ownRead||own.url})`);
+  await live.click('#qr-card');await live.waitForTimeout(150);
+  const plain=await live.evaluate(()=>{const el=document.querySelector('.slides>section.present .user-qr');return{plain:el.classList.contains('qr-plain'),bg:getComputedStyle(el.querySelector('.qr-card')).backgroundColor,fill:getComputedStyle(el.querySelector('svg')).fill,color:getComputedStyle(el).color}});
+  check(plain.plain&&plain.bg==='rgba(0, 0, 0, 0)'&&plain.fill===plain.color,'QR-Code: ohne Karte in der Textfarbe der Folie');
+  await live.click('#qr-card');await live.fill('#qr-target','');await live.press('#qr-target','Tab');await live.waitForTimeout(150);
+  const empty=await live.evaluate(()=>{const el=document.querySelector('.slides>section.present .user-qr');return{empty:el.classList.contains('is-empty'),text:el.textContent,shown:getComputedStyle(el).display!=='none',check:document.querySelector('#qr-check').textContent}});
+  check(empty.empty&&/eintragen/.test(empty.text)&&empty.shown&&/unsichtbar/.test(empty.check),'QR-Code: ohne Ziel im Editor ein Platzhalter mit Hinweis');
+  await live.selectOption('#qr-mode','pixel');await live.waitForTimeout(150);await live.click('#editor-add-qr');await live.waitForTimeout(250);await live.selectOption('#qr-mode','url');await live.waitForTimeout(150);
+  const two=await live.evaluate(()=>[...document.querySelectorAll('.slides>section.present .user-qr')].map(e=>e.classList.contains('is-empty')));
+  check(two.length===2&&two.filter(Boolean).length===1&&two[0]===false,'QR-Code: zurück auf pix·el gilt wieder der Slug, ein zweiter QR-Code ohne Ziel bleibt Platzhalter');
+  await live.evaluate(()=>deck.slide(1));await live.waitForTimeout(300);
   /* Vorführen: Publikum wird auf die Ideen-Folie geschaltet, Q zeigt den Code groß und lesbar, Bubbles bewegen sich ruhig, M hält sie an */
   await live.click('#editor-present');await live.waitForTimeout(900);
   check(hits.includes('PUT /sessions/pres-smoke/currentSlide.json'),'Live-Ideen: beim Vorführen wird das Publikum in pix·el auf das Ideen-Board geschaltet');
@@ -245,6 +268,16 @@ try{
   const paused=await live.evaluate(async()=>{const s=deck.getCurrentSlide();DeckMotion.setPaused(true);await new Promise(r=>setTimeout(r,250));const pos=()=>[...s.querySelectorAll('.live-bubble')].map(n=>n.style.transform);const a=pos();await new Promise(r=>setTimeout(r,400));const b=pos();DeckMotion.setPaused(false);return{large:s.classList.contains('join-large'),still:a.length===2&&a.every((t,i)=>t===b[i])}});
   check(!paused.large&&paused.still,'Live-Ideen: Q schließt die große Karte wieder, Taste M hält die Bubbles an');
   await live.waitForTimeout(2800);await live.screenshot({path:join(shots,'live-ideen.png')});
+  /* QR-Code beim Vorführen: Platzhalter unsichtbar, Q und Klick zeigen den Code groß und lesbar, Q und Klick schließen */
+  await live.evaluate(()=>deck.slide(2));await live.waitForTimeout(900);
+  const pres=await live.evaluate(()=>{const all=[...document.querySelectorAll('.slides>section.present .user-qr')];return{n:all.length,visible:all.filter(e=>getComputedStyle(e).display!=='none').length}});
+  await live.keyboard.press('q');await live.waitForTimeout(500);
+  const big2=await live.evaluate(()=>{const o=document.querySelector('.slides>section.present .qr-overlay');return o?Math.round(o.querySelector('svg').getBoundingClientRect().width/deck.getScale()):0});
+  const bigRead=await readQR(await live.screenshot());await live.screenshot({path:join(shots,'qr-gross.png')});
+  await live.keyboard.press('q');await live.waitForTimeout(300);const closed=await live.evaluate(()=>!document.querySelector('.qr-overlay'));
+  await live.click('.slides>section.present .user-qr:not(.is-empty)');await live.waitForTimeout(400);const byClick=await live.evaluate(()=>!!document.querySelector('.slides>section.present .qr-overlay'));
+  await live.click('.slides>section.present .qr-overlay');await live.waitForTimeout(300);const clickClosed=await live.evaluate(()=>!document.querySelector('.qr-overlay'));
+  check(pres.n===2&&pres.visible===1&&big2>=500&&closed&&byClick&&clickClosed&&(!jsqr||bigRead==='https://pix-el.de/interactive/smoke-ideen'),`QR-Code beim Vorführen: Platzhalter unsichtbar, Q und Klick zeigen den Code groß (${big2} px) und schließen ihn wieder`+(jsqr?`, ausgelesen: ${bigRead}`:''));
   check(lerr.length===0,'Live-Ideen ohne Konsolenfehler'+(lerr.length?': '+lerr.join(' | '):''));await live.close()}
 /* Zweiter Vortrag: vave (Kopie mit eigenen Folien und Figuren) */
  if(existsSync(join(root,'decks','vave','index.html'))){const vave=await open(base+'/decks/vave/index.html');

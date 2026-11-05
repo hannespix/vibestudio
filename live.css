@@ -28,3 +28,28 @@ body:not(.editing) .live-join{cursor:pointer}
 .live-slide.join-large .live-board{opacity:.14}
 body:not(.editing) .present .live-join{animation:fig-rise .8s ease-out both .3s}
 @media(prefers-reduced-motion:reduce){.live-join,.live-code,.live-title,.live-url,.live-board,.live-bubble{transition:none!important;animation:none!important}}
+/* QR-Code als Objekt („+ QR“ im Editor): dieselbe Karte wie „Mitmachen“ und „Zum Nachlesen“, auf jeder Folie frei platzierbar. Alle Maße in Container-Einheiten der Breite,
+   damit Breite und Griff rechts unten Code und Schrift gemeinsam skalieren. Ohne Karte nimmt der Code die Textfarbe der Folie an. Ohne Ziel ist er nur im Editor als Platzhalter sichtbar. */
+.reveal .user-qr{width:260px;line-height:1.25;container-type:inline-size}
+.user-qr .qr-card{box-sizing:border-box;width:100%;padding:8cqw 8cqw 6cqw;border-radius:9cqw;background:#fbf8f2;box-shadow:0 22px 60px #0005,0 0 0 1px #0000000f;color:#24231f;text-align:center;font-family:var(--sans)}
+.qr-card .qr-code{display:block;width:100%;height:auto;aspect-ratio:1;fill:#1d1f1f}
+.user-qr .qr-title{display:block;margin-top:5cqw;font-size:8cqw;font-weight:500;line-height:1.2;letter-spacing:-.01em}
+.user-qr .qr-url{display:block;margin-top:1.5cqw;font-size:6cqw;line-height:1.3;color:#6f675b;overflow-wrap:anywhere}
+.qr-card .qr-url b{display:inline-block;white-space:nowrap;font-weight:500;color:#24231f}
+.user-qr .qr-url b{font-size:clamp(3.5cqw,calc(80cqw / (var(--n,12) * .6)),1em)}
+.user-qr.qr-plain .qr-card{padding:0;border-radius:0;background:none;box-shadow:none;color:inherit}
+.user-qr.qr-plain .qr-code{fill:currentColor}
+.user-qr.qr-plain .qr-url,.user-qr.qr-plain .qr-url b{color:inherit}
+.user-qr.qr-plain .qr-url{opacity:.72}
+.user-qr.is-empty .qr-card{display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;background:none;box-shadow:none;border:2px dashed color-mix(in srgb,currentColor 35%,transparent);color:inherit}
+.user-qr.is-empty .qr-url{color:inherit;opacity:.7}
+body:not(.editing) .user-qr.is-empty{display:none}
+body:not(.editing) .user-qr:not(.is-empty){cursor:zoom-in}
+/* Groß zeigen: Q oder Klick beim Vorführen. Die Folie tritt hinter einem dunklen Schleier zurück, die Karte steht groß in der Mitte. */
+.qr-overlay{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgb(22 22 20 / .55);cursor:zoom-out;animation:qr-fade .3s ease-out both}
+.qr-overlay .qr-card{box-sizing:border-box;width:600px;padding:40px 40px 32px;border-radius:32px;background:#fbf8f2;box-shadow:0 30px 90px #0007;color:#24231f;text-align:center;font-family:var(--sans)}
+.qr-overlay .qr-title{display:block;margin-top:22px;font-size:40px;font-weight:500;line-height:1.2;letter-spacing:-.4px}
+.qr-overlay .qr-url{display:block;margin-top:8px;font-size:30px;line-height:1.3;color:#6f675b;overflow-wrap:anywhere}
+.qr-overlay .qr-url b{font-size:clamp(min(18px,1em),calc(512px / (var(--n,12) * .6)),1em)}
+@keyframes qr-fade{from{opacity:0}}
+@media(prefers-reduced-motion:reduce){.qr-overlay{animation:none}}
